@@ -124,14 +124,18 @@ public class Organism {
         switch (speciesType) {
             case SpeciesType.GRAY_WOLF:
                 switch (prey.getSpeciesType()) {
-                    case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.35;
+                    case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.30;
                     case SpeciesType.MOOSE -> baseSuccessRate = 0.15;
+                }
+            case SpeciesType.BOBCAT:
+                switch (prey.getSpeciesType()) {
+                    case SpeciesType.SNOWSHOE_HARE -> baseSuccessRate = 0.45;
+                    case SpeciesType.BEAVER -> baseSuccessRate = 0.10;
+                    case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.05;
                 }
         }
 
-        double huntSuccessRate = baseSuccessRate * ((double) preySpecies.getPopulation() / (double) preySpecies.getCarryingCapacity());
-
-        return huntSuccessRate;
+        return baseSuccessRate * ((double) preySpecies.getPopulation() / (double) preySpecies.getCarryingCapacityPer1000Km2());
 
     }
 

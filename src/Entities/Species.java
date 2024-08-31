@@ -18,7 +18,7 @@ public class Species {
     private final String taxonomyGenus;
 
     private final Diet baseDiet;
-    private int carryingCapacity;
+    private int carryingCapacityPer1000Km2;
 
     private final HashMap<SpeciesAttribute, SpeciesAttributeValue> attributes = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class Species {
     int maxSpeed;
     boolean hasAntlers;
 */
-    public Species(SpeciesType speciesType, String commonName, String scientificName, String taxonomyClass, String taxonomyOrder, String taxonomyFamily, String taxonomyGenus, int carryingCapacity, Diet baseDiet) {
+    public Species(SpeciesType speciesType, String commonName, String scientificName, String taxonomyClass, String taxonomyOrder, String taxonomyFamily, String taxonomyGenus, int carryingCapacityPer1000Km2, Diet baseDiet) {
         this.speciesType = speciesType;
         this.commonName = commonName;
         this.scientificName = scientificName;
@@ -51,7 +51,7 @@ public class Species {
         this.taxonomyOrder = taxonomyOrder;
         this.taxonomyFamily = taxonomyFamily;
         this.taxonomyGenus = taxonomyGenus;
-        this.carryingCapacity = carryingCapacity;
+        this.carryingCapacityPer1000Km2 = carryingCapacityPer1000Km2;
         this.baseDiet = baseDiet;
     }
 
@@ -83,8 +83,8 @@ public class Species {
         return taxonomyGenus;
     }
 
-    public int getCarryingCapacity() {
-        return carryingCapacity;
+    public int getCarryingCapacityPer1000Km2() {
+        return carryingCapacityPer1000Km2;
     }
 
     public Diet getBaseDiet() {
@@ -193,8 +193,8 @@ public class Species {
         return total / getAliveOrganisms().size();
     }
 
-    public void setCarryingCapacity(int carryingCapacity) {
-        this.carryingCapacity = carryingCapacity;
+    public void setCarryingCapacityPer1000Km2(int carryingCapacityPer1000Km2) {
+        this.carryingCapacityPer1000Km2 = carryingCapacityPer1000Km2;
     }
 
     public void addAttribute(SpeciesAttribute speciesAttribute, SpeciesAttributeValue speciesAttributeValue) {
@@ -215,7 +215,7 @@ public class Species {
     }
 
     public void initializeOrganisms() {
-        for (int i=0; i<carryingCapacity; i++) {
+        for (int i=0; i<carryingCapacityPer1000Km2; i++) {
 
             Gender gender = Gender.FEMALE;
             if (RandomGenerator.random.nextDouble() < 0.50) {
@@ -236,7 +236,7 @@ public class Species {
                     getAttribute(SpeciesAttribute.HUNTING_ATTEMPTS_PER_WEEK).getValue(gender),
                     getAttribute(SpeciesAttribute.ENERGY_LOST_PER_WEEK).getValue(gender),
                     getAttribute(SpeciesAttribute.ENERGY_GAIN_PER_PREY_KG).getValue(gender),
-                    getAttribute(SpeciesAttribute.MAX_PREY_KG_EATEN).getValue(gender)
+                    getAttribute(SpeciesAttribute.MAX_PREY_KG_EATEN_PER_WEEK).getValue(gender)
             );
             organism.getPreySpecies().putAll(basePreySpecies);
             organisms.add(organism);

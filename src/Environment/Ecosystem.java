@@ -46,16 +46,21 @@ public class Ecosystem {
     }
 
     public void printSpeciesDistribution() {
+
         for (Species species : speciesMap.values()) {
-            Logger.logln(species.getCommonName());
-            Logger.logln("\t" + Logger.formatNumber(species.getPopulation()) + " ALIVE (Avg Energy: " + species.getAverageEnergy() + ")");
-            Logger.logln("\t\t" + Logger.formatNumber(species.getPopulation(Gender.MALE)) + " MALE");
-            Logger.logln("\t\t" + Logger.formatNumber(species.getPopulation(Gender.FEMALE)) + " FEMALE");
-            Logger.logln("\t" + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)) + " DEAD");
-            Logger.logln("\t\t" + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)) + " PREDATION");
-            Logger.logln("\t\t" + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)) + " STARVATION");
-            Logger.logln("\t\t" + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)) + " AGE");
+            Logger.log(species.getCommonName());
+            Logger.log(" ".repeat(25 - species.getCommonName().length()));
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getCarryingCapacityPer1000Km2()).length()) + Logger.formatNumber(species.getCarryingCapacityPer1000Km2()) + " CAPACITY");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation()).length()) + Logger.formatNumber(species.getPopulation()) + " ALIVE");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(Gender.MALE)).length()) + Logger.formatNumber(species.getPopulation(Gender.MALE)) + " M");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(Gender.FEMALE)).length()) + Logger.formatNumber(species.getPopulation(Gender.FEMALE)) + " F");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)) + " DEAD");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)) + " PRE");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)) + " STA");
+            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)) + " AGE");
+            Logger.logln("");
         }
+
     }
 
 }
