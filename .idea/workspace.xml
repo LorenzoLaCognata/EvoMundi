@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="79bbc662-779c-4500-a061-a3a7c2064e3a" name="Changes" comment="" />
+    <list default="true" id="79bbc662-779c-4500-a061-a3a7c2064e3a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Control/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Control/Simulation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Control/SimulationSettings.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entities/Organism.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entities/PreySpeciesType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entities/Species.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entities/SpeciesAttributeValue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/Diet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/Gender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/LogStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/OrganismDeathReason.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/OrganismStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/SpeciesAttribute.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/SpeciesType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Environment/Ecosystem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Utils/Logger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Utils/RandomGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,11 +32,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2lR0cZV960B2rS2q9ZPutY11lEv" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -22,9 +46,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true"
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/vodev/OneDrive/Documenti/GitHub/EvoMundi",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -37,5 +64,19 @@
       <updated>1725127666922</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
