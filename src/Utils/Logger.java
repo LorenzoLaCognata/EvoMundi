@@ -13,6 +13,10 @@ public class Logger {
         return formatter.format(integer);
     }
 
+    public static String formatNumber(double d) {
+        return formatter.format(d);
+    }
+
     public static void logln(String string) {
         System.out.println(string);
     }

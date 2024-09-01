@@ -1,5 +1,6 @@
 package Entities;
 
+import Control.SimulationSettings;
 import Enums.*;
 import Utils.RandomGenerator;
 
@@ -18,7 +19,6 @@ public class Species {
     private final String taxonomyGenus;
 
     private final Diet baseDiet;
-    private int carryingCapacityPer1000Km2;
 
     private final HashMap<SpeciesAttribute, SpeciesAttributeValue> attributes = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class Species {
     int maxSpeed;
     boolean hasAntlers;
 */
-    public Species(SpeciesType speciesType, String commonName, String scientificName, String taxonomyClass, String taxonomyOrder, String taxonomyFamily, String taxonomyGenus, int carryingCapacityPer1000Km2, Diet baseDiet) {
+    public Species(SpeciesType speciesType, String commonName, String scientificName, String taxonomyClass, String taxonomyOrder, String taxonomyFamily, String taxonomyGenus, Diet baseDiet) {
         this.speciesType = speciesType;
         this.commonName = commonName;
         this.scientificName = scientificName;
@@ -51,7 +51,6 @@ public class Species {
         this.taxonomyOrder = taxonomyOrder;
         this.taxonomyFamily = taxonomyFamily;
         this.taxonomyGenus = taxonomyGenus;
-        this.carryingCapacityPer1000Km2 = carryingCapacityPer1000Km2;
         this.baseDiet = baseDiet;
     }
 
@@ -81,10 +80,6 @@ public class Species {
 
     public String getTaxonomyGenus() {
         return taxonomyGenus;
-    }
-
-    public int getCarryingCapacityPer1000Km2() {
-        return carryingCapacityPer1000Km2;
     }
 
     public Diet getBaseDiet() {
@@ -193,8 +188,15 @@ public class Species {
         return total / getAliveOrganisms().size();
     }
 
-    public void setCarryingCapacityPer1000Km2(int carryingCapacityPer1000Km2) {
-        this.carryingCapacityPer1000Km2 = carryingCapacityPer1000Km2;
+    public double getAverageWeight() {
+
+        double total = 0.0;
+
+        for (Organism organism : getAliveOrganisms()) {
+            total += organism.getWeight();
+        }
+
+        return total / getAliveOrganisms().size();
     }
 
     public void addAttribute(SpeciesAttribute speciesAttribute, SpeciesAttributeValue speciesAttributeValue) {
@@ -205,9 +207,9 @@ public class Species {
         basePreySpecies.put(preySpeciesType.getSpeciesType(), preySpeciesType);
     }
 
-    public void removeBasePreySpecies(PreySpeciesType preySpeciesType) {
-        basePreySpecies.remove(preySpeciesType.getSpeciesType());
-    }
+//    public void removeBasePreySpecies(PreySpeciesType preySpeciesType) {
+//        basePreySpecies.remove(preySpeciesType.getSpeciesType());
+//    }
 
     @Override
     public String toString() {
@@ -215,30 +217,51 @@ public class Species {
     }
 
     public void initializeOrganisms() {
-        for (int i=0; i<carryingCapacityPer1000Km2; i++) {
+
+        boolean impersonatingOrganismFound = false;
+
+        int carryingCapacity = (int) getAttribute(SpeciesAttribute.CARRYING_CAPACITY).getValue();
+
+        for (int i=0; i<carryingCapacity; i++) {
 
             Gender gender = Gender.FEMALE;
             if (RandomGenerator.random.nextDouble() < 0.50) {
                 gender = Gender.MALE;
             }
 
-            double lifeSpanGaussian = RandomGenerator.random.nextGaussian();
-            double lifeSpan = getAttribute(SpeciesAttribute.LIFESPAN).getValue(gender) + (lifeSpanGaussian * getAttribute(SpeciesAttribute.LIFESPAN).getValue(gender) * 0.2);
+            double lifeSpan = RandomGenerator.generateGaussian(gender, getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.MALE), 0.2);
             double age = RandomGenerator.random.nextDouble() * lifeSpan;
             Organism organism = new Organism(
                     speciesType,
                     gender,
                     baseDiet,
-                    getAttribute(SpeciesAttribute.WEIGHT).getValue(gender),
-                    getAttribute(SpeciesAttribute.HEIGHT).getValue(gender),
+                    RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE), 0.2),
+                    RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE), 0.2),
                     lifeSpan,
+                   0,
                     age,
-                    getAttribute(SpeciesAttribute.HUNTING_ATTEMPTS_PER_WEEK).getValue(gender),
-                    getAttribute(SpeciesAttribute.ENERGY_LOST_PER_WEEK).getValue(gender),
-                    getAttribute(SpeciesAttribute.ENERGY_GAIN_PER_PREY_KG).getValue(gender),
-                    getAttribute(SpeciesAttribute.MAX_PREY_KG_EATEN_PER_WEEK).getValue(gender)
+                    getAttribute(SpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),
+                    getAttribute(SpeciesAttribute.ENERGY_LOST).getValue(gender),
+                    getAttribute(SpeciesAttribute.ENERGY_GAIN).getValue(gender),
+                    getAttribute(SpeciesAttribute.PREY_EATEN).getValue(gender),
+                    getAttribute(SpeciesAttribute.SEXUAL_MATURITY_START).getValue(gender),
+                    getAttribute(SpeciesAttribute.SEXUAL_MATURITY_END).getValue(gender),
+                    getAttribute(SpeciesAttribute.MATING_SEASON_START).getValue(gender),
+                    getAttribute(SpeciesAttribute.MATING_SEASON_END).getValue(gender),
+                    getAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN).getValue(gender),
+                    getAttribute(SpeciesAttribute.GESTATION_PERIOD).getValue(gender),
+                    getAttribute(SpeciesAttribute.AVERAGE_OFFSPRING).getValue(gender),
+                    getAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
+                    getAttribute(SpeciesAttribute.MATING_SUCCESS_RATE).getValue(gender),
+                    getAttribute(SpeciesAttribute.MATING_ATTEMPTS).getValue(gender)
             );
             organism.getPreySpecies().putAll(basePreySpecies);
+
+            if (!impersonatingOrganismFound && gender == SimulationSettings.getImpersonatingGender() && speciesType == SimulationSettings.getImpersonatingSpeciesType() ) {
+                organism.setImpersonatedOrganism(true);
+                impersonatingOrganismFound = true;
+            }
+
             organisms.add(organism);
         }
     }

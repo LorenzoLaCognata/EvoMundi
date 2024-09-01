@@ -5,5 +5,6 @@ public enum OrganismDeathReason {
     PREDATION,
     AGE,
     STARVATION,
-    DISEASE
+    DISEASE,
+    JUVENILE_DEATH // Should be replaced with natural selection as a prey from predators
 }

@@ -27,4 +27,8 @@ public class SpeciesAttributeValue {
         }
     }
 
+    public double getValue() {
+        return (valueFemale + valueMale) / 2.0;
+    }
+
 }

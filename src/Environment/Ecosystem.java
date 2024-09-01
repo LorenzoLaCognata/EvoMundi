@@ -1,9 +1,6 @@
 package Environment;
 
-import Enums.Gender;
-import Enums.OrganismDeathReason;
-import Enums.OrganismStatus;
-import Enums.SpeciesType;
+import Enums.*;
 import Entities.Species;
 import Utils.Logger;
 
@@ -30,35 +27,32 @@ public class Ecosystem {
         speciesMap.remove(speciesType);
     }
 
-    public void printSpeciesDetails() {
+    public void printSpeciesDetails(LogStatus logStatus) {
         for (Species species : speciesMap.values()) {
-            if (species.getPopulation() > 0) {
-                Logger.logln(species.getCommonName() + ": " + Logger.formatNumber(species.getPopulation()) + " ALIVE");
-                Logger.logln("\tScientific Name: " + species.getScientificName());
-                Logger.logln("\tTaxonomy: " + species.getTaxonomyClass() + " > " +  species.getTaxonomyOrder() + " > " + species.getTaxonomyFamily() + " > " + species.getTaxonomyGenus());
-                Logger.logln("\tDiet: " + species.getBaseDiet());
-                Logger.logln("\tPrey Species: " + species.getBasePreySpecies().keySet());
-            }
-            else {
-                Logger.logln(species.getCommonName() + ": EXTINCT");
-            }
+            Logger.logln(logStatus, species.getCommonName() + ": " + Logger.formatNumber(species.getPopulation()) + " ALIVE");
+            Logger.logln(logStatus, "\tScientific Name: " + species.getScientificName());
+            Logger.logln(logStatus, "\tTaxonomy: " + species.getTaxonomyClass() + " > " +  species.getTaxonomyOrder() + " > " + species.getTaxonomyFamily() + " > " + species.getTaxonomyGenus());
+            Logger.logln(logStatus, "\tDiet: " + species.getBaseDiet());
+            Logger.logln(logStatus, "\tPrey Species: " + species.getBasePreySpecies().keySet());
         }
     }
 
-    public void printSpeciesDistribution() {
+    public void printSpeciesDistribution(LogStatus logStatus) {
 
         for (Species species : speciesMap.values()) {
-            Logger.log(species.getCommonName());
-            Logger.log(" ".repeat(25 - species.getCommonName().length()));
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getCarryingCapacityPer1000Km2()).length()) + Logger.formatNumber(species.getCarryingCapacityPer1000Km2()) + " CAPACITY");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation()).length()) + Logger.formatNumber(species.getPopulation()) + " ALIVE");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(Gender.MALE)).length()) + Logger.formatNumber(species.getPopulation(Gender.MALE)) + " M");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(Gender.FEMALE)).length()) + Logger.formatNumber(species.getPopulation(Gender.FEMALE)) + " F");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)) + " DEAD");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)) + " PRE");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)) + " STA");
-            Logger.log("\t|\t" + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)) + " AGE");
-            Logger.logln("");
+            Logger.log(logStatus, species.getCommonName());
+            Logger.log(logStatus, " ".repeat(20 - species.getCommonName().length()));
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getAttribute(SpeciesAttribute.CARRYING_CAPACITY).getValue()).length()) + Logger.formatNumber(species.getAttribute(SpeciesAttribute.CARRYING_CAPACITY).getValue()) + " CAP");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getOrganisms().size()).length()) + Logger.formatNumber(species.getOrganisms().size()) + " TOT");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation()).length()) + Logger.formatNumber(species.getPopulation()) + " ALIVE");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(Gender.MALE)).length()) + Logger.formatNumber(species.getPopulation(Gender.MALE)) + " M");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(Gender.FEMALE)).length()) + Logger.formatNumber(species.getPopulation(Gender.FEMALE)) + " F");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD)) + " DEAD");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)) + " PRE");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)) + " STA");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)) + " AGE");
+            Logger.log(logStatus, " | " + " ".repeat(6 - Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.JUVENILE_DEATH)).length()) + Logger.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.JUVENILE_DEATH)) + " JUV");
+            Logger.logln(logStatus, "");
         }
 
     }

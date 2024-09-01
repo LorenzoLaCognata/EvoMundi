@@ -1,11 +1,22 @@
 package Enums;
 
 public enum SpeciesAttribute {
-    LIFESPAN,
-    WEIGHT,
-    HEIGHT,
-    HUNTING_ATTEMPTS_PER_WEEK,
-    ENERGY_LOST_PER_WEEK,
-    ENERGY_GAIN_PER_PREY_KG,
-    MAX_PREY_KG_EATEN_PER_WEEK
+    CARRYING_CAPACITY, // Per 1000 Km2
+    LIFESPAN, // In Years
+    WEIGHT, // In Kilograms
+    HEIGHT, // In Meters
+    HUNT_ATTEMPTS, // Per Week
+    ENERGY_LOST, // Per Week
+    ENERGY_GAIN, // Per Kilogram of Prey hunted
+    PREY_EATEN, // Per Kilogram of Prey per Week
+    SEXUAL_MATURITY_START, // In Years
+    SEXUAL_MATURITY_END, // In Years
+    MATING_SEASON_START, // Week Number
+    MATING_SEASON_END, // Week Number
+    PREGNANCY_COOLDOWN, // In Weeks
+    GESTATION_PERIOD, // In Weeks
+    AVERAGE_OFFSPRING, // Per Birth
+    JUVENILE_SURVIVAL_RATE, // Per Birth
+    MATING_SUCCESS_RATE, // Per Attempt
+    MATING_ATTEMPTS // Per Week
 }
