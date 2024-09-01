@@ -9,25 +9,49 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79bbc662-779c-4500-a061-a3a7c2064e3a" name="Changes" comment="Core simulation framework">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/EvoMundi_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+    <list default="true" id="79bbc662-779c-4500-a061-a3a7c2064e3a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/apiguardian-api-1.1.2.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/junit-jupiter-5.8.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/junit-jupiter-api-5.8.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/junit-jupiter-engine-5.8.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/junit-jupiter-params-5.8.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/junit-platform-commons-1.8.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/junit-platform-engine-1.8.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/opentest4j-1.2.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/ReproductionStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Enums/SimulationStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Tests/SpeciesTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EvoMundi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EvoMundi.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Control/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/Simulation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Control/SimulationSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Control/SimulationSettings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Organism.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Organism.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Species.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Species.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/SpeciesAttributeValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/SpeciesAttributeValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/Diet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/Diet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enums/OrganismDeathReason.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/OrganismDeathReason.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Enums/SpeciesAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/SpeciesAttribute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Enums/SpeciesType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enums/SpeciesType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Environment/Ecosystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Environment/Ecosystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utils/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utils/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utils/RandomGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utils/RandomGenerator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/Control/Simulation.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -45,19 +69,61 @@
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
     &quot;JAR Application.EvoMundi.jar.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.SpeciesTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.SpeciesTest.getScientificName.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Tests in EvoMundi.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/vodev/OneDrive/Documenti/GitHub/EvoMundi/out/artifacts/EvoMundi_jar/EvoMundi.jar&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/vodev/OneDrive/Documenti/GitHub/EvoMundi/src/Tests&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="Tests" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Enums" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JAR Application.EvoMundi.jar">
+    <configuration name="SpeciesTest.getScientificName" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="EvoMundi" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SpeciesTest" />
+      <option name="METHOD_NAME" value="getScientificName" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Tests in EvoMundi" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="EvoMundi" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/Tests" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="EvoMundi.jar" type="JarApplication">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/EvoMundi_jar/EvoMundi.jar" />
       <option name="WORKING_DIRECTORY" value="C:\Users\vodev\OneDrive\Documenti\GitHub\EvoMundi" />
@@ -66,8 +132,19 @@
         <option name="BuildArtifacts" enabled="true">
           <artifact name="EvoMundi:jar" />
         </option>
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Tests in EvoMundi" run_configuration_type="JUnit" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="JAR Application.EvoMundi.jar" />
+      <item itemvalue="JUnit.Tests in EvoMundi" />
+      <item itemvalue="JUnit.SpeciesTest.getScientificName" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.SpeciesTest.getScientificName" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -86,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725133069596</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added Beaver and Bobcat, changed Carrying Capacity, print Species with tabular formatting">
+      <option name="closed" value="true" />
+      <created>1725138753827</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725138753827</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -103,6 +188,11 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Core simulation framework" />
-    <option name="LAST_COMMIT_MESSAGE" value="Core simulation framework" />
+    <MESSAGE value="Added Beaver and Bobcat, changed Carrying Capacity, print Species with tabular formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Beaver and Bobcat, changed Carrying Capacity, print Species with tabular formatting" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/EvoMundi$Tests_in_EvoMundi.ic" NAME="Tests in EvoMundi Coverage Results" MODIFIED="1725194489074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/EvoMundi$SpeciesTest.ic" NAME="SpeciesTest Coverage Results" MODIFIED="1725194333333" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>
