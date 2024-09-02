@@ -1,7 +1,7 @@
-package Entities;
+package Model.Entities;
 
-import Enums.Gender;
-import Enums.SpeciesAttribute;
+import Model.Enums.Gender;
+import Model.Enums.SpeciesAttribute;
 
 public class SpeciesAttributeValue {
 

@@ -1,4 +1,4 @@
-package Enums;
+package Model.Enums;
 
 public enum SpeciesAttribute {
     CARRYING_CAPACITY, // Per 1000 Km2

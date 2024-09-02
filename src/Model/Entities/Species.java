@@ -1,7 +1,7 @@
-package Entities;
+package Model.Entities;
 
-import Control.SimulationSettings;
-import Enums.*;
+import Model.Simulation.SimulationSettings;
+import Model.Enums.*;
 import Utils.RandomGenerator;
 
 import java.util.ArrayList;

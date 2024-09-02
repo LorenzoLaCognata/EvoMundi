@@ -1,16 +1,15 @@
-package Control;
+package Model.Simulation;
 
-import Entities.SpeciesAttributeValue;
-import Enums.*;
-import Entities.Organism;
-import Entities.PreySpeciesType;
-import Entities.Species;
-import Environment.Ecosystem;
+import Model.Enums.*;
+import Model.Entities.SpeciesAttributeValue;
+import Model.Entities.Organism;
+import Model.Entities.PreySpeciesType;
+import Model.Entities.Species;
+import Model.Environment.Ecosystem;
 import Utils.Logger;
 import Utils.RandomGenerator;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Simulation {
 

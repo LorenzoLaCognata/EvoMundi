@@ -1,7 +1,7 @@
-package Environment;
+package Model.Environment;
 
-import Enums.*;
-import Entities.Species;
+import Model.Entities.Species;
+import Model.Enums.*;
 import Utils.Logger;
 
 import java.util.HashMap;

@@ -1,8 +1,8 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import Entities.Species;
-import Enums.Diet;
-import Enums.SpeciesType;
+import Model.Entities.Species;
+import Model.Enums.Diet;
+import Model.Enums.SpeciesType;
 
 class SpeciesTest {
 

@@ -1,6 +1,6 @@
 package Utils;
 
-import Enums.LogStatus;
+import Model.Enums.LogStatus;
 
 import java.text.NumberFormat;
 import java.util.Locale;

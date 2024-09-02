@@ -1,8 +1,8 @@
-package Control;
+package Model.Simulation;
 
-import Enums.Gender;
-import Enums.SimulationStatus;
-import Enums.SpeciesType;
+import Model.Enums.Gender;
+import Model.Enums.SimulationStatus;
+import Model.Enums.SpeciesType;
 
 public class SimulationSettings {
 

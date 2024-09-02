@@ -1,6 +1,6 @@
-package Entities;
+package Model.Entities;
 
-import Enums.SpeciesType;
+import Model.Enums.SpeciesType;
 
 public class PreySpeciesType {
 

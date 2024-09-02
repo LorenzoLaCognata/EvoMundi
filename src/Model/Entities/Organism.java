@@ -1,6 +1,6 @@
-package Entities;
+package Model.Entities;
 
-import Enums.*;
+import Model.Enums.*;
 
 import java.util.HashMap;
 

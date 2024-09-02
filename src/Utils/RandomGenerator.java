@@ -1,6 +1,6 @@
 package Utils;
 
-import Enums.Gender;
+import Model.Enums.Gender;
 
 import java.util.Random;
 
