@@ -12,8 +12,8 @@ public class SimulationSettings {
 
     private static SimulationStatus simulationStatus = SimulationStatus.RUNNING;
 
-    private static SpeciesType impersonatingSpeciesType; // = SpeciesType.SNOWSHOE_HARE;
-    private static Gender impersonatingGender; // = Gender.FEMALE;
+    private static SpeciesType impersonatingSpeciesType = SpeciesType.SNOWSHOE_HARE;
+    private static Gender impersonatingGender = Gender.FEMALE;
 
     public static int getCurrentWeek() {
         return currentWeek;

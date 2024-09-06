@@ -19,6 +19,10 @@ public class Simulation {
         ecosystem = new Ecosystem();
     }
 
+    public Ecosystem getEcosystem() {
+        return ecosystem;
+    }
+
     public void initializeSpecies() {
 
         Species whiteTailedDeer = new Species(SpeciesType.WHITE_TAILED_DEER, "White-Tailed Deer", "Odocoileus virginianus", "Mammalia", "Artiodactyla", "Cervidae", "Odocoileus", Diet.HERBIVORE);
@@ -105,7 +109,7 @@ public class Simulation {
         snowshoeHare.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.40));
         snowshoeHare.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.85));
         snowshoeHare.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 4.0));
-        ecosystem.addSpecies(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
+        //ecosystem.addSpecies(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
 
         Species beaver = new Species(SpeciesType.BEAVER, "Beaver", "Castor canadensis", "Mammalia", "Rodentia", "Castoridae", "Castor", Diet.HERBIVORE);
         beaver.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 1000, 1000));
@@ -367,10 +371,41 @@ public class Simulation {
 
                     if (organism.getGestationWeek() >= organism.getGestationPeriod()) {
 
-                        Organism offspring = generateInheritance(organism, organism.getMate());
+                        double offspringCount = Math.round(RandomGenerator.generateGaussian(organism.getAverageOffspring(), 0.2));
 
                         if (organism.isImpersonatedOrganism()) {
-                            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth");
+                            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
+                        }
+
+                        for (int i=0; i < (int) offspringCount; i++) {
+
+                            Organism offspring = generateInheritance(organism, organism.getMate());
+
+                            if (RandomGenerator.random.nextDouble() >= organism.getJuvenileSurvivalRate()) {
+                                offspring.setOrganismStatus(OrganismStatus.DEAD);
+                                offspring.setOrganismDeathReason(OrganismDeathReason.JUVENILE_DEATH);
+
+                                if (organism.isImpersonatedOrganism()) {
+                                    Logger.logln("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
+                                }
+
+                                if (offspring.isImpersonatedOrganism()) {
+                                    SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
+                                    Logger.logln(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
+                                }
+
+                            }
+
+                            else {
+
+                                if (organism.isImpersonatedOrganism()) {
+                                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to a " + offspring.getSpeciesType() + " " + offspring.getGender());
+                                }
+
+                            }
+
+                            species.getOrganisms().add(offspring);
+
                         }
 
                         organism.setReproductionStatus(ReproductionStatus.COOLDOWN);
@@ -380,23 +415,6 @@ public class Simulation {
                         if (organism.isImpersonatedOrganism()) {
                             Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters reproduction cooldown");
                         }
-
-                        if (RandomGenerator.random.nextDouble() >= organism.getJuvenileSurvivalRate()) {
-                            offspring.setOrganismStatus(OrganismStatus.DEAD);
-                            offspring.setOrganismDeathReason(OrganismDeathReason.JUVENILE_DEATH);
-
-                            if (organism.isImpersonatedOrganism()) {
-                                Logger.logln("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
-                            }
-
-                            if (offspring.isImpersonatedOrganism()) {
-                                SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-                                Logger.logln(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
-                            }
-
-                        }
-
-                        species.getOrganisms().add(offspring);
 
                     }
 
@@ -459,18 +477,6 @@ public class Simulation {
 
         ecosystem.printSpeciesDistribution(LogStatus.ACTIVE);
 
-    }
-
-    public void run() {
-
-        initialize();
-
-        int week = 0;
-
-        while (SimulationSettings.getSimulationStatus() == SimulationStatus.RUNNING && week < SimulationSettings.getSimulationLengthWeeks()) {
-            simulate();
-            week = week +1;
-        }
     }
 
 }
