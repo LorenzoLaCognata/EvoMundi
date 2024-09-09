@@ -251,7 +251,7 @@ public class Organism {
             case SpeciesType.BOBCAT:
                 switch (prey.getSpeciesType()) {
                     case SpeciesType.SNOWSHOE_HARE -> baseSuccessRate = 0.45;
-                    case SpeciesType.BEAVER -> baseSuccessRate = 0.10;
+                    case SpeciesType.EUROPEAN_BEAVER -> baseSuccessRate = 0.10;
                     case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.05;
                 }
         }

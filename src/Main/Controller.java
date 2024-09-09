@@ -27,6 +27,7 @@ public class Controller {
 
         for (Species species : simulation.getEcosystem().getSpeciesMap().values()) {
             if (species.getSpeciesType() == SpeciesType.WHITE_TAILED_DEER) {
+                view.setCheckBox(species.toString());
                 view.setTextArea2(species.getCommonName() + " : " + " ".repeat(7 - Logger.formatNumber(species.getPopulation()).length()) + Logger.formatNumber(species.getPopulation()));
             }
             else if (species.getSpeciesType() == SpeciesType.MOOSE) {

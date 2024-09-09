@@ -5,6 +5,6 @@ public enum SpeciesType {
     MOOSE,
     GRAY_WOLF,
     SNOWSHOE_HARE,
-    BEAVER,
+    EUROPEAN_BEAVER,
     BOBCAT
 }
