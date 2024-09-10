@@ -19,19 +19,7 @@ public class Main extends Application {
 
         Controller controller = new Controller();
 
-        Button button = new Button();
-        button.setText("Start the Simulation");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                new Thread(() -> controller.run()).start();
-            }
-        });
-
-        Group group = new Group(controller.getView().getGridPane(), button);
-
-        Scene scene = new Scene(group, 1000, 500, Color.WHITE);
-
+        Scene scene = new Scene(controller.getView().getBorderPane(), 800, 600);
         stage.setTitle("EvoMundi");
         stage.setMaximized(true);
         stage.setScene(scene);
