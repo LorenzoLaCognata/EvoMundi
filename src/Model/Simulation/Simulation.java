@@ -1,10 +1,10 @@
 package Model.Simulation;
 
-import Model.Enums.*;
-import Model.Entities.SpeciesAttributeValue;
 import Model.Entities.Organism;
 import Model.Entities.PreySpeciesType;
 import Model.Entities.Species;
+import Model.Entities.SpeciesAttributeValue;
+import Model.Enums.*;
 import Model.Environment.Ecosystem;
 import Utils.Logger;
 import Utils.RandomGenerator;

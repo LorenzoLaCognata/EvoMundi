@@ -191,13 +191,6 @@ public class Organism {
         return impersonatedOrganism;
     }
 
-    public boolean isImpersonatedOrganism(Gender gender) {
-        if (this.gender == gender) {
-            return impersonatedOrganism;
-        }
-        else return false;
-    }
-
     public HashMap<SpeciesType, PreySpeciesType> getPreySpecies() {
         return preySpecies;
     }

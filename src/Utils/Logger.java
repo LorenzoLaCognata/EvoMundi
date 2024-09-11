@@ -31,9 +31,5 @@ public class Logger {
             System.out.print(string);
         }
     }
-
-    public static void log(String string) {
-        System.out.print(string);
-    }
-
+    
 }

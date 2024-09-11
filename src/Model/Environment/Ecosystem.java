@@ -23,10 +23,6 @@ public class Ecosystem {
         speciesMap.put(speciesType, species);
     }
 
-    public void removeOrganism(SpeciesType speciesType) {
-        speciesMap.remove(speciesType);
-    }
-
     public void printSpeciesDetails(LogStatus logStatus) {
         for (Species species : speciesMap.values()) {
             Logger.logln(logStatus, species.getCommonName() + ": " + Logger.formatNumber(species.getPopulation()) + " ALIVE");

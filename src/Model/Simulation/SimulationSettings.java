@@ -7,10 +7,10 @@ import Model.Enums.SpeciesType;
 public class SimulationSettings {
 
     private static final int simulationSpeedWeeks = 1;
-    private static final int simulationLengthWeeks = 52;
+    private static final int simulationLengthWeeks = 52 * 5;
     private static int currentWeek = -1;
 
-    private static SimulationStatus simulationStatus = SimulationStatus.RUNNING;
+    private static SimulationStatus simulationStatus = SimulationStatus.PAUSED;
 
     private static SpeciesType impersonatingSpeciesType = SpeciesType.SNOWSHOE_HARE;
     private static Gender impersonatingGender = Gender.FEMALE;

@@ -1,12 +1,20 @@
 package Main;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.geometry.Insets;
 
 public class View {
 
@@ -22,6 +30,14 @@ public class View {
     private final Label populationLabel5 = new Label();
     private final Label weekLabel = new Label();
 
+    CheckBox checkBox1 = new CheckBox();
+
+    Button buttonStartStop = new Button();
+
+    Pane centerRegion;
+
+    ImageView imageViewOrganism = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\whitetaildeer_64x64.png"));
+
     public View() {
 
         ToolBar topBar = createToolBar();
@@ -30,13 +46,33 @@ public class View {
         HBox statusBar = createStatusBar();
         borderPane.setBottom(statusBar);
 
-        Label centerContent = createCenterContent();
-        borderPane.setCenter(centerContent);
+        centerRegion = createCenterContent();
+        borderPane.setCenter(centerRegion);
 
+    }
+
+    public void setButtonStartStop(Runnable handler) {
+        buttonStartStop.setOnAction(e -> handler.run());
     }
 
     public BorderPane getBorderPane() {
         return borderPane;
+    }
+
+    public CheckBox getCheckBox1() {
+        return checkBox1;
+    }
+
+    public Button getButtonStartStop() {
+        return buttonStartStop;
+    }
+
+    public void setCheckBox1(CheckBox checkBox1) {
+        this.checkBox1 = checkBox1;
+    }
+
+    public Pane getCenterRegion() {
+        return centerRegion;
     }
 
     public Label getPopulationLabel1() {
@@ -87,6 +123,18 @@ public class View {
         weekLabel.setText(string);
     }
 
+    public ImageView getImageViewOrganism() {
+        return imageViewOrganism;
+    }
+
+    public void setImageViewOrganismX(double x) {
+        imageViewOrganism.setX(x);
+    }
+
+    public void setImageViewOrganismY(double y) {
+        imageViewOrganism.setY(y);
+    }
+
     private ToolBar createToolBar() {
 
         ToolBar toolBar = new ToolBar();
@@ -97,8 +145,16 @@ public class View {
         vbox1.setMinWidth(128);
         Label species1 = new Label("White-Tail Deer");
         ImageView imageView1 = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\whitetaildeer_64x64.png"));
-        CheckBox checkBox1 = new CheckBox();
         checkBox1.setSelected(true);
+        checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue && !newValue) {
+                centerRegion.getChildren().remove(imageViewOrganism);
+            }
+            else if (!oldValue && newValue) {
+                centerRegion.getChildren().add(imageViewOrganism);
+            }
+        });
+
         vbox1.getChildren().addAll(species1, populationLabel1, imageView1, checkBox1);
 
         VBox vbox2 = new VBox(5);
@@ -145,17 +201,16 @@ public class View {
         vboxN.setAlignment(Pos.CENTER);
         vboxN.setPadding(new Insets(5));
         vboxN.setMinWidth(128);
-        Button button4 = new Button();
-        button4.setText("Start the Simulation");
+        buttonStartStop.setText("Start the Simulation");
     /*
-        button4.setOnAction(new EventHandler<ActionEvent>() {
+        buttonStartStop.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 new Thread(() -> controller.run()).start();
             }
         });
     */
-        vboxN.getChildren().addAll(weekLabel, button4);
+        vboxN.getChildren().addAll(weekLabel, buttonStartStop);
 
         toolBar.getItems().addAll(vbox1, vbox2, vbox3, vbox4, vbox5, vboxN);
 
@@ -176,8 +231,16 @@ public class View {
         return statusBar;
     }
 
-    private Label createCenterContent() {
-        return new Label("EvoMundi Simulation");
+    private Pane createCenterContent() {
+
+        Pane pane = new Pane();
+
+        imageViewOrganism.setX(200.0);
+        imageViewOrganism.setY(200.0);
+
+        pane.getChildren().addAll(imageViewOrganism);
+
+        return pane;
     }
 
 }
