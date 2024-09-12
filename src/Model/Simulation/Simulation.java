@@ -205,42 +205,7 @@ public class Simulation {
 
                 while (predatorOrganism.getEnergy() < 1.0 && huntingAttemptNumber < predatorOrganism.getHuntAttempts())  {
 
-                    Species preySpecies = preySpeciesChoice(predatorOrganism);
-
-                    if (preySpecies != null) {
-
-                        ArrayList<Organism> preyOrganisms = preySpecies.getAliveOrganisms();
-                        int preySpeciesPopulation = preySpecies.getPopulation();
-
-                        if (preySpeciesPopulation > 0) {
-
-                            int preyOrganismSelected = RandomGenerator.random.nextInt(0, preySpeciesPopulation);
-
-                            Organism preyOrganism = preyOrganisms.get(preyOrganismSelected);
-                            double huntSuccessRate = RandomGenerator.generateGaussian(predatorOrganism.calculateHuntSuccessRate(preySpecies, preyOrganism), 0.2);
-
-                            if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
-
-                                if (predatorOrganism.isImpersonatedOrganism()) {
-                                    Logger.logln(predatorOrganism.getSpeciesType() + " " + predatorOrganism.getGender() + " hunts a " + preyOrganism.getSpeciesType());
-                                }
-
-                                preyOrganism.setOrganismStatus(OrganismStatus.DEAD);
-                                preyOrganism.setOrganismDeathReason(OrganismDeathReason.PREDATION);
-
-                                if (preyOrganism.isImpersonatedOrganism()) {
-                                    SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-                                    Logger.logln(preyOrganism.getSpeciesType() + " " + preyOrganism.getGender() + " is hunted by a " + predatorOrganism.getSpeciesType());
-                                }
-
-                                double preyKgEaten = Math.max(preyOrganism.getWeight(), predatorOrganism.getPreyEaten());
-                                double baseEnergyGain = predatorOrganism.getEnergyGain() * preyKgEaten;
-                                double energyGain = Math.min(baseEnergyGain, 1.0 - predatorOrganism.getEnergy());
-                                predatorOrganism.setEnergy(predatorOrganism.getEnergy() + energyGain);
-
-                            }
-                        }
-                    }
+                    huntingAttempt(predatorOrganism);
 
                     huntingAttemptNumber++;
 
@@ -250,58 +215,122 @@ public class Simulation {
         }
     }
 
+    private void huntingAttempt(Organism predatorOrganism) {
+        Species preySpecies = preySpeciesChoice(predatorOrganism);
+
+        if (preySpecies != null) {
+
+            ArrayList<Organism> preyOrganisms = preySpecies.getAliveOrganisms();
+            int preySpeciesPopulation = preySpecies.getPopulation();
+
+            if (preySpeciesPopulation > 0) {
+
+                int preyOrganismSelected = RandomGenerator.random.nextInt(0, preySpeciesPopulation);
+
+                Organism preyOrganism = preyOrganisms.get(preyOrganismSelected);
+                double huntSuccessRate = RandomGenerator.generateGaussian(predatorOrganism.calculateHuntSuccessRate(preySpecies, preyOrganism), 0.2);
+
+                if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
+                    huntSuccessful(predatorOrganism, preyOrganism);
+                }
+            }
+        }
+    }
+
+    private static void huntSuccessful(Organism predatorOrganism, Organism preyOrganism) {
+        if (predatorOrganism.isImpersonatedOrganism()) {
+            Logger.logln(predatorOrganism.getSpeciesType() + " " + predatorOrganism.getGender() + " hunts a " + preyOrganism.getSpeciesType());
+        }
+
+        preyOrganism.setOrganismStatus(OrganismStatus.DEAD);
+        preyOrganism.setOrganismDeathReason(OrganismDeathReason.PREDATION);
+
+        if (preyOrganism.isImpersonatedOrganism()) {
+            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
+            Logger.logln(preyOrganism.getSpeciesType() + " " + preyOrganism.getGender() + " is hunted by a " + predatorOrganism.getSpeciesType());
+        }
+
+        double preyKgEaten = Math.max(preyOrganism.getWeight(), predatorOrganism.getPreyEaten());
+        double baseEnergyGain = predatorOrganism.getEnergyGain() * preyKgEaten;
+        double energyGain = Math.min(baseEnergyGain, 1.0 - predatorOrganism.getEnergy());
+        predatorOrganism.setEnergy(predatorOrganism.getEnergy() + energyGain);
+    }
+
     public void simulateAging(Species species) {
 
         for (Organism organism : species.getAliveOrganisms()) {
             organism.setAge(organism.getAge() + (SimulationSettings.getSimulationSpeedWeeks() / 52.0));
 
             if (organism.getAge() >= organism.getLifeSpan()) {
-                organism.setOrganismStatus(OrganismStatus.DEAD);
-                organism.setOrganismDeathReason(OrganismDeathReason.AGE);
-
-                if (organism.isImpersonatedOrganism()) {
-                    SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by age");
-                }
-
+                organismDeathByAge(organism);
             }
+
             else {
 
                 if (organism.getGender() == Gender.FEMALE && organism.getReproductionStatus() == ReproductionStatus.MATURE && organism.getAge() >= organism.getSexualMaturityEnd()) {
-                    organism.setReproductionStatus(ReproductionStatus.MENOPAUSE);
-
-                    if (organism.isImpersonatedOrganism()) {
-                        Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters menopause");
-                    }
-
+                    organismMenopause(organism);
                 }
 
                 if (organism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && organism.getAge() >= organism.getSexualMaturityStart()) {
-                    organism.setReproductionStatus(ReproductionStatus.MATURE);
-
-                    if (organism.isImpersonatedOrganism()) {
-                        Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters sexual maturity");
-                    }
-
+                    organismSexualMaturityStart(organism);
                 }
 
-                // WAITING TO IMPLEMENT PLANTS AND NUTRITION FOR HERBIVORES, ASSUMING NO ENERGY LOSS FOR THEM
+                // TODO: waiting to implement plants and nutrition for herbivores, assuming no energy loss for them
                 if (organism.getDiet() != Diet.HERBIVORE) {
-                    organism.setEnergy(organism.getEnergy() - organism.getEnergyLost());
-
-                    if (organism.getEnergy() <= 0.0) {
-                        organism.setOrganismStatus(OrganismStatus.DEAD);
-                        organism.setOrganismDeathReason(OrganismDeathReason.STARVATION);
-
-                        if (organism.isImpersonatedOrganism()) {
-                            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-                            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by starvation");
-                        }
-
-                    }
+                    organismEnergyLoss(organism);
                 }
             }
 
+        }
+
+    }
+
+    private static void organismEnergyLoss(Organism organism) {
+        organism.setEnergy(organism.getEnergy() - organism.getEnergyLost());
+
+        if (organism.getEnergy() <= 0.0) {
+            organismDeathByStarvation(organism);
+        }
+    }
+
+    private static void organismDeathByStarvation(Organism organism) {
+
+        organism.setOrganismStatus(OrganismStatus.DEAD);
+        organism.setOrganismDeathReason(OrganismDeathReason.STARVATION);
+
+        if (organism.isImpersonatedOrganism()) {
+            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
+            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by starvation");
+        }
+
+    }
+
+    private static void organismSexualMaturityStart(Organism organism) {
+        organism.setReproductionStatus(ReproductionStatus.MATURE);
+
+        if (organism.isImpersonatedOrganism()) {
+            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters sexual maturity");
+        }
+    }
+
+    private static void organismMenopause(Organism organism) {
+
+        organism.setReproductionStatus(ReproductionStatus.MENOPAUSE);
+
+        if (organism.isImpersonatedOrganism()) {
+            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters menopause");
+        }
+
+    }
+
+    private static void organismDeathByAge(Organism organism) {
+
+        organism.setOrganismStatus(OrganismStatus.DEAD);
+        organism.setOrganismDeathReason(OrganismDeathReason.AGE);
+
+        if (organism.isImpersonatedOrganism()) {
+            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
+            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by age");
         }
 
     }
@@ -344,6 +373,105 @@ public class Simulation {
 
     }
 
+    public void simulatePregnancy(Species species, Organism organism) {
+
+        organism.setGestationWeek(organism.getGestationWeek() + 1);
+
+        if (organism.getGestationWeek() >= organism.getGestationPeriod()) {
+
+            double offspringCount = Math.round(RandomGenerator.generateGaussian(organism.getAverageOffspring(), 0.2));
+
+            if (organism.isImpersonatedOrganism()) {
+                Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
+            }
+
+            for (int i=0; i < (int) offspringCount; i++) {
+
+                Organism offspring = generateInheritance(organism, organism.getMate());
+
+                if (RandomGenerator.random.nextDouble() >= organism.getJuvenileSurvivalRate()) {
+                    organismJuvenileDeath(organism, offspring);
+                }
+
+                else {
+                    if (organism.isImpersonatedOrganism()) {
+                        Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to a " + offspring.getSpeciesType() + " " + offspring.getGender());
+                    }
+                }
+
+                species.getOrganisms().add(offspring);
+
+            }
+
+            organism.setReproductionStatus(ReproductionStatus.COOLDOWN);
+            organism.setGestationWeek(0.0);
+            organism.setMate(null);
+
+            if (organism.isImpersonatedOrganism()) {
+                Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters reproduction cooldown");
+            }
+
+        }
+
+    }
+
+    private static void organismJuvenileDeath(Organism organism, Organism offspring) {
+        offspring.setOrganismStatus(OrganismStatus.DEAD);
+        offspring.setOrganismDeathReason(OrganismDeathReason.JUVENILE_DEATH);
+
+        if (organism.isImpersonatedOrganism()) {
+            Logger.logln("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
+        }
+
+        if (offspring.isImpersonatedOrganism()) {
+            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
+            Logger.logln(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
+        }
+    }
+
+    public void findMate(Species species, Organism organism) {
+
+        boolean foundMate = false;
+
+        for (Organism mate : species.getAliveOrganisms()) {
+
+            if (!foundMate && mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
+
+                foundMate = true;
+
+                if (organism.isImpersonatedOrganism()) {
+                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " finds a mate");
+                }
+
+                organism.setReproductionStatus(ReproductionStatus.PREGNANT);
+                organism.setMate(mate);
+
+                if (organism.isImpersonatedOrganism()) {
+                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " starts pregnancy");
+                }
+
+            }
+        }
+
+    }
+
+    public void simulateCooldown(Organism organism) {
+
+        organism.setCooldownWeek(organism.getCooldownWeek() + 1);
+
+        if (organism.getCooldownWeek() >= organism.getPregnancyCooldown()) {
+
+            organism.setReproductionStatus(ReproductionStatus.MATURE);
+            organism.setCooldownWeek(0.0);
+
+            if (organism.isImpersonatedOrganism()) {
+                Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " finishes reproduction cooldown");
+            }
+
+        }
+
+    }
+
     public void simulateReproduction(Species species) {
 
         for (Organism organism : species.getAliveOrganisms()) {
@@ -351,102 +479,15 @@ public class Simulation {
             if (organism.getGender() == Gender.FEMALE) {
 
                 if (organism.getReproductionStatus() == ReproductionStatus.COOLDOWN) {
-                    organism.setCooldownWeek(organism.getCooldownWeek() + 1);
-
-                    if (organism.getCooldownWeek() >= organism.getPregnancyCooldown()) {
-
-                        organism.setReproductionStatus(ReproductionStatus.MATURE);
-                        organism.setCooldownWeek(0.0);
-
-                        if (organism.isImpersonatedOrganism()) {
-                            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " finishes reproduction cooldown");
-                        }
-
-                    }
-
+                    simulateCooldown(organism);
                 }
 
                 if (organism.getReproductionStatus() == ReproductionStatus.PREGNANT) {
-                    organism.setGestationWeek(organism.getGestationWeek() + 1);
-
-                    if (organism.getGestationWeek() >= organism.getGestationPeriod()) {
-
-                        double offspringCount = Math.round(RandomGenerator.generateGaussian(organism.getAverageOffspring(), 0.2));
-
-                        if (organism.isImpersonatedOrganism()) {
-                            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
-                        }
-
-                        for (int i=0; i < (int) offspringCount; i++) {
-
-                            Organism offspring = generateInheritance(organism, organism.getMate());
-
-                            if (RandomGenerator.random.nextDouble() >= organism.getJuvenileSurvivalRate()) {
-                                offspring.setOrganismStatus(OrganismStatus.DEAD);
-                                offspring.setOrganismDeathReason(OrganismDeathReason.JUVENILE_DEATH);
-
-                                if (organism.isImpersonatedOrganism()) {
-                                    Logger.logln("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
-                                }
-
-                                if (offspring.isImpersonatedOrganism()) {
-                                    SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-                                    Logger.logln(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
-                                }
-
-                            }
-
-                            else {
-
-                                if (organism.isImpersonatedOrganism()) {
-                                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to a " + offspring.getSpeciesType() + " " + offspring.getGender());
-                                }
-
-                            }
-
-                            species.getOrganisms().add(offspring);
-
-                        }
-
-                        organism.setReproductionStatus(ReproductionStatus.COOLDOWN);
-                        organism.setGestationWeek(0.0);
-                        organism.setMate(null);
-
-                        if (organism.isImpersonatedOrganism()) {
-                            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters reproduction cooldown");
-                        }
-
-                    }
-
+                    simulatePregnancy(species, organism);
                 }
 
                 if (organism.getReproductionStatus() == ReproductionStatus.MATURE) {
-
-                    boolean foundMate = false;
-
-                    for (Organism mate : species.getAliveOrganisms()) {
-
-                        if (!foundMate && mate.getGender() == Gender.MALE) {
-
-                            if (mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
-
-                                foundMate = true;
-
-                                if (organism.isImpersonatedOrganism()) {
-                                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " finds a mate");
-                                }
-
-                                organism.setReproductionStatus(ReproductionStatus.PREGNANT);
-                                organism.setMate(mate);
-
-                                if (organism.isImpersonatedOrganism()) {
-                                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " starts pregnancy");
-                                }
-
-                            }
-
-                        }
-                    }
+                    findMate(species, organism);
                 }
 
             }
