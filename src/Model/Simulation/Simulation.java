@@ -1,15 +1,12 @@
 package Model.Simulation;
 
-import Model.Entities.Organism;
-import Model.Entities.PreySpeciesType;
-import Model.Entities.Species;
-import Model.Entities.SpeciesAttributeValue;
+import Model.Entities.*;
 import Model.Enums.*;
 import Model.Environment.Ecosystem;
-import Utils.Logger;
+import Utils.Log;
 import Utils.RandomGenerator;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Simulation {
 
@@ -25,114 +22,56 @@ public class Simulation {
 
     public void initializeSpecies() {
 
-        Species whiteTailedDeer = new Species(SpeciesType.WHITE_TAILED_DEER, "White-Tailed Deer", "Odocoileus virginianus", "Mammalia", "Artiodactyla", "Cervidae", "Odocoileus", Diet.HERBIVORE);
-        whiteTailedDeer.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 5000, 5000));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 4.0, 5.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 100.0, 65.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.95, 0.85));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.30, 0.30));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.5));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 40.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 52.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 38.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 28.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 1.5));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.50));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.70));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 3.0));
+        TaxonomyClass mammalia = new TaxonomyClass("Mammalia");
+        TaxonomyOrder artiodactyla = new TaxonomyOrder("Artiodactyla");
+        TaxonomyFamily cervidae = new TaxonomyFamily("Cervidae");
+        TaxonomyGenus odocoileus = new TaxonomyGenus("Odocoileus");
+        SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(mammalia, artiodactyla, cervidae, odocoileus);
+
+        Species whiteTailedDeer = new Species(odocoileusTaxonomy, SpeciesType.WHITE_TAILED_DEER, "White-Tailed Deer", "Odocoileus virginianus", Diet.HERBIVORE);
+        whiteTailedDeerAttributes(whiteTailedDeer);
         ecosystem.addSpecies(SpeciesType.WHITE_TAILED_DEER, whiteTailedDeer);
 
-        Species moose = new Species(SpeciesType.MOOSE, "Moose", "Alces alces", "Mammalia", "Artiodactyla", "Cervidae", "Alces", Diet.HERBIVORE);
-        moose.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
-        moose.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 13.0, 16.0));
-        moose.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 520.0, 410.0));
-        moose.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 1.80, 1.70));
-        moose.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        moose.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.25, 0.25));
-        moose.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        moose.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
-        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 12.0));
-        moose.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 36.0));
-        moose.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 44.0));
-        moose.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
-        moose.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 36.0));
-        moose.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 1.0));
-        moose.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.70));
-        moose.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.65));
-        moose.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        TaxonomyGenus alces = new TaxonomyGenus("Alces");
+        SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(mammalia, artiodactyla, cervidae, alces);
+        Species moose = new Species(alcesTaxonomy, SpeciesType.MOOSE, "Moose", "Alces alces", Diet.HERBIVORE);
+        mooseAttributes(moose);
         ecosystem.addSpecies(SpeciesType.MOOSE, moose);
 
-        Species grayWolf = new Species(SpeciesType.GRAY_WOLF, "Gray Wolf", "Canis lupus", "Mammalia", "Carnivora", "Canidae", "Canis", Diet.CARNIVORE);
-        grayWolf.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
-        grayWolf.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 7.0, 8.0));
-        grayWolf.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 40.0, 35.0));
-        grayWolf.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.80, 0.70));
-        grayWolf.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 5.0,  5.0));
-        grayWolf.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.30, 0.30));
-        grayWolf.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.02, 0.022));
-        grayWolf.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 50.0, 45.0));
-        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.WHITE_TAILED_DEER, 0.75));
-        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.MOOSE, 0.25));
-        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
-        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 1.0));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 13.0));
-        grayWolf.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 38.0));
-        grayWolf.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 20.0));
-        grayWolf.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 3.0));
-        grayWolf.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.60));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.80));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        TaxonomyOrder carnivora = new TaxonomyOrder("Carnivora");
+        TaxonomyFamily canidae = new TaxonomyFamily("Canidae");
+        TaxonomyGenus canis = new TaxonomyGenus("Canis");
+        SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(mammalia, carnivora, canidae, canis);
+        Species grayWolf = new Species(canisTaxonomy, SpeciesType.GRAY_WOLF, "Gray Wolf", "Canis lupus", Diet.CARNIVORE);
+        grayWolfAttributes(grayWolf);
         ecosystem.addSpecies(SpeciesType.GRAY_WOLF, grayWolf);
 
-        Species snowshoeHare = new Species(SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", "Mammalia", "Lagomorpha", "Leporidae", "Lepus", Diet.HERBIVORE);
-        snowshoeHare.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 10000, 10000));
-        snowshoeHare.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 5.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 1.2, 1.4));
-        snowshoeHare.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.35, 0.40));
-        snowshoeHare.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.40, 0.40));
-        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 30.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 4.5));
-        snowshoeHare.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.40));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.85));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 4.0));
-        //ecosystem.addSpecies(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
+        TaxonomyOrder lagomorpha = new TaxonomyOrder("Lagomorpha");
+        TaxonomyFamily leporidae = new TaxonomyFamily("Leporidae");
+        TaxonomyGenus lepus = new TaxonomyGenus("Lepus");
+        SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(mammalia, lagomorpha, leporidae, lepus);
+        Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE);
+        snowshoeHareAttributes(snowshoeHare);
+        // TODO: ecosystem.addSpecies(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
 
-        Species europeanBeaver = new Species(SpeciesType.EUROPEAN_BEAVER, "European Beaver", "Castor fiber", "Mammalia", "Rodentia", "Castoridae", "Castor", Diet.HERBIVORE);
-        europeanBeaver.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 1000, 1000));
-        europeanBeaver.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 12.0, 12.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 18, 16));
-        europeanBeaver.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.35, 0.32));
-        europeanBeaver.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.25, 0.25));
-        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 12.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 1.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 9.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 9.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 2.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.45));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.75));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        TaxonomyOrder rodentia = new TaxonomyOrder("Rodentia");
+        TaxonomyFamily castoridae = new TaxonomyFamily("Castoridae");
+        TaxonomyGenus castor = new TaxonomyGenus("Castor");
+        SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(mammalia, rodentia, castoridae, castor);
+        Species europeanBeaver = new Species(castorTaxonomy, SpeciesType.EUROPEAN_BEAVER, "European Beaver", "Castor fiber", Diet.HERBIVORE);
+        europeanBeaverAttributes(europeanBeaver);
         ecosystem.addSpecies(SpeciesType.EUROPEAN_BEAVER, europeanBeaver);
 
-        Species bobcat = new Species(SpeciesType.BOBCAT, "Bobcat", "Lynx rufus", "Mammalia", "Carnivora", "Felidae", "Lynx", Diet.CARNIVORE);
+        TaxonomyFamily felidae = new TaxonomyFamily("Felidae");
+        TaxonomyGenus lynx = new TaxonomyGenus("Lynx");
+        SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(mammalia, carnivora, felidae, lynx);
+        Species bobcat = new Species(lynxTaxonomy, SpeciesType.BOBCAT, "Bobcat", "Lynx rufus", Diet.CARNIVORE);
+        bobcatAttributes(bobcat);
+        ecosystem.addSpecies(SpeciesType.BOBCAT, bobcat);
+
+    }
+
+    private static void bobcatAttributes(Species bobcat) {
         bobcat.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
         bobcat.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 12.0, 12.0));
         bobcat.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 13.0, 10.0));
@@ -154,19 +93,123 @@ public class Simulation {
         bobcat.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.55));
         bobcat.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.80));
         bobcat.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
-        ecosystem.addSpecies(SpeciesType.BOBCAT, bobcat);
+    }
 
+    private static void europeanBeaverAttributes(Species europeanBeaver) {
+        europeanBeaver.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 1000, 1000));
+        europeanBeaver.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 12.0, 12.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 18, 16));
+        europeanBeaver.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.35, 0.32));
+        europeanBeaver.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.25, 0.25));
+        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 12.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 1.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 9.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 9.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 2.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.45));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.75));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+    }
+
+    private static void snowshoeHareAttributes(Species snowshoeHare) {
+        snowshoeHare.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 10000, 10000));
+        snowshoeHare.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 5.0, 5.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 1.2, 1.4));
+        snowshoeHare.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.35, 0.40));
+        snowshoeHare.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.40, 0.40));
+        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 5.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 5.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 30.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 5.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 5.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 4.5));
+        snowshoeHare.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.40));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.85));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 4.0));
+    }
+
+    private static void grayWolfAttributes(Species grayWolf) {
+        grayWolf.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
+        grayWolf.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 7.0, 8.0));
+        grayWolf.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 40.0, 35.0));
+        grayWolf.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.80, 0.70));
+        grayWolf.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 5.0,  5.0));
+        grayWolf.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.30, 0.30));
+        grayWolf.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.02, 0.022));
+        grayWolf.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 50.0, 45.0));
+        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.WHITE_TAILED_DEER, 0.75));
+        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.MOOSE, 0.25));
+        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
+        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 1.0));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 13.0));
+        grayWolf.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 38.0));
+        grayWolf.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 20.0));
+        grayWolf.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 3.0));
+        grayWolf.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.60));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.80));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+    }
+
+    private static void mooseAttributes(Species moose) {
+        moose.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
+        moose.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 13.0, 16.0));
+        moose.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 520.0, 410.0));
+        moose.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 1.80, 1.70));
+        moose.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        moose.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.25, 0.25));
+        moose.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        moose.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
+        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 12.0));
+        moose.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 36.0));
+        moose.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 44.0));
+        moose.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
+        moose.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 36.0));
+        moose.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 1.0));
+        moose.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.70));
+        moose.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.65));
+        moose.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+    }
+
+    private static void whiteTailedDeerAttributes(Species whiteTailedDeer) {
+        whiteTailedDeer.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 5000, 5000));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 4.0, 5.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 100.0, 65.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.95, 0.85));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_LOST, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOST, 0.30, 0.30));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.5));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 40.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 52.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 38.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 28.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 1.5));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.50));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.70));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 3.0));
     }
 
     public void initialize() {
 
         initializeSpecies();
-        Logger.logln("");
-        Logger.logln("--------");
-        Logger.logln("ECOSYSTEM");
-        Logger.logln("");
+        Log.logln("");
+        Log.logln("ECOSYSTEM");
+        Log.logln("");
         ecosystem.printSpeciesDetails(LogStatus.INACTIVE);
-        Logger.logln("--------");
+        Log.logln("--------");
 
     }
 
@@ -179,12 +222,12 @@ public class Simulation {
 
             for (PreySpeciesType preySpeciesType : predatorOrganism.getPreySpecies().values()) {
 
-                if (preySpeciesTypeSelected >= preySpeciesTypeSelectorIndex && preySpeciesTypeSelected < preySpeciesTypeSelectorIndex + preySpeciesType.getPreferenceRate()) {
-                    return ecosystem.getSpecies(preySpeciesType.getSpeciesType());
+                if (preySpeciesTypeSelected >= preySpeciesTypeSelectorIndex && preySpeciesTypeSelected < preySpeciesTypeSelectorIndex + preySpeciesType.preferenceRate()) {
+                    return ecosystem.getSpecies(preySpeciesType.speciesType());
                 }
 
                 else {
-                    preySpeciesTypeSelectorIndex = preySpeciesTypeSelectorIndex + preySpeciesType.getPreferenceRate();
+                    preySpeciesTypeSelectorIndex = preySpeciesTypeSelectorIndex + preySpeciesType.preferenceRate();
                 }
 
             }
@@ -220,7 +263,7 @@ public class Simulation {
 
         if (preySpecies != null) {
 
-            ArrayList<Organism> preyOrganisms = preySpecies.getAliveOrganisms();
+            List<Organism> preyOrganisms = preySpecies.getAliveOrganisms();
             int preySpeciesPopulation = preySpecies.getPopulation();
 
             if (preySpeciesPopulation > 0) {
@@ -239,7 +282,7 @@ public class Simulation {
 
     private static void huntSuccessful(Organism predatorOrganism, Organism preyOrganism) {
         if (predatorOrganism.isImpersonatedOrganism()) {
-            Logger.logln(predatorOrganism.getSpeciesType() + " " + predatorOrganism.getGender() + " hunts a " + preyOrganism.getSpeciesType());
+            Log.logln(predatorOrganism.getSpeciesType() + " " + predatorOrganism.getGender() + " hunts a " + preyOrganism.getSpeciesType());
         }
 
         preyOrganism.setOrganismStatus(OrganismStatus.DEAD);
@@ -247,7 +290,7 @@ public class Simulation {
 
         if (preyOrganism.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Logger.logln(preyOrganism.getSpeciesType() + " " + preyOrganism.getGender() + " is hunted by a " + predatorOrganism.getSpeciesType());
+            Log.logln(preyOrganism.getSpeciesType() + " " + preyOrganism.getGender() + " is hunted by a " + predatorOrganism.getSpeciesType());
         }
 
         double preyKgEaten = Math.max(preyOrganism.getWeight(), predatorOrganism.getPreyEaten());
@@ -259,7 +302,7 @@ public class Simulation {
     public void simulateAging(Species species) {
 
         for (Organism organism : species.getAliveOrganisms()) {
-            organism.setAge(organism.getAge() + (SimulationSettings.getSimulationSpeedWeeks() / 52.0));
+            organism.setAge(organism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
 
             if (organism.getAge() >= organism.getLifeSpan()) {
                 organismDeathByAge(organism);
@@ -300,7 +343,7 @@ public class Simulation {
 
         if (organism.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by starvation");
+            Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by starvation");
         }
 
     }
@@ -309,7 +352,7 @@ public class Simulation {
         organism.setReproductionStatus(ReproductionStatus.MATURE);
 
         if (organism.isImpersonatedOrganism()) {
-            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters sexual maturity");
+            Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters sexual maturity");
         }
     }
 
@@ -318,7 +361,7 @@ public class Simulation {
         organism.setReproductionStatus(ReproductionStatus.MENOPAUSE);
 
         if (organism.isImpersonatedOrganism()) {
-            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters menopause");
+            Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters menopause");
         }
 
     }
@@ -330,7 +373,7 @@ public class Simulation {
 
         if (organism.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by age");
+            Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " dies by age");
         }
 
     }
@@ -382,7 +425,7 @@ public class Simulation {
             double offspringCount = Math.round(RandomGenerator.generateGaussian(organism.getAverageOffspring(), 0.2));
 
             if (organism.isImpersonatedOrganism()) {
-                Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
+                Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
             }
 
             for (int i=0; i < (int) offspringCount; i++) {
@@ -395,7 +438,7 @@ public class Simulation {
 
                 else {
                     if (organism.isImpersonatedOrganism()) {
-                        Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to a " + offspring.getSpeciesType() + " " + offspring.getGender());
+                        Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to a " + offspring.getSpeciesType() + " " + offspring.getGender());
                     }
                 }
 
@@ -408,7 +451,7 @@ public class Simulation {
             organism.setMate(null);
 
             if (organism.isImpersonatedOrganism()) {
-                Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters reproduction cooldown");
+                Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " enters reproduction cooldown");
             }
 
         }
@@ -420,12 +463,12 @@ public class Simulation {
         offspring.setOrganismDeathReason(OrganismDeathReason.JUVENILE_DEATH);
 
         if (organism.isImpersonatedOrganism()) {
-            Logger.logln("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
+            Log.logln("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
         }
 
         if (offspring.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Logger.logln(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
+            Log.logln(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
         }
     }
 
@@ -440,14 +483,14 @@ public class Simulation {
                 foundMate = true;
 
                 if (organism.isImpersonatedOrganism()) {
-                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " finds a mate");
+                    Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " finds a mate");
                 }
 
                 organism.setReproductionStatus(ReproductionStatus.PREGNANT);
                 organism.setMate(mate);
 
                 if (organism.isImpersonatedOrganism()) {
-                    Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " starts pregnancy");
+                    Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " starts pregnancy");
                 }
 
             }
@@ -465,7 +508,7 @@ public class Simulation {
             organism.setCooldownWeek(0.0);
 
             if (organism.isImpersonatedOrganism()) {
-                Logger.logln(organism.getSpeciesType() + " " + organism.getGender() + " finishes reproduction cooldown");
+                Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " finishes reproduction cooldown");
             }
 
         }
@@ -497,12 +540,11 @@ public class Simulation {
 
     public void simulate() {
 
-        SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.getSimulationSpeedWeeks());
-        Logger.logln("");
-        Logger.logln("--------");
-        Logger.logln("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
+        SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
+        Log.logln("--------");
+        Log.logln("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-        Logger.logln("");
+        Log.logln("");
 
         for (Species species : ecosystem.getSpeciesMap().values()) {
             simulateAging(species);

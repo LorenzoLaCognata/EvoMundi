@@ -1,7 +1,5 @@
 package Main;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -17,9 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class View {
-
-    private final String fontFamily = "Roboto";
-    private final double fontSize = 24;
 
     private final BorderPane borderPane = new BorderPane();
 
@@ -147,10 +142,10 @@ public class View {
         ImageView imageView1 = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\whitetaildeer_64x64.png"));
         checkBox1.setSelected(true);
         checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue && !newValue) {
+            if (Boolean.TRUE.equals(oldValue) && Boolean.FALSE.equals(newValue)) {
                 centerRegion.getChildren().remove(imageViewOrganism);
             }
-            else if (!oldValue && newValue) {
+            else if (Boolean.FALSE.equals(oldValue) && Boolean.TRUE.equals(newValue)) {
                 centerRegion.getChildren().add(imageViewOrganism);
             }
         });
@@ -202,14 +197,7 @@ public class View {
         vboxN.setPadding(new Insets(5));
         vboxN.setMinWidth(128);
         buttonStartStop.setText("Start the Simulation");
-    /*
-        buttonStartStop.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                new Thread(() -> controller.run()).start();
-            }
-        });
-    */
+
         vboxN.getChildren().addAll(weekLabel, buttonStartStop);
 
         toolBar.getItems().addAll(vbox1, vbox2, vbox3, vbox4, vbox5, vboxN);

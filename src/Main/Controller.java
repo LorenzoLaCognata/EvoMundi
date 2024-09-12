@@ -4,11 +4,9 @@ import Model.Entities.Species;
 import Model.Enums.SimulationStatus;
 import Model.Enums.SpeciesType;
 import Model.Simulation.SimulationSettings;
-import Utils.Logger;
+import Utils.Log;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 public class Controller {
 
@@ -22,14 +20,14 @@ public class Controller {
     };
 
     public Controller() {
-        view.setButtonStartStop(() -> handleStartStopButton());
+        view.setButtonStartStop(this::handleStartStopButton);
     }
 
     private void handleStartStopButton() {
 
         if (SimulationSettings.getSimulationStatus() == SimulationStatus.RUNNING) {
-            timer.stop();
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
+            timer.stop();
         }
         else if (SimulationSettings.getSimulationStatus() == SimulationStatus.PAUSED) {
             SimulationSettings.setSimulationStatus(SimulationStatus.RUNNING);
@@ -55,7 +53,7 @@ public class Controller {
 
         for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
 
-            String string = " ".repeat(7 - Logger.formatNumber(species.getPopulation()).length()) + Logger.formatNumber(species.getPopulation());
+            String string = " ".repeat(7 - Log.formatNumber(species.getPopulation()).length()) + Log.formatNumber(species.getPopulation());
 
             if (species.getSpeciesType() == SpeciesType.WHITE_TAILED_DEER) {
                 view.setPopulationLabel1(string);
@@ -79,7 +77,7 @@ public class Controller {
     public void run() {
 
         model.getSimulation().simulate();
-        Platform.runLater(() -> updateView());
+        Platform.runLater(this::updateView);
 
     }
 

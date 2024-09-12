@@ -5,7 +5,12 @@ import Model.Enums.Gender;
 import java.util.Random;
 
 public class RandomGenerator {
+
     public static final Random random = new Random();
+
+    private RandomGenerator() {
+
+    }
 
     public static double generateGaussian(double average, double variance) {
 

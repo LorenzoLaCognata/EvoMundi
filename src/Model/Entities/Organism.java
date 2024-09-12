@@ -1,8 +1,10 @@
 package Model.Entities;
 
 import Model.Enums.*;
+import Utils.Log;
 
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class Organism {
 
@@ -44,7 +46,9 @@ public class Organism {
 
     private boolean impersonatedOrganism = false;
 
-    private final HashMap<SpeciesType, PreySpeciesType> preySpecies = new HashMap<>();
+    private final Map<SpeciesType, PreySpeciesType> preySpecies = new EnumMap<>(SpeciesType.class);
+
+    // TODO: refactor constructor to reduce the number of parameters
 
     public Organism(SpeciesType speciesType, Gender gender, Diet diet, double weight, double height, double lifeSpan, double birthWeek, double age, double huntAttempts, double energyLost, double energyGain, double preyEaten, double sexualMaturityStart, double sexualMaturityEnd, double matingSeasonStart, double matingSeasonEnd, double pregnancyCooldown, double gestationPeriod, double averageOffspring, double juvenileSurvivalRate, double matingSuccessRate, double matingAttempts) {
         this.speciesType = speciesType;
@@ -191,7 +195,7 @@ public class Organism {
         return impersonatedOrganism;
     }
 
-    public HashMap<SpeciesType, PreySpeciesType> getPreySpecies() {
+    public Map<SpeciesType, PreySpeciesType> getPreySpecies() {
         return preySpecies;
     }
 
@@ -233,23 +237,29 @@ public class Organism {
 
     public double calculateHuntSuccessRate(Species preySpecies, Organism prey) {
 
-        double baseSuccessRate = 0.0;
+        double baseSuccessRate;
 
         switch (speciesType) {
             case SpeciesType.GRAY_WOLF:
                 switch (prey.getSpeciesType()) {
                     case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.30;
                     case SpeciesType.MOOSE -> baseSuccessRate = 0.15;
+                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + prey.getSpeciesType());
                 }
+                break;
             case SpeciesType.BOBCAT:
                 switch (prey.getSpeciesType()) {
                     case SpeciesType.SNOWSHOE_HARE -> baseSuccessRate = 0.45;
                     case SpeciesType.EUROPEAN_BEAVER -> baseSuccessRate = 0.10;
                     case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.05;
+                    default -> throw new IllegalStateException("Unexpected value: " + prey.getSpeciesType());
                 }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + speciesType);
         }
 
-        return baseSuccessRate * ((double) preySpecies.getPopulation() / preySpecies.getAttribute (SpeciesAttribute.CARRYING_CAPACITY).getValue());
+        return baseSuccessRate * (preySpecies.getPopulation() / preySpecies.getAttribute (SpeciesAttribute.CARRYING_CAPACITY).getValue());
 
     }
 
