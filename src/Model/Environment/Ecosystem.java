@@ -15,10 +15,6 @@ public class Ecosystem {
         return speciesMap;
     }
 
-    public Species getSpecies(SpeciesType speciesType) {
-        return speciesMap.get(speciesType);
-    }
-
     public void addSpecies(SpeciesType speciesType, Species species) {
         species.initializeOrganisms();
         speciesMap.put(speciesType, species);

@@ -10,31 +10,14 @@ public class Organism {
 
     private final SpeciesType speciesType;
     private final Gender gender;
-
     private final Diet diet;
 
-    private final double weight;
-    private final double height;
-    private final double lifeSpan;
-    private final double birthWeek;
+    private final VitalsAttributes vitalsAttributes;
+    private final HuntingAttributes huntingAttributes;
+    private final ReproductionAttributes reproductionAttributes;
+
     private double age;
-
-    private final double huntAttempts;
-    private final double energyLost;
-    private final double energyGain;
-    private final double preyEaten;
     private double energy = 1.0;
-
-    private final double sexualMaturityStart;
-    private final double sexualMaturityEnd;
-    private final double matingSeasonStart;
-    private final double matingSeasonEnd;
-    private final double pregnancyCooldown;
-    private final double gestationPeriod;
-    private final double averageOffspring;
-    private final double juvenileSurvivalRate;
-    private final double matingSuccessRate;
-    private final double matingAttempts;
 
     private ReproductionStatus reproductionStatus = ReproductionStatus.NOT_MATURE;
     private double gestationWeek = 0.0;
@@ -48,31 +31,14 @@ public class Organism {
 
     private final Map<SpeciesType, PreySpeciesType> preySpecies = new EnumMap<>(SpeciesType.class);
 
-    // TODO: refactor constructor to reduce the number of parameters
-
-    public Organism(SpeciesType speciesType, Gender gender, Diet diet, double weight, double height, double lifeSpan, double birthWeek, double age, double huntAttempts, double energyLost, double energyGain, double preyEaten, double sexualMaturityStart, double sexualMaturityEnd, double matingSeasonStart, double matingSeasonEnd, double pregnancyCooldown, double gestationPeriod, double averageOffspring, double juvenileSurvivalRate, double matingSuccessRate, double matingAttempts) {
+    public Organism(SpeciesType speciesType, Gender gender, Diet diet, double age, VitalsAttributes vitalsAttributes, HuntingAttributes huntingAttributes, ReproductionAttributes reproductionAttributes) {
         this.speciesType = speciesType;
         this.gender = gender;
         this.diet = diet;
-        this.weight = weight;
-        this.height = height;
-        this.lifeSpan = lifeSpan;
-        this.birthWeek = birthWeek;
         this.age = age;
-        this.huntAttempts = huntAttempts;
-        this.energyLost = energyLost;
-        this.energyGain = energyGain;
-        this.preyEaten = preyEaten;
-        this.sexualMaturityStart = sexualMaturityStart;
-        this.sexualMaturityEnd = sexualMaturityEnd;
-        this.matingSeasonStart = matingSeasonStart;
-        this.matingSeasonEnd = matingSeasonEnd;
-        this.pregnancyCooldown = pregnancyCooldown;
-        this.gestationPeriod = gestationPeriod;
-        this.averageOffspring = averageOffspring;
-        this.juvenileSurvivalRate = juvenileSurvivalRate;
-        this.matingSuccessRate = matingSuccessRate;
-        this.matingAttempts = matingAttempts;
+        this.vitalsAttributes = vitalsAttributes;
+        this.huntingAttributes = huntingAttributes;
+        this.reproductionAttributes = reproductionAttributes;
     }
 
     public SpeciesType getSpeciesType() {
@@ -87,84 +53,24 @@ public class Organism {
         return diet;
     }
 
-    public double getHuntAttempts() {
-        return huntAttempts;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public double getLifeSpan() {
-        return lifeSpan;
-    }
-
-    public double getEnergyLost() {
-        return energyLost;
-    }
-
-    public double getEnergyGain() {
-        return energyGain;
-    }
-
-    public double getPreyEaten() {
-        return preyEaten;
-    }
-
     public double getAge() {
         return age;
-    }
-
-    public double getBirthWeek() {
-        return birthWeek;
     }
 
     public double getEnergy() {
         return energy;
     }
 
-    public double getSexualMaturityStart() {
-        return sexualMaturityStart;
+    public VitalsAttributes getVitalsAttributes() {
+        return vitalsAttributes;
     }
 
-    public double getSexualMaturityEnd() {
-        return sexualMaturityEnd;
+    public HuntingAttributes getHuntingAttributes() {
+        return huntingAttributes;
     }
 
-    public double getMatingSeasonStart() {
-        return matingSeasonStart;
-    }
-
-    public double getMatingSeasonEnd() {
-        return matingSeasonEnd;
-    }
-
-    public double getPregnancyCooldown() {
-        return pregnancyCooldown;
-    }
-
-    public double getGestationPeriod() {
-        return gestationPeriod;
-    }
-
-    public double getAverageOffspring() {
-        return averageOffspring;
-    }
-
-    public double getJuvenileSurvivalRate() {
-        return juvenileSurvivalRate;
-    }
-
-    public double getMatingSuccessRate() {
-        return matingSuccessRate;
-    }
-
-    public double getMatingAttempts() {
-        return matingAttempts;
+    public ReproductionAttributes getReproductionAttributes() {
+        return reproductionAttributes;
     }
 
     public ReproductionStatus getReproductionStatus() {

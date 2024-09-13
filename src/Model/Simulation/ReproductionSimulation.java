@@ -18,25 +18,31 @@ public class ReproductionSimulation {
             female.getSpeciesType(),
             gender,
             female.getDiet(),
-            RandomGenerator.generateGaussian(female.getWeight(), male.getWeight(), 0.2),
-            RandomGenerator.generateGaussian(female.getHeight(), male.getHeight(), 0.2),
-            RandomGenerator.generateGaussian(female.getLifeSpan(), male.getLifeSpan(), 0.2),
-            SimulationSettings.getCurrentWeek(),
             0.0,
-            RandomGenerator.generateGaussian(gender, female.getHuntAttempts(), male.getHuntAttempts(), 0.0),
-            RandomGenerator.generateGaussian(gender, female.getEnergyLost(), male.getEnergyLost(), 0.2),
-            RandomGenerator.generateGaussian(gender, female.getEnergyGain(), male.getEnergyGain(), 0.2),
-            RandomGenerator.generateGaussian(gender, female.getPreyEaten(), male.getPreyEaten(), 0.2),
-            female.getSexualMaturityStart(),
-            female.getSexualMaturityEnd(),
-            female.getMatingSeasonStart(),
-            female.getMatingSeasonEnd(),
-            female.getPregnancyCooldown(),
-            female.getGestationPeriod(),
-            female.getAverageOffspring(),
-            female.getJuvenileSurvivalRate(),
-            female.getMatingSuccessRate(),
-            female.getMatingAttempts()
+            new VitalsAttributes(
+                RandomGenerator.generateGaussian(female.getVitalsAttributes().weight(), male.getVitalsAttributes().weight(), 0.2),
+                RandomGenerator.generateGaussian(female.getVitalsAttributes().height(), male.getVitalsAttributes().height(), 0.2),
+                RandomGenerator.generateGaussian(female.getVitalsAttributes().lifeSpan(), male.getVitalsAttributes().lifeSpan(), 0.2),
+                SimulationSettings.getCurrentWeek()
+            ),
+            new HuntingAttributes(
+                RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().huntAttempts(), male.getHuntingAttributes().huntAttempts(), 0.0),
+                RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().energyLost(), male.getHuntingAttributes().energyLost(), 0.2),
+                RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().energyGain(), male.getHuntingAttributes().energyGain(), 0.2),
+                RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().preyEaten(), male.getHuntingAttributes().preyEaten(), 0.2)
+            ),
+            new ReproductionAttributes(
+                female.getReproductionAttributes().sexualMaturityStart(),
+                female.getReproductionAttributes().sexualMaturityEnd(),
+                female.getReproductionAttributes().matingSeasonStart(),
+                female.getReproductionAttributes().matingSeasonEnd(),
+                female.getReproductionAttributes().matingCooldown(),
+                female.getReproductionAttributes().gestationPeriod(),
+                female.getReproductionAttributes().averageOffspring(),
+                female.getReproductionAttributes().juvenileSurvivalRate(),
+                female.getReproductionAttributes().matingSuccessRate(),
+                female.getReproductionAttributes().matingAttempts()
+            )
         );
 
         offspring.getPreySpecies().putAll(female.getPreySpecies());
@@ -49,9 +55,9 @@ public class ReproductionSimulation {
 
         organism.setGestationWeek(organism.getGestationWeek() + 1);
 
-        if (organism.getGestationWeek() >= organism.getGestationPeriod()) {
+        if (organism.getGestationWeek() >= organism.getReproductionAttributes().gestationPeriod()) {
 
-            double offspringCount = Math.round(RandomGenerator.generateGaussian(organism.getAverageOffspring(), 0.2));
+            double offspringCount = Math.round(RandomGenerator.generateGaussian(organism.getReproductionAttributes().averageOffspring(), 0.2));
 
             if (organism.isImpersonatedOrganism()) {
                 Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
@@ -61,7 +67,7 @@ public class ReproductionSimulation {
 
                 Organism offspring = birthing(organism, organism.getMate());
 
-                if (RandomGenerator.random.nextDouble() >= organism.getJuvenileSurvivalRate()) {
+                if (RandomGenerator.random.nextDouble() >= organism.getReproductionAttributes().juvenileSurvivalRate()) {
                     juvenileDeath(organism, offspring);
                 }
 
@@ -131,7 +137,7 @@ public class ReproductionSimulation {
 
         organism.setCooldownWeek(organism.getCooldownWeek() + 1);
 
-        if (organism.getCooldownWeek() >= organism.getPregnancyCooldown()) {
+        if (organism.getCooldownWeek() >= organism.getReproductionAttributes().matingCooldown()) {
 
             organism.setReproductionStatus(ReproductionStatus.MATURE);
             organism.setCooldownWeek(0.0);

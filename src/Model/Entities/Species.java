@@ -23,13 +23,6 @@ public class Species {
     private final Map<SpeciesType, PreySpeciesType> basePreySpecies = new EnumMap<>(SpeciesType.class);
     private final ArrayList<Organism> organisms = new ArrayList<>();
 
-    // TODO: implement matingSeason
-    // TODO: implement socialStructure
-    // TODO: implement activityPattern
-    // TODO: implement habitat
-    // TODO: implement movementRadius
-    // TODO: implement hasAntlers
-
     public Species(SpeciesTaxonomy speciesTaxonomy, SpeciesType speciesType, String commonName, String scientificName, Diet baseDiet) {
         this.speciesTaxonomy = speciesTaxonomy;
         this.speciesType = speciesType;
@@ -166,25 +159,31 @@ public class Species {
                     speciesType,
                     gender,
                     baseDiet,
-                    RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE), 0.2),
-                    RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE), 0.2),
-                    lifeSpan,
-                   0,
                     age,
-                    getAttribute(SpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),
-                    getAttribute(SpeciesAttribute.ENERGY_LOST).getValue(gender),
-                    getAttribute(SpeciesAttribute.ENERGY_GAIN).getValue(gender),
-                    getAttribute(SpeciesAttribute.PREY_EATEN).getValue(gender),
-                    getAttribute(SpeciesAttribute.SEXUAL_MATURITY_START).getValue(gender),
-                    getAttribute(SpeciesAttribute.SEXUAL_MATURITY_END).getValue(gender),
-                    getAttribute(SpeciesAttribute.MATING_SEASON_START).getValue(gender),
-                    getAttribute(SpeciesAttribute.MATING_SEASON_END).getValue(gender),
-                    getAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN).getValue(gender),
-                    getAttribute(SpeciesAttribute.GESTATION_PERIOD).getValue(gender),
-                    getAttribute(SpeciesAttribute.AVERAGE_OFFSPRING).getValue(gender),
-                    getAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
-                    getAttribute(SpeciesAttribute.MATING_SUCCESS_RATE).getValue(gender),
-                    getAttribute(SpeciesAttribute.MATING_ATTEMPTS).getValue(gender)
+                    new VitalsAttributes(
+                        RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE), 0.2),
+                        RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE), 0.2),
+                        lifeSpan,
+                        0
+                    ),
+                    new HuntingAttributes(
+                        getAttribute(SpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),
+                        getAttribute(SpeciesAttribute.ENERGY_LOST).getValue(gender),
+                        getAttribute(SpeciesAttribute.ENERGY_GAIN).getValue(gender),
+                        getAttribute(SpeciesAttribute.PREY_EATEN).getValue(gender)
+                    ),
+                    new ReproductionAttributes(
+                        getAttribute(SpeciesAttribute.SEXUAL_MATURITY_START).getValue(gender),
+                        getAttribute(SpeciesAttribute.SEXUAL_MATURITY_END).getValue(gender),
+                        getAttribute(SpeciesAttribute.MATING_SEASON_START).getValue(gender),
+                        getAttribute(SpeciesAttribute.MATING_SEASON_END).getValue(gender),
+                        getAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN).getValue(gender),
+                        getAttribute(SpeciesAttribute.GESTATION_PERIOD).getValue(gender),
+                        getAttribute(SpeciesAttribute.AVERAGE_OFFSPRING).getValue(gender),
+                        getAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
+                        getAttribute(SpeciesAttribute.MATING_SUCCESS_RATE).getValue(gender),
+                        getAttribute(SpeciesAttribute.MATING_ATTEMPTS).getValue(gender)
+                    )
             );
             organism.getPreySpecies().putAll(basePreySpecies);
 

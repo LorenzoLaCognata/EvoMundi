@@ -66,7 +66,7 @@ public class Simulation {
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(mammalia, lagomorpha, leporidae, lepus);
         Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE);
         snowshoeHareAttributes(snowshoeHare);
-        ecosystem.addSpecies(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
+        // TODO: ecosystem.addSpecies(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
 
         TaxonomyOrder rodentia = new TaxonomyOrder("Rodentia");
         TaxonomyFamily castoridae = new TaxonomyFamily("Castoridae");
