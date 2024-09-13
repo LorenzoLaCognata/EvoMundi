@@ -6,7 +6,7 @@ public enum SpeciesAttribute {
     WEIGHT, // In Kilograms
     HEIGHT, // In Meters
     HUNT_ATTEMPTS, // Per Week
-    ENERGY_LOST, // Per Week
+    ENERGY_LOSS, // Per Week
     ENERGY_GAIN, // Per Kilogram of Prey hunted
     PREY_EATEN, // Per Kilogram of Prey per Week
     SEXUAL_MATURITY_START, // In Years

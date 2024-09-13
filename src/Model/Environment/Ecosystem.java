@@ -1,23 +1,24 @@
 package Model.Environment;
 
-import Model.Entities.Species;
+import Model.Animals.Species;
 import Model.Enums.*;
 import Utils.Log;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Ecosystem {
 
+    private final Map<BiomassType, Biomass> biomassMap = new HashMap<>();
     private final Map<SpeciesType, Species> speciesMap = new EnumMap<>(SpeciesType.class);
+
+    public Map<BiomassType, Biomass> getBiomassMap() {
+        return biomassMap;
+    }
 
     public Map<SpeciesType, Species> getSpeciesMap() {
         return speciesMap;
-    }
-
-    public void addSpecies(SpeciesType speciesType, Species species) {
-        species.initializeOrganisms();
-        speciesMap.put(speciesType, species);
     }
 
     public void printSpeciesDetails(LogStatus logStatus) {

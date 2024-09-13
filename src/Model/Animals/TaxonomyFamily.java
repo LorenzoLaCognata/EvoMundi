@@ -1,4 +1,4 @@
-package Model.Entities;
+package Model.Animals;
 
 public record TaxonomyFamily(String taxonomyFamily) {
 

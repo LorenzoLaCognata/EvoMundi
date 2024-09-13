@@ -1,4 +1,4 @@
-package Model.Entities;
+package Model.Animals;
 
 import Model.Enums.*;
 import Utils.Log;

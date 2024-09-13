@@ -25,21 +25,24 @@ public class Log {
     }
 
     // TODO: transform logging from formatted output to actual info, warnings etc.
+    // TODO: temporarily disabled for performance analysis
     public static void logln(String string) {
-        logger.info(string);
+        //logger.info(string);
     }
 
     // TODO: transform logging from formatted output to actual info, warnings etc.
+    // TODO: temporarily disabled for performance analysis
     public static void logln(LogStatus logStatus, String string) {
         if (logStatus == LogStatus.ACTIVE) {
-            logger.info(string);
+            //logger.info(string);
         }
     }
 
     // TODO: transform logging from formatted output to actual info, warnings etc.
+    // TODO: temporarily disabled for performance analysis
     public static void log(LogStatus logStatus, String string) {
         if (logStatus == LogStatus.ACTIVE) {
-            logger.info(string);
+            //logger.info(string);
         }
     }
     

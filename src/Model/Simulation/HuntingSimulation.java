@@ -1,7 +1,12 @@
 package Model.Simulation;
 
-import Model.Entities.*;
-import Model.Enums.*;
+import Model.Animals.Organism;
+import Model.Animals.PreySpeciesType;
+import Model.Animals.Species;
+import Model.Enums.OrganismDeathReason;
+import Model.Enums.OrganismStatus;
+import Model.Enums.SimulationStatus;
+import Model.Enums.SpeciesType;
 import Utils.Log;
 import Utils.RandomGenerator;
 
@@ -35,7 +40,7 @@ public class HuntingSimulation {
 
 }
 
-    public void hunt(Map<SpeciesType, Species> speciesMap, Species predatorSpecies) {
+    public void speciesHunt(Map<SpeciesType, Species> speciesMap, Species predatorSpecies) {
 
         for (Organism predatorOrganism : predatorSpecies.getAliveOrganisms()) {
 

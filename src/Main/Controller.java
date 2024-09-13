@@ -1,6 +1,6 @@
 package Main;
 
-import Model.Entities.Species;
+import Model.Animals.Species;
 import Model.Enums.SimulationStatus;
 import Model.Enums.SpeciesType;
 import Model.Simulation.SimulationSettings;

@@ -1,6 +1,6 @@
 package Model.Simulation;
 
-import Model.Entities.*;
+import Model.Animals.*;
 import Model.Enums.*;
 import Utils.Log;
 import Utils.RandomGenerator;
@@ -23,11 +23,11 @@ public class ReproductionSimulation {
                 RandomGenerator.generateGaussian(female.getVitalsAttributes().weight(), male.getVitalsAttributes().weight(), 0.2),
                 RandomGenerator.generateGaussian(female.getVitalsAttributes().height(), male.getVitalsAttributes().height(), 0.2),
                 RandomGenerator.generateGaussian(female.getVitalsAttributes().lifeSpan(), male.getVitalsAttributes().lifeSpan(), 0.2),
-                SimulationSettings.getCurrentWeek()
+                SimulationSettings.getCurrentWeek(),
+                RandomGenerator.generateGaussian(gender, female.getVitalsAttributes().energyLoss(), male.getVitalsAttributes().energyLoss(), 0.2)
             ),
             new HuntingAttributes(
                 RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().huntAttempts(), male.getHuntingAttributes().huntAttempts(), 0.0),
-                RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().energyLost(), male.getHuntingAttributes().energyLost(), 0.2),
                 RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().energyGain(), male.getHuntingAttributes().energyGain(), 0.2),
                 RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().preyEaten(), male.getHuntingAttributes().preyEaten(), 0.2)
             ),
@@ -150,7 +150,7 @@ public class ReproductionSimulation {
 
     }
 
-    public void reproduction(Species species) {
+    public void speciesReproduction(Species species) {
 
         for (Organism organism : species.getAliveOrganisms()) {
 
