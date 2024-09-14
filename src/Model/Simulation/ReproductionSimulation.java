@@ -5,6 +5,8 @@ import Model.Enums.*;
 import Utils.Log;
 import Utils.RandomGenerator;
 
+import javafx.scene.image.ImageView;
+
 public class ReproductionSimulation {
 
     public Organism birthing(Organism male, Organism female) {
@@ -19,12 +21,20 @@ public class ReproductionSimulation {
             gender,
             female.getDiet(),
             0.0,
+            new ImageView(female.getImageView().getImage()),
             new VitalsAttributes(
                 RandomGenerator.generateGaussian(female.getVitalsAttributes().weight(), male.getVitalsAttributes().weight(), 0.2),
                 RandomGenerator.generateGaussian(female.getVitalsAttributes().height(), male.getVitalsAttributes().height(), 0.2),
                 RandomGenerator.generateGaussian(female.getVitalsAttributes().lifeSpan(), male.getVitalsAttributes().lifeSpan(), 0.2),
                 SimulationSettings.getCurrentWeek(),
                 RandomGenerator.generateGaussian(gender, female.getVitalsAttributes().energyLoss(), male.getVitalsAttributes().energyLoss(), 0.2)
+            ),
+            new MovementAttributes(
+                female.getMovementAttributes().getPosX(),
+                female.getMovementAttributes().getPosY(),
+                0.0,
+                0.0,
+                0.0
             ),
             new HuntingAttributes(
                 RandomGenerator.generateGaussian(gender, female.getHuntingAttributes().huntAttempts(), male.getHuntingAttributes().huntAttempts(), 0.0),
@@ -109,13 +119,11 @@ public class ReproductionSimulation {
 
     public void findMate(Species species, Organism organism) {
 
-        boolean foundMate = false;
+        for (int i = 0; i < species.getOrganisms().size(); i++) {
 
-        for (Organism mate : species.getAliveOrganisms()) {
+            Organism mate = species.getOrganisms().get(i);
 
-            if (!foundMate && mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
-
-                foundMate = true;
+            if (mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
 
                 if (organism.isImpersonatedOrganism()) {
                     Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " finds a mate");
@@ -127,6 +135,8 @@ public class ReproductionSimulation {
                 if (organism.isImpersonatedOrganism()) {
                     Log.logln(organism.getSpeciesType() + " " + organism.getGender() + " starts pregnancy");
                 }
+
+                break;
 
             }
         }
@@ -152,7 +162,9 @@ public class ReproductionSimulation {
 
     public void speciesReproduction(Species species) {
 
-        for (Organism organism : species.getAliveOrganisms()) {
+        for (int i = 0; i < species.getOrganisms().size(); i++) {
+
+            Organism organism = species.getOrganisms().get(i);
 
             if (organism.getGender() == Gender.FEMALE) {
 

@@ -16,6 +16,9 @@ import javafx.scene.paint.Color;
 
 public class View {
 
+    public static final double SCENE_WIDTH = 1600;
+    public static final double SCENE_HEIGHT = 500;
+
     private final BorderPane borderPane = new BorderPane();
 
     private final Label populationLabel1 = new Label();
@@ -23,6 +26,7 @@ public class View {
     private final Label populationLabel3 = new Label();
     private final Label populationLabel4 = new Label();
     private final Label populationLabel5 = new Label();
+    private final Label populationLabel6 = new Label();
     private final Label weekLabel = new Label();
 
     CheckBox checkBox1 = new CheckBox();
@@ -30,8 +34,6 @@ public class View {
     Button buttonStartStop = new Button();
 
     Pane centerRegion;
-
-    ImageView imageViewOrganism = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\whitetaildeer_64x64.png"));
 
     public View() {
 
@@ -110,24 +112,16 @@ public class View {
         populationLabel5.setText(string);
     }
 
+    public void setPopulationLabel6(String string) {
+        populationLabel6.setText(string);
+    }
+
     public Label getWeekLabel() {
         return weekLabel;
     }
 
     public void setWeekLabel(String string) {
         weekLabel.setText(string);
-    }
-
-    public ImageView getImageViewOrganism() {
-        return imageViewOrganism;
-    }
-
-    public void setImageViewOrganismX(double x) {
-        imageViewOrganism.setX(x);
-    }
-
-    public void setImageViewOrganismY(double y) {
-        imageViewOrganism.setY(y);
     }
 
     private ToolBar createToolBar() {
@@ -143,10 +137,10 @@ public class View {
         checkBox1.setSelected(true);
         checkBox1.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (Boolean.TRUE.equals(oldValue) && Boolean.FALSE.equals(newValue)) {
-                centerRegion.getChildren().remove(imageViewOrganism);
+                // TODO: do not show any organism of that species with centerRegion.getChildren().remove(imageViewOrganism);
             }
             else if (Boolean.FALSE.equals(oldValue) && Boolean.TRUE.equals(newValue)) {
-                centerRegion.getChildren().add(imageViewOrganism);
+                // TODO: show every organism of that species with centerRegion.getChildren().add(imageViewOrganism);
             }
         });
 
@@ -172,16 +166,6 @@ public class View {
         checkBox3.setSelected(true);
         vbox3.getChildren().addAll(species3, populationLabel3, imageView3, checkBox3);
 
-        VBox vbox4 = new VBox(5);
-        vbox4.setAlignment(Pos.CENTER);
-        vbox4.setPadding(new Insets(5));
-        vbox4.setMinWidth(128);
-        Label species4 = new Label("European Beaver");
-        ImageView imageView4 = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\beaver_64x64.png"));
-        CheckBox checkBox4 = new CheckBox();
-        checkBox4.setSelected(true);
-        vbox4.getChildren().addAll(species4, populationLabel4, imageView4, checkBox4);
-
         VBox vbox5 = new VBox(5);
         vbox5.setAlignment(Pos.CENTER);
         vbox5.setPadding(new Insets(5));
@@ -192,6 +176,26 @@ public class View {
         checkBox5.setSelected(true);
         vbox5.getChildren().addAll(species5, populationLabel5, imageView5, checkBox5);
 
+        VBox vbox4 = new VBox(5);
+        vbox4.setAlignment(Pos.CENTER);
+        vbox4.setPadding(new Insets(5));
+        vbox4.setMinWidth(128);
+        Label species4 = new Label("European Beaver");
+        ImageView imageView4 = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\europeanbeaver_64x64.png"));
+        CheckBox checkBox4 = new CheckBox();
+        checkBox4.setSelected(true);
+        vbox4.getChildren().addAll(species4, populationLabel4, imageView4, checkBox4);
+
+        VBox vbox6 = new VBox(5);
+        vbox6.setAlignment(Pos.CENTER);
+        vbox6.setPadding(new Insets(5));
+        vbox6.setMinWidth(128);
+        Label species6 = new Label("Bobcat");
+        ImageView imageView6 = new ImageView(new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\bobcat_64x64.png"));
+        CheckBox checkBox6 = new CheckBox();
+        checkBox6.setSelected(true);
+        vbox6.getChildren().addAll(species6, populationLabel6, imageView6, checkBox6);
+
         VBox vboxN = new VBox(5);
         vboxN.setAlignment(Pos.CENTER);
         vboxN.setPadding(new Insets(5));
@@ -200,7 +204,7 @@ public class View {
 
         vboxN.getChildren().addAll(weekLabel, buttonStartStop);
 
-        toolBar.getItems().addAll(vbox1, vbox2, vbox3, vbox4, vbox5, vboxN);
+        toolBar.getItems().addAll(vbox1, vbox2, vbox3, vbox4, vbox5, vbox6, vboxN);
 
         return toolBar;
     }
@@ -221,14 +225,7 @@ public class View {
 
     private Pane createCenterContent() {
 
-        Pane pane = new Pane();
-
-        imageViewOrganism.setX(200.0);
-        imageViewOrganism.setY(200.0);
-
-        pane.getChildren().addAll(imageViewOrganism);
-
-        return pane;
+        return new Pane();
     }
 
 }

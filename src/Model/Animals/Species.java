@@ -1,8 +1,12 @@
 package Model.Animals;
 
+import Main.View;
 import Model.Enums.*;
 import Model.Simulation.SimulationSettings;
 import Utils.RandomGenerator;
+import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -18,19 +22,23 @@ public class Species {
 
     private final Diet baseDiet;
 
+    // TODO: create parameters or relative folders
+    private final Image image;
+    private final Group imageGroup = new Group();
+
     private final Map<SpeciesAttribute, SpeciesAttributeValue> attributes = new EnumMap<>(SpeciesAttribute.class);
 
     private final Map<SpeciesType, PreySpeciesType> basePreySpecies = new EnumMap<>(SpeciesType.class);
     private final ArrayList<Organism> organisms = new ArrayList<>();
+    private final ArrayList<Organism> deadOrganisms = new ArrayList<>();
 
-    public Species(SpeciesTaxonomy speciesTaxonomy, SpeciesType speciesType, String commonName, String scientificName, Diet baseDiet) {
-
+    public Species(SpeciesTaxonomy speciesTaxonomy, SpeciesType speciesType, String commonName, String scientificName, Diet baseDiet, Image image) {
         this.speciesTaxonomy = speciesTaxonomy;
         this.speciesType = speciesType;
         this.commonName = commonName;
         this.scientificName = scientificName;
         this.baseDiet = baseDiet;
-
+        this.image = image;
     }
 
     public SpeciesType getSpeciesType() {
@@ -53,6 +61,14 @@ public class Species {
         return baseDiet;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public Group getImageGroup() {
+        return imageGroup;
+    }
+
     public SpeciesAttributeValue getAttribute(SpeciesAttribute speciesAttribute) {
         return attributes.get(speciesAttribute);
     }
@@ -65,44 +81,20 @@ public class Species {
         return organisms;
     }
 
-    public List<Organism> getOrganisms(OrganismStatus organismStatus) {
-
-        ArrayList<Organism> statusOrganisms = new ArrayList<>();
-
-        for (Organism organism : organisms) {
-            if (organism.getOrganismStatus() == organismStatus) {
-                statusOrganisms.add(organism);
-            }
-        }
-
-        return statusOrganisms;
-
+    public List<Organism> getDeadOrganisms() {
+        return deadOrganisms;
     }
 
-    public List<Organism> getAliveOrganisms() {
-        return getOrganisms(OrganismStatus.ALIVE);
+    public int getDeadPopulation() {
+        return deadOrganisms.size();
     }
 
-    public int getPopulation(OrganismStatus organismStatus, OrganismDeathReason organismDeathReason) {
+    public int getDeadPopulation(OrganismDeathReason organismDeathReason) {
 
         int count = 0;
 
-        for (Organism organism : organisms) {
-            if (organism.getOrganismStatus() == organismStatus && organism.getOrganismDeathReason() == organismDeathReason) {
-                count++;
-            }
-        }
-
-        return count;
-
-    }
-
-    public int getPopulation(OrganismStatus organismStatus) {
-
-        int count = 0;
-
-        for (Organism organism : organisms) {
-            if (organism.getOrganismStatus() == organismStatus) {
+        for (Organism organism : deadOrganisms) {
+            if (organism.getOrganismDeathReason() == organismDeathReason) {
                 count++;
             }
         }
@@ -112,7 +104,7 @@ public class Species {
     }
 
     public int getPopulation() {
-        return getPopulation(OrganismStatus.ALIVE);
+        return organisms.size();
     }
 
     public int getPopulation(Gender gender) {
@@ -120,7 +112,7 @@ public class Species {
         int count = 0;
 
         for (Organism organism : organisms) {
-            if (organism.getOrganismStatus() == OrganismStatus.ALIVE && organism.getGender() == gender) {
+            if (organism.getGender() == gender) {
                 count++;
             }
         }
@@ -285,14 +277,14 @@ public class Species {
         TaxonomyGenus odocoileus = new TaxonomyGenus("Odocoileus");
         SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(mammalia, artiodactyla, cervidae, odocoileus);
 
-        Species whiteTailedDeer = new Species(odocoileusTaxonomy, SpeciesType.WHITE_TAILED_DEER, "White-Tailed Deer", "Odocoileus virginianus", Diet.HERBIVORE);
+        Species whiteTailedDeer = new Species(odocoileusTaxonomy, SpeciesType.WHITE_TAILED_DEER, "White-Tailed Deer", "Odocoileus virginianus", Diet.HERBIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\whitetaildeer_64x64.png"));
         whiteTailedDeerAttributes(whiteTailedDeer);
         whiteTailedDeer.initializeOrganisms();
         speciesMap.put(SpeciesType.WHITE_TAILED_DEER, whiteTailedDeer);
 
         TaxonomyGenus alces = new TaxonomyGenus("Alces");
         SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(mammalia, artiodactyla, cervidae, alces);
-        Species moose = new Species(alcesTaxonomy, SpeciesType.MOOSE, "Moose", "Alces alces", Diet.HERBIVORE);
+        Species moose = new Species(alcesTaxonomy, SpeciesType.MOOSE, "Moose", "Alces alces", Diet.HERBIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\moose_64x64.png"));
         mooseAttributes(moose);
         moose.initializeOrganisms();
         speciesMap.put(SpeciesType.MOOSE, moose);
@@ -301,7 +293,7 @@ public class Species {
         TaxonomyFamily canidae = new TaxonomyFamily("Canidae");
         TaxonomyGenus canis = new TaxonomyGenus("Canis");
         SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(mammalia, carnivora, canidae, canis);
-        Species grayWolf = new Species(canisTaxonomy, SpeciesType.GRAY_WOLF, "Gray Wolf", "Canis lupus", Diet.CARNIVORE);
+        Species grayWolf = new Species(canisTaxonomy, SpeciesType.GRAY_WOLF, "Gray Wolf", "Canis lupus", Diet.CARNIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\graywolf_64x64.png"));
         grayWolfAttributes(grayWolf);
         grayWolf.initializeOrganisms();
         speciesMap.put(SpeciesType.GRAY_WOLF, grayWolf);
@@ -310,16 +302,16 @@ public class Species {
         TaxonomyFamily leporidae = new TaxonomyFamily("Leporidae");
         TaxonomyGenus lepus = new TaxonomyGenus("Lepus");
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(mammalia, lagomorpha, leporidae, lepus);
-        Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE);
+        Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\snoeshowhare_64x64.png"));
         snowshoeHareAttributes(snowshoeHare);
-        snowshoeHare.initializeOrganisms();
+        //snowshoeHare.initializeOrganisms();
         speciesMap.put(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
 
         TaxonomyOrder rodentia = new TaxonomyOrder("Rodentia");
         TaxonomyFamily castoridae = new TaxonomyFamily("Castoridae");
         TaxonomyGenus castor = new TaxonomyGenus("Castor");
         SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(mammalia, rodentia, castoridae, castor);
-        Species europeanBeaver = new Species(castorTaxonomy, SpeciesType.EUROPEAN_BEAVER, "European Beaver", "Castor fiber", Diet.HERBIVORE);
+        Species europeanBeaver = new Species(castorTaxonomy, SpeciesType.EUROPEAN_BEAVER, "European Beaver", "Castor fiber", Diet.HERBIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\europeanbeaver_64x64.png"));
         europeanBeaverAttributes(europeanBeaver);
         europeanBeaver.initializeOrganisms();
         speciesMap.put(SpeciesType.EUROPEAN_BEAVER, europeanBeaver);
@@ -327,7 +319,7 @@ public class Species {
         TaxonomyFamily felidae = new TaxonomyFamily("Felidae");
         TaxonomyGenus lynx = new TaxonomyGenus("Lynx");
         SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(mammalia, carnivora, felidae, lynx);
-        Species bobcat = new Species(lynxTaxonomy, SpeciesType.BOBCAT, "Bobcat", "Lynx rufus", Diet.CARNIVORE);
+        Species bobcat = new Species(lynxTaxonomy, SpeciesType.BOBCAT, "Bobcat", "Lynx rufus", Diet.CARNIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\bobcat_64x64.png"));
         bobcatAttributes(bobcat);
         bobcat.initializeOrganisms();
         speciesMap.put(SpeciesType.BOBCAT, bobcat);
@@ -351,17 +343,27 @@ public class Species {
 
             double lifeSpan = RandomGenerator.generateGaussian(gender, getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.MALE), 0.2);
             double age = RandomGenerator.random.nextDouble() * lifeSpan;
+            double posX = RandomGenerator.random.nextDouble() * View.SCENE_WIDTH;
+            double posY = RandomGenerator.random.nextDouble() * View.SCENE_HEIGHT;
             Organism organism = new Organism(
                     speciesType,
                     gender,
                     baseDiet,
                     age,
+                    new ImageView(image),
                     new VitalsAttributes(
                         RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE), 0.2),
                         RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE), 0.2),
                         lifeSpan,
                         0,
                         getAttribute(SpeciesAttribute.ENERGY_LOSS).getValue(gender)
+                    ),
+                    new MovementAttributes(
+                        posX,
+                        posY,
+                        0.0,
+                        0.0,
+                        0.0
                     ),
                     new HuntingAttributes(
                         getAttribute(SpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),

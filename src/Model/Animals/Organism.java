@@ -2,6 +2,7 @@ package Model.Animals;
 
 import Model.Enums.*;
 import Utils.Log;
+import javafx.scene.image.ImageView;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -11,8 +12,10 @@ public class Organism {
     private final SpeciesType speciesType;
     private final Gender gender;
     private final Diet diet;
+    private final ImageView imageView;
 
     private final VitalsAttributes vitalsAttributes;
+    private final MovementAttributes movementAttributes;
     private final HuntingAttributes huntingAttributes;
     private final ReproductionAttributes reproductionAttributes;
 
@@ -31,12 +34,14 @@ public class Organism {
 
     private final Map<SpeciesType, PreySpeciesType> preySpecies = new EnumMap<>(SpeciesType.class);
 
-    public Organism(SpeciesType speciesType, Gender gender, Diet diet, double age, VitalsAttributes vitalsAttributes, HuntingAttributes huntingAttributes, ReproductionAttributes reproductionAttributes) {
+    public Organism(SpeciesType speciesType, Gender gender, Diet diet, double age, ImageView imageView, VitalsAttributes vitalsAttributes, MovementAttributes movementAttributes, HuntingAttributes huntingAttributes, ReproductionAttributes reproductionAttributes) {
         this.speciesType = speciesType;
         this.gender = gender;
         this.diet = diet;
         this.age = age;
+        this.imageView = imageView;
         this.vitalsAttributes = vitalsAttributes;
+        this.movementAttributes = movementAttributes;
         this.huntingAttributes = huntingAttributes;
         this.reproductionAttributes = reproductionAttributes;
     }
@@ -47,6 +52,10 @@ public class Organism {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
     }
 
     public Diet getDiet() {
@@ -63,6 +72,10 @@ public class Organism {
 
     public VitalsAttributes getVitalsAttributes() {
         return vitalsAttributes;
+    }
+
+    public MovementAttributes getMovementAttributes() {
+        return movementAttributes;
     }
 
     public HuntingAttributes getHuntingAttributes() {

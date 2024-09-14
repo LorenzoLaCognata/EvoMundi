@@ -42,7 +42,9 @@ public class HuntingSimulation {
 
     public void speciesHunt(Map<SpeciesType, Species> speciesMap, Species predatorSpecies) {
 
-        for (Organism predatorOrganism : predatorSpecies.getAliveOrganisms()) {
+        for (int i = 0; i < predatorSpecies.getOrganisms().size(); i++) {
+
+            Organism predatorOrganism = predatorSpecies.getOrganisms().get(i);
 
             if (!predatorOrganism.getPreySpecies().isEmpty()) {
 
@@ -65,7 +67,7 @@ public class HuntingSimulation {
 
         if (preySpecies != null) {
 
-            List<Organism> preyOrganisms = preySpecies.getAliveOrganisms();
+            List<Organism> preyOrganisms = preySpecies.getOrganisms();
             int preySpeciesPopulation = preySpecies.getPopulation();
 
             if (preySpeciesPopulation > 0) {

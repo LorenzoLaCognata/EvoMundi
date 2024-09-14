@@ -37,15 +37,14 @@ public class Ecosystem {
             Log.log(logStatus, species.getCommonName());
             Log.log(logStatus, " ".repeat(20 - species.getCommonName().length()));
             Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getAttribute(SpeciesAttribute.CARRYING_CAPACITY).getValue()).length()) + Log.formatNumber(species.getAttribute(SpeciesAttribute.CARRYING_CAPACITY).getValue()) + " CAP");
-            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getOrganisms().size()).length()) + Log.formatNumber(species.getOrganisms().size()) + " TOT");
             Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation()).length()) + Log.formatNumber(species.getPopulation()) + " ALIVE");
             Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(Gender.MALE)).length()) + Log.formatNumber(species.getPopulation(Gender.MALE)) + " M");
             Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(Gender.FEMALE)).length()) + Log.formatNumber(species.getPopulation(Gender.FEMALE)) + " F");
-            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(OrganismStatus.DEAD)).length()) + Log.formatNumber(species.getPopulation(OrganismStatus.DEAD)) + " DEAD");
-            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)).length()) + Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.PREDATION)) + " PRE");
-            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)).length()) + Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.STARVATION)) + " STA");
-            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)).length()) + Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.AGE)) + " AGE");
-            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.JUVENILE_DEATH)).length()) + Log.formatNumber(species.getPopulation(OrganismStatus.DEAD, OrganismDeathReason.JUVENILE_DEATH)) + " JUV");
+            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getDeadPopulation()).length()) + Log.formatNumber(species.getDeadPopulation()) + " DEAD");
+            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.PREDATION)).length()) + Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.PREDATION)) + " PRE");
+            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.STARVATION)).length()) + Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.STARVATION)) + " STA");
+            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.AGE)).length()) + Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.AGE)) + " AGE");
+            Log.log(logStatus, " | " + " ".repeat(7 - Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.JUVENILE_DEATH)).length()) + Log.formatNumber(species.getDeadPopulation(OrganismDeathReason.JUVENILE_DEATH)) + " JUV");
             Log.logln(logStatus, "");
         }
 

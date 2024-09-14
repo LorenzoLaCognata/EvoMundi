@@ -11,7 +11,9 @@ public class GrazingSimulation {
 
     public void speciesGraze(Map<BiomassType, Biomass> biomassMap, Species species) {
 
-        for (Organism organism : species.getAliveOrganisms()) {
+        for (int i = 0; i < species.getOrganisms().size(); i++) {
+
+            Organism organism = species.getOrganisms().get(i);
 
             // TODO: selection of the biomass to consume and not always the first one
             Biomass biomass = biomassMap.entrySet().iterator().next().getValue();

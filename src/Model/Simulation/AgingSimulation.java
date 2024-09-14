@@ -9,7 +9,10 @@ public class AgingSimulation {
 
     public void speciesAge(Species species) {
 
-        for (Organism organism : species.getAliveOrganisms()) {
+        for (int i = 0; i < species.getOrganisms().size(); i++) {
+
+            Organism organism = species.getOrganisms().get(i);
+
             organism.setAge(organism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
 
             if (organism.getAge() >= organism.getVitalsAttributes().lifeSpan()) {
@@ -18,11 +21,11 @@ public class AgingSimulation {
 
             else {
 
-                if (organism.getGender() == Gender.FEMALE && organism.getReproductionStatus() == ReproductionStatus.MATURE && organism.getAge() >= organism.getReproductionAttributes().sexualMaturityEnd()) {
+                if (organism.getReproductionStatus() == ReproductionStatus.MATURE && organism.getAge() >= organism.getReproductionAttributes().sexualMaturityEnd() && organism.getGender() == Gender.FEMALE) {
                     organismMenopause(organism);
                 }
 
-                if (organism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && organism.getAge() >= organism.getReproductionAttributes().sexualMaturityStart()) {
+                else if (organism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && organism.getAge() >= organism.getReproductionAttributes().sexualMaturityStart()) {
                     sexualMaturation(organism);
                 }
 

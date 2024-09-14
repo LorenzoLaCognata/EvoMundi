@@ -1,13 +1,17 @@
 package Model.Simulation;
 
+import Model.Animals.MovementAttributes;
+import Model.Animals.Organism;
 import Model.Animals.Species;
 import Model.Enums.BiomassType;
 import Model.Enums.LogStatus;
+import Model.Enums.OrganismStatus;
 import Model.Enums.SpeciesType;
 import Model.Environment.Biomass;
 import Model.Environment.Ecosystem;
 import Utils.Log;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public class Simulation {
@@ -17,6 +21,7 @@ public class Simulation {
     private final BiomassGrowthSimulation biomassGrowthSimulation;
     private final GrazingSimulation grazingSimulation;
 
+    private final MovementSimulation movementSimulation;
     private final AgingSimulation agingSimulation;
     private final ReproductionSimulation reproductionSimulation;
     private final HuntingSimulation huntingSimulation;
@@ -28,22 +33,31 @@ public class Simulation {
         biomassGrowthSimulation = new BiomassGrowthSimulation();
         grazingSimulation = new GrazingSimulation();
 
+        movementSimulation = new MovementSimulation();
         agingSimulation = new AgingSimulation();
         reproductionSimulation = new ReproductionSimulation();
         huntingSimulation = new HuntingSimulation();
 
         ecosystem.getBiomassMap().putAll(Biomass.initializeBiomass());
         ecosystem.getSpeciesMap().putAll(Species.initializeSpecies());
-        Log.logln("");
-        Log.logln("ECOSYSTEM");
-        Log.logln("");
-        ecosystem.printSpeciesDetails(LogStatus.INACTIVE);
-        Log.logln("--------");
 
     }
 
     public Ecosystem getEcosystem() {
         return ecosystem;
+    }
+
+    private static void buryDead(Species species) {
+
+        Iterator<Organism> iterator = species.getOrganisms().iterator();
+        while (iterator.hasNext()) {
+            Organism organism = iterator.next();
+            if (organism.getOrganismStatus() == OrganismStatus.DEAD) {
+                species.getDeadOrganisms().add(organism);
+                iterator.remove();
+            }
+        }
+
     }
 
     public void simulate() {
@@ -63,6 +77,10 @@ public class Simulation {
         Map<SpeciesType, Species> speciesMap = ecosystem.getSpeciesMap();
 
         for (Species species : speciesMap.values()) {
+            movementSimulation.speciesMove(species);
+        }
+
+        for (Species species : speciesMap.values()) {
             agingSimulation.speciesAge(species);
         }
 
@@ -78,8 +96,13 @@ public class Simulation {
             reproductionSimulation.speciesReproduction(species);
         }
 
+        for (Species species : speciesMap.values()) {
+            buryDead(species);
+        }
+
         ecosystem.printSpeciesDistribution(LogStatus.ACTIVE);
 
     }
+
 
 }

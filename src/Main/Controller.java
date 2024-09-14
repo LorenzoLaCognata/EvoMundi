@@ -1,5 +1,6 @@
 package Main;
 
+import Model.Animals.Organism;
 import Model.Animals.Species;
 import Model.Enums.SimulationStatus;
 import Model.Enums.SpeciesType;
@@ -7,17 +8,61 @@ import Model.Simulation.SimulationSettings;
 import Utils.Log;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.scene.Group;
 
 public class Controller {
 
     private final View view = new View();
     private final Model model = new Model();
     private final AnimationTimer timer = new AnimationTimer() {
+
+        private long lastUpdateTime = 0;
+
         @Override
         public void handle(long now) {
-            run();
+
+            if (now - lastUpdateTime >= SimulationSettings.FRAME_DURATION) {
+                lastUpdateTime = now;
+                run();
+            }
         }
+
     };
+
+    private void addImageViews() {
+
+        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
+
+            for (int i = 0; i < species.getOrganisms().size(); i++) {
+
+                Organism organism = species.getOrganisms().get(i);
+
+                if (true || organism.isImpersonatedOrganism()) {
+                    species.getImageGroup().getChildren().add(organism.getImageView());
+                }
+
+            }
+
+            view.getCenterRegion().getChildren().addAll(species.getImageGroup());
+        }
+
+    }
+
+    private void clearDeadOrganismImageViews() {
+
+        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
+
+            for (int i = 0; i < species.getDeadOrganisms().size(); i++) {
+
+                Organism deadOrganism = species.getDeadOrganisms().get(i);
+
+                species.getImageGroup().getChildren().removeAll(deadOrganism.getImageView());
+
+            }
+
+        }
+
+    }
 
     public Controller() {
         view.setButtonStartStop(this::handleStartStopButton);
@@ -46,8 +91,11 @@ public class Controller {
 
     public void updateView() {
 
-        view.setImageViewOrganismX(view.getImageViewOrganism().getX() + 1.0);
-        view.setImageViewOrganismY(view.getImageViewOrganism().getY() + 1.0);
+        if (SimulationSettings.getCurrentWeek() == 0) {
+            addImageViews();
+        }
+
+        clearDeadOrganismImageViews();
 
         view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
@@ -64,11 +112,14 @@ public class Controller {
             else if (species.getSpeciesType() == SpeciesType.GRAY_WOLF) {
                 view.setPopulationLabel3(string);
             }
+            else if (species.getSpeciesType() == SpeciesType.SNOWSHOE_HARE) {
+                view.setPopulationLabel5(string);
+            }
             else if (species.getSpeciesType() == SpeciesType.EUROPEAN_BEAVER) {
                 view.setPopulationLabel4(string);
             }
-            else if (species.getSpeciesType() == SpeciesType.SNOWSHOE_HARE) {
-                view.setPopulationLabel5(string);
+            else if (species.getSpeciesType() == SpeciesType.BOBCAT) {
+                view.setPopulationLabel6(string);
             }
         }
 

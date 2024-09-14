@@ -14,7 +14,7 @@ public class Main extends Application {
 
         Controller controller = new Controller();
 
-        Scene scene = new Scene(controller.getView().getBorderPane(), 800, 600);
+        Scene scene = new Scene(controller.getView().getBorderPane(), View.SCENE_WIDTH, View.SCENE_HEIGHT);
         stage.setTitle("EvoMundi");
         stage.setMaximized(true);
         stage.setScene(scene);
