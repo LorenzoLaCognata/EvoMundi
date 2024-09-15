@@ -4,6 +4,8 @@ import Main.View;
 import Model.Enums.*;
 import Model.Simulation.SimulationSettings;
 import Utils.RandomGenerator;
+import View.ToolbarSection;
+
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,6 +27,7 @@ public class Species {
     // TODO: create parameters or relative folders
     private final Image image;
     private final Group imageGroup = new Group();
+    private final ToolbarSection toolbarSection;
 
     private final Map<SpeciesAttribute, SpeciesAttributeValue> attributes = new EnumMap<>(SpeciesAttribute.class);
 
@@ -39,6 +42,7 @@ public class Species {
         this.scientificName = scientificName;
         this.baseDiet = baseDiet;
         this.image = image;
+        this.toolbarSection = new ToolbarSection(this.commonName, this.getImage());
     }
 
     public SpeciesType getSpeciesType() {
@@ -127,6 +131,10 @@ public class Species {
 
     public void addBasePreySpecies(PreySpeciesType preySpeciesType) {
         basePreySpecies.put(preySpeciesType.speciesType(), preySpeciesType);
+    }
+
+    public ToolbarSection getToolbarSection() {
+        return toolbarSection;
     }
 
     @Override
@@ -302,7 +310,7 @@ public class Species {
         TaxonomyFamily leporidae = new TaxonomyFamily("Leporidae");
         TaxonomyGenus lepus = new TaxonomyGenus("Lepus");
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(mammalia, lagomorpha, leporidae, lepus);
-        Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\snoeshowhare_64x64.png"));
+        Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE, new Image("File:C:\\Users\\vodev\\OneDrive\\Desktop\\snowshoehare_64x64.png"));
         snowshoeHareAttributes(snowshoeHare);
         //snowshoeHare.initializeOrganisms();
         speciesMap.put(SpeciesType.SNOWSHOE_HARE, snowshoeHare);

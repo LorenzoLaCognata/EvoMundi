@@ -24,6 +24,10 @@ public class Log {
         return formatter.format(d);
     }
 
+    public static void info(String string) {
+        logger.info(string);
+    }
+
     // TODO: transform logging from formatted output to actual info, warnings etc.
     // TODO: temporarily disabled for performance analysis
     public static void logln(String string) {

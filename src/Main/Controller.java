@@ -3,12 +3,9 @@ package Main;
 import Model.Animals.Organism;
 import Model.Animals.Species;
 import Model.Enums.SimulationStatus;
-import Model.Enums.SpeciesType;
 import Model.Simulation.SimulationSettings;
-import Utils.Log;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.scene.Group;
 
 public class Controller {
 
@@ -25,30 +22,31 @@ public class Controller {
                 lastUpdateTime = now;
                 run();
             }
+
+            if (SimulationSettings.getCurrentWeek() == SimulationSettings.SIMULATION_LENGTH_WEEKS) {
+                timer.stop();
+            }
         }
 
     };
 
-    private void addImageViews() {
+    private void addSpeciesIconsSpecies() {
 
         for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
-
-            for (int i = 0; i < species.getOrganisms().size(); i++) {
-
-                Organism organism = species.getOrganisms().get(i);
-
-                if (true || organism.isImpersonatedOrganism()) {
-                    species.getImageGroup().getChildren().add(organism.getImageView());
-                }
-
-            }
-
-            view.getCenterRegion().getChildren().addAll(species.getImageGroup());
+            view.addSpeciesIcons(species);
         }
 
     }
 
-    private void clearDeadOrganismImageViews() {
+    private void addOrganismImagesSpecies() {
+
+        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
+            view.addOrganismImages(species);
+        }
+
+    }
+
+    private void removeDeadOrganismImageViews() {
 
         for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
 
@@ -64,8 +62,28 @@ public class Controller {
 
     }
 
+    private void viewSelectedSpeciesImageViews() {
+
+        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
+
+            for (int i = 0; i < species.getDeadOrganisms().size(); i++) {
+
+                if (!species.getToolbarSection().getCheckBox().isSelected()) {
+                    view.removeCenterRegionGroup(species.getImageGroup());
+                }
+                else if (!view.centerRegionContainsroup(species.getImageGroup())) {
+                    view.addCenterRegionGroup(species.getImageGroup());
+                }
+            }
+
+        }
+
+    }
+
     public Controller() {
+        view.initializeToolBar();
         view.setButtonStartStop(this::handleStartStopButton);
+        addSpeciesIconsSpecies();
     }
 
     private void handleStartStopButton() {
@@ -92,35 +110,16 @@ public class Controller {
     public void updateView() {
 
         if (SimulationSettings.getCurrentWeek() == 0) {
-            addImageViews();
+            addOrganismImagesSpecies();
         }
 
-        clearDeadOrganismImageViews();
+        removeDeadOrganismImageViews();
+        viewSelectedSpeciesImageViews();
 
         view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
         for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
-
-            String string = " ".repeat(7 - Log.formatNumber(species.getPopulation()).length()) + Log.formatNumber(species.getPopulation());
-
-            if (species.getSpeciesType() == SpeciesType.WHITE_TAILED_DEER) {
-                view.setPopulationLabel1(string);
-            }
-            else if (species.getSpeciesType() == SpeciesType.MOOSE) {
-                view.setPopulationLabel2(string);
-            }
-            else if (species.getSpeciesType() == SpeciesType.GRAY_WOLF) {
-                view.setPopulationLabel3(string);
-            }
-            else if (species.getSpeciesType() == SpeciesType.SNOWSHOE_HARE) {
-                view.setPopulationLabel5(string);
-            }
-            else if (species.getSpeciesType() == SpeciesType.EUROPEAN_BEAVER) {
-                view.setPopulationLabel4(string);
-            }
-            else if (species.getSpeciesType() == SpeciesType.BOBCAT) {
-                view.setPopulationLabel6(string);
-            }
+            view.updateToolBarLabels(species);
         }
 
     }
