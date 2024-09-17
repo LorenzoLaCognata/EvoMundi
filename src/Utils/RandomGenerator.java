@@ -6,6 +6,8 @@ import java.util.Random;
 
 public class RandomGenerator {
 
+    public static final double GAUSSIAN_VARIANCE = 0.2;
+
     public static final Random random = new Random();
 
     private RandomGenerator() {

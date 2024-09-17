@@ -7,13 +7,15 @@ import Utils.RandomGenerator;
 
 public class MovementSimulation {
 
+    public static final int STEPS_PER_DIRECTION = 25;
+
     public void speciesMove(Species species) {
 
         for (int i = 0; i < species.getOrganisms().size(); i++) {
 
             Organism organism = species.getOrganisms().get(i);
 
-            if (organism.getMovementAttributes().getDirectionSteps() % 25 == 0) {
+            if (organism.getMovementAttributes().getDirectionSteps() % STEPS_PER_DIRECTION == 0) {
                 organism.getMovementAttributes().setSpeedX(RandomGenerator.random.nextDouble(-1.0, 1.0));
                 organism.getMovementAttributes().setSpeedY(RandomGenerator.random.nextDouble(-1.0, 1.0));
             }

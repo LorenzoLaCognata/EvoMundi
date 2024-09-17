@@ -24,7 +24,8 @@ public class HuntingSimulation {
 
         for (PreySpeciesType preySpeciesType : predatorOrganism.getPreySpecies().values()) {
 
-            if (preySpeciesTypeSelected >= preySpeciesTypeSelectorIndex && preySpeciesTypeSelected < preySpeciesTypeSelectorIndex + preySpeciesType.preferenceRate()) {
+            if (preySpeciesTypeSelected >= preySpeciesTypeSelectorIndex &&
+                    preySpeciesTypeSelected < preySpeciesTypeSelectorIndex + preySpeciesType.preferenceRate()) {
                 return speciesMap.get(preySpeciesType.speciesType());
             }
 
@@ -75,7 +76,8 @@ public class HuntingSimulation {
                 int preyOrganismSelected = RandomGenerator.random.nextInt(0, preySpeciesPopulation);
 
                 Organism preyOrganism = preyOrganisms.get(preyOrganismSelected);
-                double huntSuccessRate = RandomGenerator.generateGaussian(predatorOrganism.calculateHuntSuccessRate(preySpecies, preyOrganism), 0.2);
+                double baseSuccessRate = predatorOrganism.calculateHuntSuccessRate(preySpecies, preyOrganism);
+                double huntSuccessRate = RandomGenerator.generateGaussian(baseSuccessRate, RandomGenerator.GAUSSIAN_VARIANCE);
 
                 if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
                     huntingSuccess(predatorOrganism, preyOrganism);

@@ -3,6 +3,7 @@ package Model.Animals;
 import Main.View;
 import Model.Enums.*;
 import Model.Simulation.SimulationSettings;
+import Model.SpeciesConstants.*;
 import Utils.RandomGenerator;
 import View.ToolbarSection;
 
@@ -43,10 +44,6 @@ public class Species {
         this.baseDiet = baseDiet;
         this.image = image;
         this.toolbarSection = new ToolbarSection(this.commonName, this.getImage());
-    }
-
-    public SpeciesType getSpeciesType() {
-        return speciesType;
     }
 
     public String getCommonName() {
@@ -145,134 +142,242 @@ public class Species {
     // TODO: review energy loss for herbivores
 
     private static void bobcatAttributes(Species bobcat) {
-        bobcat.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
-        bobcat.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 12.0, 12.0));
-        bobcat.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 13.0, 10.0));
-        bobcat.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.45, 0.40));
-        bobcat.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 6.0,  6.0));
-        bobcat.addAttribute(SpeciesAttribute.ENERGY_LOSS, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, 0.25, 0.25));
-        bobcat.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.10, 0.10));
-        bobcat.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 10.0, 10.0));
-        bobcat.addBasePreySpecies(new PreySpeciesType(SpeciesType.SNOWSHOE_HARE, 0.70));
-        bobcat.addBasePreySpecies(new PreySpeciesType(SpeciesType.EUROPEAN_BEAVER, 0.20));
-        bobcat.addBasePreySpecies(new PreySpeciesType(SpeciesType.WHITE_TAILED_DEER, 0.10));
-        bobcat.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
-        bobcat.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
-        bobcat.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 5.0));
-        bobcat.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 13.0));
-        bobcat.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
-        bobcat.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 9.0));
-        bobcat.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 5.0));
-        bobcat.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.55));
-        bobcat.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.80));
-        bobcat.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        bobcat.addAttribute(SpeciesAttribute.CARRYING_CAPACITY,
+                new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, Bobcat.CARRYING_CAPACITY, Bobcat.CARRYING_CAPACITY));
+        bobcat.addAttribute(SpeciesAttribute.LIFESPAN,
+                new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, Bobcat.MALE_LIFESPAN, Bobcat.FEMALE_LIFESPAN));
+        bobcat.addAttribute(SpeciesAttribute.WEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, Bobcat.MALE_WEIGHT, Bobcat.FEMALE_WEIGHT));
+        bobcat.addAttribute(SpeciesAttribute.HEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, Bobcat.MALE_HEIGHT, Bobcat.FEMALE_HEIGHT));
+        bobcat.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, Bobcat.MALE_HUNT_ATTEMPTS, Bobcat.FEMALE_HUNT_ATTEMPTS));
+        bobcat.addAttribute(SpeciesAttribute.ENERGY_LOSS,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, Bobcat.MALE_ENERGY_LOSS, Bobcat.FEMALE_ENERGY_LOSS));
+        bobcat.addAttribute(SpeciesAttribute.ENERGY_GAIN,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, Bobcat.MALE_ENERGY_GAIN, Bobcat.FEMALE_ENERGY_GAIN));
+        bobcat.addAttribute(SpeciesAttribute.PREY_EATEN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, Bobcat.MALE_PREY_EATEN, Bobcat.FEMALE_PREY_EATEN));
+        bobcat.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, Bobcat.SEXUAL_MATURITY_START));
+        bobcat.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, Bobcat.SEXUAL_MATURITY_END));
+        bobcat.addAttribute(SpeciesAttribute.MATING_SEASON_START,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, Bobcat.MATING_SEASON_START));
+        bobcat.addAttribute(SpeciesAttribute.MATING_SEASON_END,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, Bobcat.MATING_SEASON_END));
+        bobcat.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, Bobcat.PREGNANCY_COOLDOWN));
+        bobcat.addAttribute(SpeciesAttribute.GESTATION_PERIOD,
+                new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, Bobcat.GESTATION_PERIOD));
+        bobcat.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING,
+                new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, Bobcat.AVERAGE_OFFSPRING));
+        bobcat.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, Bobcat.JUVENILE_SURVIVAL_RATE));
+        bobcat.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, Bobcat.MATING_SUCCESS_RATE));
+        bobcat.addAttribute(SpeciesAttribute.MATING_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, Bobcat.MATING_ATTEMPTS));
+        bobcat.addBasePreySpecies(new PreySpeciesType(SpeciesType.SNOWSHOE_HARE, Bobcat.PREFERENCE_SNOWSHOE_HARE));
+        bobcat.addBasePreySpecies(new PreySpeciesType(SpeciesType.EUROPEAN_BEAVER, Bobcat.PREFERENCE_EUROPEAN_BEAVER));
+        bobcat.addBasePreySpecies(new PreySpeciesType(SpeciesType.WHITE_TAILED_DEER, Bobcat.PREFERENCE_WHITETAIL_DEER));
     }
 
     private static void europeanBeaverAttributes(Species europeanBeaver) {
-        europeanBeaver.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 1000, 1000));
-        europeanBeaver.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 12.0, 12.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 18, 16));
-        europeanBeaver.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.35, 0.32));
-        europeanBeaver.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_LOSS, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, 0.25, 0.25));
-        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 12.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 1.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 9.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 9.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 2.0));
-        europeanBeaver.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.45));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.75));
-        europeanBeaver.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.CARRYING_CAPACITY,
+                new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, EuropeanBeaver.CARRYING_CAPACITY, EuropeanBeaver.CARRYING_CAPACITY));
+        europeanBeaver.addAttribute(SpeciesAttribute.LIFESPAN,
+                new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, EuropeanBeaver.MALE_LIFESPAN, EuropeanBeaver.FEMALE_LIFESPAN));
+        europeanBeaver.addAttribute(SpeciesAttribute.WEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, EuropeanBeaver.MALE_WEIGHT, EuropeanBeaver.FEMALE_WEIGHT));
+        europeanBeaver.addAttribute(SpeciesAttribute.HEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, EuropeanBeaver.MALE_HEIGHT, EuropeanBeaver.FEMALE_HEIGHT));
+        europeanBeaver.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_LOSS,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, EuropeanBeaver.MALE_ENERGY_LOSS, EuropeanBeaver.FEMALE_ENERGY_LOSS));
+        europeanBeaver.addAttribute(SpeciesAttribute.ENERGY_GAIN,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.PREY_EATEN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, EuropeanBeaver.SEXUAL_MATURITY_START));
+        europeanBeaver.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, EuropeanBeaver.SEXUAL_MATURITY_END));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_START,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, EuropeanBeaver.MATING_SEASON_START));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SEASON_END,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, EuropeanBeaver.MATING_SEASON_END));
+        europeanBeaver.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, EuropeanBeaver.PREGNANCY_COOLDOWN));
+        europeanBeaver.addAttribute(SpeciesAttribute.GESTATION_PERIOD,
+                new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, EuropeanBeaver.GESTATION_PERIOD));
+        europeanBeaver.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING,
+                new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, EuropeanBeaver.AVERAGE_OFFSPRING));
+        europeanBeaver.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, EuropeanBeaver.JUVENILE_SURVIVAL_RATE));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, EuropeanBeaver.MATING_SUCCESS_RATE));
+        europeanBeaver.addAttribute(SpeciesAttribute.MATING_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, EuropeanBeaver.MATING_ATTEMPTS));
     }
 
     private static void snowshoeHareAttributes(Species snowshoeHare) {
-        snowshoeHare.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 10000, 10000));
-        snowshoeHare.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 5.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 1.2, 1.4));
-        snowshoeHare.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.35, 0.40));
-        snowshoeHare.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_LOSS, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, 0.40, 0.40));
-        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 30.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 5.0));
-        snowshoeHare.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 4.5));
-        snowshoeHare.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.40));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.85));
-        snowshoeHare.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 4.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.CARRYING_CAPACITY,
+                new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, SnowshoeHare.CARRYING_CAPACITY, SnowshoeHare.CARRYING_CAPACITY));
+        snowshoeHare.addAttribute(SpeciesAttribute.LIFESPAN,
+                new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, SnowshoeHare.MALE_LIFESPAN, SnowshoeHare.FEMALE_LIFESPAN));
+        snowshoeHare.addAttribute(SpeciesAttribute.WEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, SnowshoeHare.MALE_WEIGHT, SnowshoeHare.FEMALE_WEIGHT));
+        snowshoeHare.addAttribute(SpeciesAttribute.HEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, SnowshoeHare.MALE_HEIGHT, SnowshoeHare.FEMALE_HEIGHT));
+        snowshoeHare.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_LOSS,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, SnowshoeHare.MALE_ENERGY_LOSS, SnowshoeHare.FEMALE_ENERGY_LOSS));
+        snowshoeHare.addAttribute(SpeciesAttribute.ENERGY_GAIN,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.PREY_EATEN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, SnowshoeHare.SEXUAL_MATURITY_START));
+        snowshoeHare.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, SnowshoeHare.SEXUAL_MATURITY_END));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_START,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, SnowshoeHare.MATING_SEASON_START));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SEASON_END,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, SnowshoeHare.MATING_SEASON_END));
+        snowshoeHare.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, SnowshoeHare.PREGNANCY_COOLDOWN));
+        snowshoeHare.addAttribute(SpeciesAttribute.GESTATION_PERIOD,
+                new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, SnowshoeHare.GESTATION_PERIOD));
+        snowshoeHare.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING,
+                new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, SnowshoeHare.AVERAGE_OFFSPRING));
+        snowshoeHare.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, SnowshoeHare.JUVENILE_SURVIVAL_RATE));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, SnowshoeHare.MATING_SUCCESS_RATE));
+        snowshoeHare.addAttribute(SpeciesAttribute.MATING_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, SnowshoeHare.MATING_ATTEMPTS));
     }
 
     private static void grayWolfAttributes(Species grayWolf) {
-        grayWolf.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
-        grayWolf.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 7.0, 8.0));
-        grayWolf.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 40.0, 35.0));
-        grayWolf.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.80, 0.70));
-        grayWolf.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 5.0,  5.0));
-        grayWolf.addAttribute(SpeciesAttribute.ENERGY_LOSS, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, 0.30, 0.30));
-        grayWolf.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.02, 0.022));
-        grayWolf.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 50.0, 45.0));
-        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.WHITE_TAILED_DEER, 0.75));
-        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.MOOSE, 0.25));
-        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
-        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 1.0));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 13.0));
-        grayWolf.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 38.0));
-        grayWolf.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 20.0));
-        grayWolf.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 3.0));
-        grayWolf.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.60));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.80));
-        grayWolf.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        grayWolf.addAttribute(SpeciesAttribute.CARRYING_CAPACITY,
+                new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, GrayWolf.CARRYING_CAPACITY, GrayWolf.CARRYING_CAPACITY));
+        grayWolf.addAttribute(SpeciesAttribute.LIFESPAN,
+                new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, GrayWolf.MALE_LIFESPAN, GrayWolf.FEMALE_LIFESPAN));
+        grayWolf.addAttribute(SpeciesAttribute.WEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, GrayWolf.MALE_WEIGHT, GrayWolf.FEMALE_WEIGHT));
+        grayWolf.addAttribute(SpeciesAttribute.HEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, GrayWolf.MALE_HEIGHT, GrayWolf.FEMALE_HEIGHT));
+        grayWolf.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, GrayWolf.MALE_HUNT_ATTEMPTS, GrayWolf.FEMALE_HUNT_ATTEMPTS));
+        grayWolf.addAttribute(SpeciesAttribute.ENERGY_LOSS,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, GrayWolf.MALE_ENERGY_LOSS, GrayWolf.FEMALE_ENERGY_LOSS));
+        grayWolf.addAttribute(SpeciesAttribute.ENERGY_GAIN,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, GrayWolf.MALE_ENERGY_GAIN, GrayWolf.FEMALE_ENERGY_GAIN));
+        grayWolf.addAttribute(SpeciesAttribute.PREY_EATEN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, GrayWolf.MALE_PREY_EATEN, GrayWolf.FEMALE_PREY_EATEN));
+        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, GrayWolf.SEXUAL_MATURITY_START));
+        grayWolf.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, GrayWolf.SEXUAL_MATURITY_END));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_START,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, GrayWolf.MATING_SEASON_START));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_SEASON_END,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, GrayWolf.MATING_SEASON_END));
+        grayWolf.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, GrayWolf.PREGNANCY_COOLDOWN));
+        grayWolf.addAttribute(SpeciesAttribute.GESTATION_PERIOD,
+                new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, GrayWolf.GESTATION_PERIOD));
+        grayWolf.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING,
+                new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, GrayWolf.AVERAGE_OFFSPRING));
+        grayWolf.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, GrayWolf.JUVENILE_SURVIVAL_RATE));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, GrayWolf.MATING_SUCCESS_RATE));
+        grayWolf.addAttribute(SpeciesAttribute.MATING_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, GrayWolf.MATING_ATTEMPTS));
+        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.WHITE_TAILED_DEER, GrayWolf.PREFERENCE_WHITETAIL_DEER));
+        grayWolf.addBasePreySpecies(new PreySpeciesType(SpeciesType.MOOSE, GrayWolf.PREFERENCE_MOOSE));
     }
 
     private static void mooseAttributes(Species moose) {
-        moose.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 100, 100));
-        moose.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 13.0, 16.0));
-        moose.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 520.0, 410.0));
-        moose.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 1.80, 1.70));
-        moose.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        moose.addAttribute(SpeciesAttribute.ENERGY_LOSS, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, 0.25, 0.25));
-        moose.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        moose.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 2.0));
-        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 12.0));
-        moose.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 36.0));
-        moose.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 44.0));
-        moose.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 42.0));
-        moose.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 36.0));
-        moose.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 1.0));
-        moose.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.70));
-        moose.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.65));
-        moose.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 2.0));
+        moose.addAttribute(SpeciesAttribute.CARRYING_CAPACITY,
+                new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, Moose.CARRYING_CAPACITY, Moose.CARRYING_CAPACITY));
+        moose.addAttribute(SpeciesAttribute.LIFESPAN,
+                new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, Moose.MALE_LIFESPAN, Moose.FEMALE_LIFESPAN));
+        moose.addAttribute(SpeciesAttribute.WEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, Moose.MALE_WEIGHT, Moose.FEMALE_WEIGHT));
+        moose.addAttribute(SpeciesAttribute.HEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, Moose.MALE_HEIGHT, Moose.FEMALE_HEIGHT));
+        moose.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        moose.addAttribute(SpeciesAttribute.ENERGY_LOSS,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, Moose.MALE_ENERGY_LOSS, Moose.FEMALE_ENERGY_LOSS));
+        moose.addAttribute(SpeciesAttribute.ENERGY_GAIN,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        moose.addAttribute(SpeciesAttribute.PREY_EATEN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, Moose.SEXUAL_MATURITY_START));
+        moose.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, Moose.SEXUAL_MATURITY_END));
+        moose.addAttribute(SpeciesAttribute.MATING_SEASON_START,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, Moose.MATING_SEASON_START));
+        moose.addAttribute(SpeciesAttribute.MATING_SEASON_END,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, Moose.MATING_SEASON_END));
+        moose.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, Moose.PREGNANCY_COOLDOWN));
+        moose.addAttribute(SpeciesAttribute.GESTATION_PERIOD,
+                new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, Moose.GESTATION_PERIOD));
+        moose.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING,
+                new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, Moose.AVERAGE_OFFSPRING));
+        moose.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, Moose.JUVENILE_SURVIVAL_RATE));
+        moose.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, Moose.MATING_SUCCESS_RATE));
+        moose.addAttribute(SpeciesAttribute.MATING_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, Moose.MATING_ATTEMPTS));
     }
 
     private static void whiteTailedDeerAttributes(Species whiteTailedDeer) {
-        whiteTailedDeer.addAttribute(SpeciesAttribute.CARRYING_CAPACITY, new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 5000, 5000));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.LIFESPAN, new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, 4.0, 5.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.WEIGHT, new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, 100.0, 65.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.HEIGHT, new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, 0.95, 0.85));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_LOSS, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, 0.30, 0.30));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_GAIN, new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.PREY_EATEN, new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, 1.5));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END, new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, 10.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_START, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, 40.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_END, new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, 52.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN, new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, 38.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.GESTATION_PERIOD, new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, 28.0));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING, new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, 1.5));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, 0.50));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE, new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, 0.70));
-        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_ATTEMPTS, new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, 3.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.CARRYING_CAPACITY,
+                new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, WhiteTailedDeer.CARRYING_CAPACITY, WhiteTailedDeer.CARRYING_CAPACITY));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.LIFESPAN,
+                new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, WhiteTailedDeer.MALE_LIFESPAN, WhiteTailedDeer.FEMALE_LIFESPAN));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.WEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, WhiteTailedDeer.MALE_WEIGHT, WhiteTailedDeer.FEMALE_WEIGHT));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.HEIGHT,
+                new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, WhiteTailedDeer.MALE_HEIGHT, WhiteTailedDeer.FEMALE_HEIGHT));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.HUNT_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, 0.0, 0.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_LOSS,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, WhiteTailedDeer.MALE_ENERGY_LOSS, WhiteTailedDeer.FEMALE_ENERGY_LOSS));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.ENERGY_GAIN,
+                new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, 0.0, 0.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.PREY_EATEN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, 0.0, 0.0));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_START,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, WhiteTailedDeer.SEXUAL_MATURITY_START));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.SEXUAL_MATURITY_END,
+                new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, WhiteTailedDeer.SEXUAL_MATURITY_END));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_START,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, WhiteTailedDeer.MATING_SEASON_START));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SEASON_END,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, WhiteTailedDeer.MATING_SEASON_END));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN,
+                new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, WhiteTailedDeer.PREGNANCY_COOLDOWN));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.GESTATION_PERIOD,
+                new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, WhiteTailedDeer.GESTATION_PERIOD));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.AVERAGE_OFFSPRING,
+                new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, WhiteTailedDeer.AVERAGE_OFFSPRING));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, WhiteTailedDeer.JUVENILE_SURVIVAL_RATE));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_SUCCESS_RATE,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, WhiteTailedDeer.MATING_SUCCESS_RATE));
+        whiteTailedDeer.addAttribute(SpeciesAttribute.MATING_ATTEMPTS,
+                new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, WhiteTailedDeer.MATING_ATTEMPTS));
     }
 
     public static Map<SpeciesType, Species> initializeSpecies() {
@@ -349,7 +454,13 @@ public class Species {
                 gender = Gender.MALE;
             }
 
-            double lifeSpan = RandomGenerator.generateGaussian(gender, getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.MALE), 0.2);
+            double femaleLifeSpan = getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.FEMALE);
+            double maleLifeSpan = getAttribute(SpeciesAttribute.LIFESPAN).getValue(Gender.MALE);
+            double lifeSpan = RandomGenerator.generateGaussian(gender, femaleLifeSpan, maleLifeSpan, RandomGenerator.GAUSSIAN_VARIANCE);
+            double femaleWeight = getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE);
+            double maleWeight = getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE);
+            double femaleHeigth = getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE);
+            double maleHeigth = getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE);
             double age = RandomGenerator.random.nextDouble() * lifeSpan;
             double posX = RandomGenerator.random.nextDouble() * View.SCENE_WIDTH;
             double posY = RandomGenerator.random.nextDouble() * View.SCENE_HEIGHT;
@@ -360,8 +471,8 @@ public class Species {
                     age,
                     new ImageView(image),
                     new VitalsAttributes(
-                        RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE), 0.2),
-                        RandomGenerator.generateGaussian(getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE), getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE), 0.2),
+                        RandomGenerator.generateGaussian(femaleWeight, maleWeight, RandomGenerator.GAUSSIAN_VARIANCE),
+                        RandomGenerator.generateGaussian(femaleHeigth, maleHeigth, RandomGenerator.GAUSSIAN_VARIANCE),
                         lifeSpan,
                         0,
                         getAttribute(SpeciesAttribute.ENERGY_LOSS).getValue(gender)

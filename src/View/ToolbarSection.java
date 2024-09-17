@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class ToolbarSection {
 
@@ -21,6 +22,8 @@ public class ToolbarSection {
         this.vBox.setPadding(new Insets(5));
         this.vBox.setMinWidth(128);
         this.name.setText(name);
+        this.name.setTextFill(Color.WHITE);
+        this.population.setTextFill(Color.WHITE);
         this.imageView.setImage(image);
         this.checkBox.setSelected(Boolean.TRUE);
         this.vBox.getChildren().addAll(this.name, this.population, this.imageView, this.checkBox);

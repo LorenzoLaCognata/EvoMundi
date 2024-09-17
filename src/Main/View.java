@@ -55,12 +55,14 @@ public class View {
 
     public void initializeToolBar() {
 
+        toolBar.setStyle("-fx-background-color: #1E2A38;");
+        weekLabel.setTextFill(Color.WHITE);
+
         VBox simulationTimer = new VBox(5);
         simulationTimer.setAlignment(Pos.CENTER);
         simulationTimer.setPadding(new Insets(5));
         simulationTimer.setMinWidth(128);
         simulationTimer.getChildren().addAll(weekLabel, buttonStartStop);
-
         toolBar.getItems().add(simulationTimer);
 
     }
@@ -89,7 +91,7 @@ public class View {
     }
 
     public boolean centerRegionContainsroup(Group group) {
-        return centerRegion.getChildren().contains(group);
+        return  centerRegion.getChildren().contains(group);
     }
 
     public void addCenterRegionGroup(Group group) {

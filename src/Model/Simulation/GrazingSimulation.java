@@ -27,10 +27,10 @@ public class GrazingSimulation {
 
     public void graze(Biomass biomass, Organism organism) {
 
-        // TODO: biomass consumption following a formula variable by species
+        // TODO: biomass consumption following a formula variable by species (use variables for parameters)
         double quantityConsumed = Math.min(0.001, biomass.getQuantity());
 
-        // TODO: energy gain following a formula variable by species
+        // TODO: energy gain following a formula variable by species (use variables for parameters)
         double energyGained = Math.min(70.0, 100.0 - organism.getEnergy());
 
         biomass.setQuantity(biomass.getQuantity() - quantityConsumed);
