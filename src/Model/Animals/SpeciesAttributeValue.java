@@ -2,6 +2,10 @@ package Model.Animals;
 
 import Model.Enums.Gender;
 import Model.Enums.SpeciesAttribute;
+import Model.SpeciesConstants.Bobcat;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class SpeciesAttributeValue {
 

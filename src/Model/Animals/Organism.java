@@ -171,11 +171,11 @@ public class Organism {
                     case SpeciesType.SNOWSHOE_HARE -> baseSuccessRate = 0.45;
                     case SpeciesType.EUROPEAN_BEAVER -> baseSuccessRate = 0.10;
                     case SpeciesType.WHITE_TAILED_DEER -> baseSuccessRate = 0.05;
-                    default -> throw new IllegalStateException("Unexpected value: " + prey.getSpeciesType());
+                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + prey.getSpeciesType());
                 }
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + speciesType);
+                throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + prey.getSpeciesType());
         }
 
         return baseSuccessRate * (preySpecies.getPopulation() / preySpecies.getAttribute (SpeciesAttribute.CARRYING_CAPACITY).getValue());

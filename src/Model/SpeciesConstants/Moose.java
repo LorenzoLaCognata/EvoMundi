@@ -9,8 +9,14 @@ public class Moose {
     public static final double FEMALE_WEIGHT = 410;
     public static final double MALE_HEIGHT = 1.80;
     public static final double FEMALE_HEIGHT = 1.70;
+    public static final double MALE_HUNT_ATTEMPTS = 0.0;
+    public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
     public static final double MALE_ENERGY_LOSS = 0.25;
     public static final double FEMALE_ENERGY_LOSS = 0.25;
+    public static final double MALE_ENERGY_GAIN = 0.0;
+    public static final double FEMALE_ENERGY_GAIN = 0.0;
+    public static final double MALE_PREY_EATEN = 0.0;
+    public static final double FEMALE_PREY_EATEN = 0.0;
     public static final double SEXUAL_MATURITY_START = 2.0;
     public static final double SEXUAL_MATURITY_END = 12.0;
     public static final double MATING_SEASON_START = 36.0;

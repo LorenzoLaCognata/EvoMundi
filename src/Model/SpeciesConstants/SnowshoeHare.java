@@ -9,8 +9,14 @@ public class SnowshoeHare {
     public static final double FEMALE_WEIGHT = 1.4;
     public static final double MALE_HEIGHT = 0.35;
     public static final double FEMALE_HEIGHT = 0.40;
+    public static final double MALE_HUNT_ATTEMPTS = 0.0;
+    public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
     public static final double MALE_ENERGY_LOSS = 0.40;
     public static final double FEMALE_ENERGY_LOSS = 0.40;
+    public static final double MALE_ENERGY_GAIN = 0.0;
+    public static final double FEMALE_ENERGY_GAIN = 0.0;
+    public static final double MALE_PREY_EATEN = 0.0;
+    public static final double FEMALE_PREY_EATEN = 0.0;
     public static final double SEXUAL_MATURITY_START = 1.0;
     public static final double SEXUAL_MATURITY_END = 5.0;
     public static final double MATING_SEASON_START = 5.0;
