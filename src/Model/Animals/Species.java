@@ -2,9 +2,9 @@ package Model.Animals;
 
 import Main.View;
 import Model.Enums.*;
+import Utils.Log;
 import Model.Simulation.SimulationSettings;
 import Model.SpeciesConstants.*;
-import Utils.Log;
 import Utils.RandomGenerator;
 import View.ToolbarSection;
 
@@ -143,262 +143,32 @@ Species {
 
     // TODO: review energy loss for herbivores
 
-    private static SpeciesAttributeValue speciesConstants(Species species, SpeciesAttribute speciesAttribute) {
+    public static double classDoubleConstant(String className, String constantName) {
 
-        SpeciesAttributeValue speciesAttributeValue = new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, 0.0, 0.0);
-        
-        switch (species.speciesType) {
-            case SpeciesType.BOBCAT:
-                switch (speciesAttribute) {
-                    case SpeciesAttribute.CARRYING_CAPACITY -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, Bobcat.CARRYING_CAPACITY, Bobcat.CARRYING_CAPACITY);
-                    case SpeciesAttribute.LIFESPAN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, Bobcat.MALE_LIFESPAN, Bobcat.FEMALE_LIFESPAN);
-                    case SpeciesAttribute.WEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, Bobcat.MALE_WEIGHT, Bobcat.FEMALE_WEIGHT);
-                    case SpeciesAttribute.HEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, Bobcat.MALE_HEIGHT, Bobcat.FEMALE_HEIGHT);
-                    case SpeciesAttribute.HUNT_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, Bobcat.MALE_HUNT_ATTEMPTS, Bobcat.FEMALE_HUNT_ATTEMPTS);
-                    case SpeciesAttribute.ENERGY_LOSS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, Bobcat.MALE_ENERGY_LOSS, Bobcat.FEMALE_ENERGY_LOSS);
-                    case SpeciesAttribute.ENERGY_GAIN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, Bobcat.MALE_ENERGY_GAIN, Bobcat.FEMALE_ENERGY_GAIN);
-                    case SpeciesAttribute.PREY_EATEN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, Bobcat.MALE_PREY_EATEN, Bobcat.FEMALE_PREY_EATEN);
-                    case SpeciesAttribute.SEXUAL_MATURITY_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, Bobcat.SEXUAL_MATURITY_START);
-                    case SpeciesAttribute.SEXUAL_MATURITY_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, Bobcat.SEXUAL_MATURITY_END);
-                    case SpeciesAttribute.MATING_SEASON_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, Bobcat.MATING_SEASON_START);
-                    case SpeciesAttribute.MATING_SEASON_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, Bobcat.MATING_SEASON_END);
-                    case SpeciesAttribute.PREGNANCY_COOLDOWN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, Bobcat.PREGNANCY_COOLDOWN);
-                    case SpeciesAttribute.GESTATION_PERIOD -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, Bobcat.GESTATION_PERIOD);
-                    case SpeciesAttribute.AVERAGE_OFFSPRING -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, Bobcat.AVERAGE_OFFSPRING);
-                    case SpeciesAttribute.JUVENILE_SURVIVAL_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, Bobcat.JUVENILE_SURVIVAL_RATE);
-                    case SpeciesAttribute.MATING_SUCCESS_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, Bobcat.MATING_SUCCESS_RATE);
-                    case SpeciesAttribute.MATING_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, Bobcat.MATING_ATTEMPTS);
-                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
-                }
-                break;
-            case SpeciesType.EUROPEAN_BEAVER:
-                switch (speciesAttribute) {
-                    case SpeciesAttribute.CARRYING_CAPACITY -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, EuropeanBeaver.CARRYING_CAPACITY, EuropeanBeaver.CARRYING_CAPACITY);
-                    case SpeciesAttribute.LIFESPAN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, EuropeanBeaver.MALE_LIFESPAN, EuropeanBeaver.FEMALE_LIFESPAN);
-                    case SpeciesAttribute.WEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, EuropeanBeaver.MALE_WEIGHT, EuropeanBeaver.FEMALE_WEIGHT);
-                    case SpeciesAttribute.HEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, EuropeanBeaver.MALE_HEIGHT, EuropeanBeaver.FEMALE_HEIGHT);
-                    case SpeciesAttribute.HUNT_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, EuropeanBeaver.MALE_HUNT_ATTEMPTS, EuropeanBeaver.FEMALE_HUNT_ATTEMPTS);
-                    case SpeciesAttribute.ENERGY_LOSS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, EuropeanBeaver.MALE_ENERGY_LOSS, EuropeanBeaver.FEMALE_ENERGY_LOSS);
-                    case SpeciesAttribute.ENERGY_GAIN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, EuropeanBeaver.MALE_ENERGY_GAIN, EuropeanBeaver.FEMALE_ENERGY_GAIN);
-                    case SpeciesAttribute.PREY_EATEN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, EuropeanBeaver.MALE_PREY_EATEN, EuropeanBeaver.FEMALE_PREY_EATEN);
-                    case SpeciesAttribute.SEXUAL_MATURITY_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, EuropeanBeaver.SEXUAL_MATURITY_START);
-                    case SpeciesAttribute.SEXUAL_MATURITY_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, EuropeanBeaver.SEXUAL_MATURITY_END);
-                    case SpeciesAttribute.MATING_SEASON_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, EuropeanBeaver.MATING_SEASON_START);
-                    case SpeciesAttribute.MATING_SEASON_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, EuropeanBeaver.MATING_SEASON_END);
-                    case SpeciesAttribute.PREGNANCY_COOLDOWN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, EuropeanBeaver.PREGNANCY_COOLDOWN);
-                    case SpeciesAttribute.GESTATION_PERIOD -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, EuropeanBeaver.GESTATION_PERIOD);
-                    case SpeciesAttribute.AVERAGE_OFFSPRING -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, EuropeanBeaver.AVERAGE_OFFSPRING);
-                    case SpeciesAttribute.JUVENILE_SURVIVAL_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, EuropeanBeaver.JUVENILE_SURVIVAL_RATE);
-                    case SpeciesAttribute.MATING_SUCCESS_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, EuropeanBeaver.MATING_SUCCESS_RATE);
-                    case SpeciesAttribute.MATING_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, EuropeanBeaver.MATING_ATTEMPTS);
-                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
-                }
-                break;
-            case SpeciesType.GRAY_WOLF:
-                switch (speciesAttribute) {
-                    case SpeciesAttribute.CARRYING_CAPACITY -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, GrayWolf.CARRYING_CAPACITY, GrayWolf.CARRYING_CAPACITY);
-                    case SpeciesAttribute.LIFESPAN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, GrayWolf.MALE_LIFESPAN, GrayWolf.FEMALE_LIFESPAN);
-                    case SpeciesAttribute.WEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, GrayWolf.MALE_WEIGHT, GrayWolf.FEMALE_WEIGHT);
-                    case SpeciesAttribute.HEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, GrayWolf.MALE_HEIGHT, GrayWolf.FEMALE_HEIGHT);
-                    case SpeciesAttribute.HUNT_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, GrayWolf.MALE_HUNT_ATTEMPTS, GrayWolf.FEMALE_HUNT_ATTEMPTS);
-                    case SpeciesAttribute.ENERGY_LOSS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, GrayWolf.MALE_ENERGY_LOSS, GrayWolf.FEMALE_ENERGY_LOSS);
-                    case SpeciesAttribute.ENERGY_GAIN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, GrayWolf.MALE_ENERGY_GAIN, GrayWolf.FEMALE_ENERGY_GAIN);
-                    case SpeciesAttribute.PREY_EATEN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, GrayWolf.MALE_PREY_EATEN, GrayWolf.FEMALE_PREY_EATEN);
-                    case SpeciesAttribute.SEXUAL_MATURITY_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, GrayWolf.SEXUAL_MATURITY_START);
-                    case SpeciesAttribute.SEXUAL_MATURITY_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, GrayWolf.SEXUAL_MATURITY_END);
-                    case SpeciesAttribute.MATING_SEASON_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, GrayWolf.MATING_SEASON_START);
-                    case SpeciesAttribute.MATING_SEASON_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, GrayWolf.MATING_SEASON_END);
-                    case SpeciesAttribute.PREGNANCY_COOLDOWN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, GrayWolf.PREGNANCY_COOLDOWN);
-                    case SpeciesAttribute.GESTATION_PERIOD -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, GrayWolf.GESTATION_PERIOD);
-                    case SpeciesAttribute.AVERAGE_OFFSPRING -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, GrayWolf.AVERAGE_OFFSPRING);
-                    case SpeciesAttribute.JUVENILE_SURVIVAL_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, GrayWolf.JUVENILE_SURVIVAL_RATE);
-                    case SpeciesAttribute.MATING_SUCCESS_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, GrayWolf.MATING_SUCCESS_RATE);
-                    case SpeciesAttribute.MATING_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, GrayWolf.MATING_ATTEMPTS);
-                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
-                }
-                break;
-            case SpeciesType.MOOSE:
-                switch (speciesAttribute) {
-                    case SpeciesAttribute.CARRYING_CAPACITY -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, Moose.CARRYING_CAPACITY, Moose.CARRYING_CAPACITY);
-                    case SpeciesAttribute.LIFESPAN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, Moose.MALE_LIFESPAN, Moose.FEMALE_LIFESPAN);
-                    case SpeciesAttribute.WEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, Moose.MALE_WEIGHT, Moose.FEMALE_WEIGHT);
-                    case SpeciesAttribute.HEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, Moose.MALE_HEIGHT, Moose.FEMALE_HEIGHT);
-                    case SpeciesAttribute.HUNT_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, Moose.MALE_HUNT_ATTEMPTS, Moose.FEMALE_HUNT_ATTEMPTS);
-                    case SpeciesAttribute.ENERGY_LOSS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, Moose.MALE_ENERGY_LOSS, Moose.FEMALE_ENERGY_LOSS);
-                    case SpeciesAttribute.ENERGY_GAIN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, Moose.MALE_ENERGY_GAIN, Moose.FEMALE_ENERGY_GAIN);
-                    case SpeciesAttribute.PREY_EATEN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, Moose.MALE_PREY_EATEN, Moose.FEMALE_PREY_EATEN);
-                    case SpeciesAttribute.SEXUAL_MATURITY_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, Moose.SEXUAL_MATURITY_START);
-                    case SpeciesAttribute.SEXUAL_MATURITY_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, Moose.SEXUAL_MATURITY_END);
-                    case SpeciesAttribute.MATING_SEASON_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, Moose.MATING_SEASON_START);
-                    case SpeciesAttribute.MATING_SEASON_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, Moose.MATING_SEASON_END);
-                    case SpeciesAttribute.PREGNANCY_COOLDOWN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, Moose.PREGNANCY_COOLDOWN);
-                    case SpeciesAttribute.GESTATION_PERIOD -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, Moose.GESTATION_PERIOD);
-                    case SpeciesAttribute.AVERAGE_OFFSPRING -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, Moose.AVERAGE_OFFSPRING);
-                    case SpeciesAttribute.JUVENILE_SURVIVAL_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, Moose.JUVENILE_SURVIVAL_RATE);
-                    case SpeciesAttribute.MATING_SUCCESS_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, Moose.MATING_SUCCESS_RATE);
-                    case SpeciesAttribute.MATING_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, Moose.MATING_ATTEMPTS);
-                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
-                }
-                break;
-            case SpeciesType.SNOWSHOE_HARE:
-                switch (speciesAttribute) {
-                    case SpeciesAttribute.CARRYING_CAPACITY -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, SnowshoeHare.CARRYING_CAPACITY, SnowshoeHare.CARRYING_CAPACITY);
-                    case SpeciesAttribute.LIFESPAN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, SnowshoeHare.MALE_LIFESPAN, SnowshoeHare.FEMALE_LIFESPAN);
-                    case SpeciesAttribute.WEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, SnowshoeHare.MALE_WEIGHT, SnowshoeHare.FEMALE_WEIGHT);
-                    case SpeciesAttribute.HEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, SnowshoeHare.MALE_HEIGHT, SnowshoeHare.FEMALE_HEIGHT);
-                    case SpeciesAttribute.HUNT_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, SnowshoeHare.MALE_HUNT_ATTEMPTS, SnowshoeHare.FEMALE_HUNT_ATTEMPTS);
-                    case SpeciesAttribute.ENERGY_LOSS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, SnowshoeHare.MALE_ENERGY_LOSS, SnowshoeHare.FEMALE_ENERGY_LOSS);
-                    case SpeciesAttribute.ENERGY_GAIN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, SnowshoeHare.MALE_ENERGY_GAIN, SnowshoeHare.FEMALE_ENERGY_GAIN);
-                    case SpeciesAttribute.PREY_EATEN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, SnowshoeHare.MALE_PREY_EATEN, SnowshoeHare.FEMALE_PREY_EATEN);
-                    case SpeciesAttribute.SEXUAL_MATURITY_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, SnowshoeHare.SEXUAL_MATURITY_START);
-                    case SpeciesAttribute.SEXUAL_MATURITY_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, SnowshoeHare.SEXUAL_MATURITY_END);
-                    case SpeciesAttribute.MATING_SEASON_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, SnowshoeHare.MATING_SEASON_START);
-                    case SpeciesAttribute.MATING_SEASON_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, SnowshoeHare.MATING_SEASON_END);
-                    case SpeciesAttribute.PREGNANCY_COOLDOWN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, SnowshoeHare.PREGNANCY_COOLDOWN);
-                    case SpeciesAttribute.GESTATION_PERIOD -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, SnowshoeHare.GESTATION_PERIOD);
-                    case SpeciesAttribute.AVERAGE_OFFSPRING -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, SnowshoeHare.AVERAGE_OFFSPRING);
-                    case SpeciesAttribute.JUVENILE_SURVIVAL_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, SnowshoeHare.JUVENILE_SURVIVAL_RATE);
-                    case SpeciesAttribute.MATING_SUCCESS_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, SnowshoeHare.MATING_SUCCESS_RATE);
-                    case SpeciesAttribute.MATING_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, SnowshoeHare.MATING_ATTEMPTS);
-                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
-                }
-                break;
-            case SpeciesType.WHITE_TAILED_DEER:
-                switch (speciesAttribute) {
-                    case SpeciesAttribute.CARRYING_CAPACITY -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.CARRYING_CAPACITY, WhiteTailedDeer.CARRYING_CAPACITY, WhiteTailedDeer.CARRYING_CAPACITY);
-                    case SpeciesAttribute.LIFESPAN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.LIFESPAN, WhiteTailedDeer.MALE_LIFESPAN, WhiteTailedDeer.FEMALE_LIFESPAN);
-                    case SpeciesAttribute.WEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.WEIGHT, WhiteTailedDeer.MALE_WEIGHT, WhiteTailedDeer.FEMALE_WEIGHT);
-                    case SpeciesAttribute.HEIGHT -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HEIGHT, WhiteTailedDeer.MALE_HEIGHT, WhiteTailedDeer.FEMALE_HEIGHT);
-                    case SpeciesAttribute.HUNT_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.HUNT_ATTEMPTS, WhiteTailedDeer.MALE_HUNT_ATTEMPTS, WhiteTailedDeer.FEMALE_HUNT_ATTEMPTS);
-                    case SpeciesAttribute.ENERGY_LOSS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_LOSS, WhiteTailedDeer.MALE_ENERGY_LOSS, WhiteTailedDeer.FEMALE_ENERGY_LOSS);
-                    case SpeciesAttribute.ENERGY_GAIN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.ENERGY_GAIN, WhiteTailedDeer.MALE_ENERGY_GAIN, WhiteTailedDeer.FEMALE_ENERGY_GAIN);
-                    case SpeciesAttribute.PREY_EATEN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREY_EATEN, WhiteTailedDeer.MALE_PREY_EATEN, WhiteTailedDeer.FEMALE_PREY_EATEN);
-                    case SpeciesAttribute.SEXUAL_MATURITY_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_START, 0.0, WhiteTailedDeer.SEXUAL_MATURITY_START);
-                    case SpeciesAttribute.SEXUAL_MATURITY_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.SEXUAL_MATURITY_END, 0.0, WhiteTailedDeer.SEXUAL_MATURITY_END);
-                    case SpeciesAttribute.MATING_SEASON_START -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_START, 0.0, WhiteTailedDeer.MATING_SEASON_START);
-                    case SpeciesAttribute.MATING_SEASON_END -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SEASON_END, 0.0, WhiteTailedDeer.MATING_SEASON_END);
-                    case SpeciesAttribute.PREGNANCY_COOLDOWN -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.PREGNANCY_COOLDOWN, 0.0, WhiteTailedDeer.PREGNANCY_COOLDOWN);
-                    case SpeciesAttribute.GESTATION_PERIOD -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.GESTATION_PERIOD, 0.0, WhiteTailedDeer.GESTATION_PERIOD);
-                    case SpeciesAttribute.AVERAGE_OFFSPRING -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.AVERAGE_OFFSPRING, 0.0, WhiteTailedDeer.AVERAGE_OFFSPRING);
-                    case SpeciesAttribute.JUVENILE_SURVIVAL_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.JUVENILE_SURVIVAL_RATE, 0.0, WhiteTailedDeer.JUVENILE_SURVIVAL_RATE);
-                    case SpeciesAttribute.MATING_SUCCESS_RATE -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_SUCCESS_RATE, 0.0, WhiteTailedDeer.MATING_SUCCESS_RATE);
-                    case SpeciesAttribute.MATING_ATTEMPTS -> speciesAttributeValue =
-                            new SpeciesAttributeValue(SpeciesAttribute.MATING_ATTEMPTS, 0.0, WhiteTailedDeer.MATING_ATTEMPTS);
-                    default -> throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
-                }
-                break;
-            default:
-                throw new IllegalStateException(Log.UNEXPECTED_VALUE_MESSAGE + " " + species.speciesType + " " + speciesAttribute);
+        Class<?> speciesClass;
+        try {
+            speciesClass = Class.forName(className);
+            return speciesClass.getField(constantName).getDouble(null);
+
+        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
         }
 
-        return speciesAttributeValue;
+    }
+
+    private static SpeciesAttributeValue speciesConstants(Species species, SpeciesAttribute speciesAttribute) {
+
+        String speciesName = species.speciesType.name();
+        String speciesClassName = "Model.SpeciesConstants." + Log.titleCase(speciesName.replace("_", " ")).replace(" ", "");
+        String speciesAttributeconstantName = speciesAttribute.name();
+        String maleConstantName = "MALE_" + speciesAttributeconstantName;
+        String femaleConstantName = "FEMALE_" + speciesAttributeconstantName;
+
+        return new SpeciesAttributeValue(
+                speciesAttribute,
+                classDoubleConstant(speciesClassName, maleConstantName),
+                classDoubleConstant(speciesClassName, femaleConstantName)
+        );
 
     }
 

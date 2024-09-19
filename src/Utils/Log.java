@@ -5,6 +5,8 @@ import Model.Enums.LogStatus;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Log {
 
@@ -22,6 +24,22 @@ public class Log {
 
     public static String formatNumber(double d) {
         return formatter.format(d);
+    }
+
+    public static String titleCase(String text) {
+
+        if (text == null)
+            return null;
+
+        Pattern pattern = Pattern.compile("\\b([a-zÀ-ÖØ-öø-ÿ])([\\w]*)");
+        Matcher matcher = pattern.matcher(text.toLowerCase());
+
+        StringBuilder buffer = new StringBuilder();
+
+        while (matcher.find())
+            matcher.appendReplacement(buffer, matcher.group(1).toUpperCase() + matcher.group(2));
+
+        return matcher.appendTail(buffer).toString();
     }
 
     public static void info(String string) {
