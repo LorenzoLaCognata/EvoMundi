@@ -15,10 +15,6 @@ public class SpeciesAttributeValue {
         this.valueFemale = valueFemale;
     }
 
-    public SpeciesAttribute getSpeciesAttribute() {
-        return speciesAttribute;
-    }
-
     public double getValue(Gender gender) {
         if (gender == Gender.FEMALE) {
             return valueFemale;

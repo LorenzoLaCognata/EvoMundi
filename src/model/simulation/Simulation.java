@@ -2,7 +2,6 @@ package model.simulation;
 
 import model.animals.Organism;
 import model.animals.Species;
-import model.enums.BiomassType;
 import model.enums.OrganismStatus;
 import model.enums.SpeciesType;
 import model.environment.Biomass;
@@ -11,6 +10,7 @@ import utils.Log;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class Simulation {
 
@@ -36,7 +36,7 @@ public class Simulation {
         reproductionSimulation = new ReproductionSimulation();
         huntingSimulation = new HuntingSimulation();
 
-        ecosystem.getBiomassMap().putAll(Biomass.initializeBiomass());
+        ecosystem.getBiomassSet().addAll(Biomass.initializeBiomass());
         ecosystem.getSpeciesMap().putAll(Species.initializeSpecies());
 
     }
@@ -63,9 +63,9 @@ public class Simulation {
         SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
         Log.log5("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-        Map<BiomassType, Biomass> biomassMap = ecosystem.getBiomassMap();
+        Set<Biomass> biomassSet = ecosystem.getBiomassSet();
 
-        for (Biomass biomass : biomassMap.values()) {
+        for (Biomass biomass : biomassSet) {
             biomassGrowthSimulation.biomassRegenerate(biomass);
         }
 
@@ -80,7 +80,7 @@ public class Simulation {
         }
 
         for (Species species : speciesMap.values()) {
-            grazingSimulation.speciesGraze(biomassMap, species);
+            grazingSimulation.speciesGraze(biomassSet, species);
         }
 
         for (Species species : speciesMap.values()) {

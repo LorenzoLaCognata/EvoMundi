@@ -1,5 +1,6 @@
 package model.constants;
 
+@SuppressWarnings("unused")
 public class Bobcat {
 
     public static final double MALE_CARRYING_CAPACITY = 100;
@@ -43,5 +44,8 @@ public class Bobcat {
     public static final double PREFERENCE_SNOWSHOE_HARE = 0.70;
     public static final double PREFERENCE_EUROPEAN_BEAVER = 0.20;
     public static final double PREFERENCE_WHITETAIL_DEER = 0.10;
+
+    private Bobcat() {
+    }
 
 }

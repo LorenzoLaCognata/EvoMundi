@@ -1,5 +1,6 @@
 package model.constants;
 
+@SuppressWarnings("unused")
 public class Moose {
 
     public static final double MALE_CARRYING_CAPACITY = 100;
@@ -39,5 +40,8 @@ public class Moose {
     public static final double FEMALE_MATING_SUCCESS_RATE = 0.65;
     public static final double MALE_MATING_ATTEMPTS = 0.0;
     public static final double FEMALE_MATING_ATTEMPTS = 2.0;
+
+    private Moose() {
+    }
 
 }

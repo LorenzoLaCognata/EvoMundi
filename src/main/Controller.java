@@ -1,11 +1,11 @@
 package main;
 
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import model.animals.Organism;
 import model.animals.Species;
 import model.enums.SimulationStatus;
 import model.simulation.SimulationSettings;
-import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 
 public class Controller {
 

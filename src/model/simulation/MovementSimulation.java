@@ -15,21 +15,21 @@ public class MovementSimulation {
 
             Organism organism = species.getOrganisms().get(i);
 
-            if (organism.getMovementAttributes().getDirectionSteps() % STEPS_PER_DIRECTION == 0) {
-                organism.getMovementAttributes().setSpeedX(RandomGenerator.random.nextDouble(-1.0, 1.0));
-                organism.getMovementAttributes().setSpeedY(RandomGenerator.random.nextDouble(-1.0, 1.0));
+            if (organism.getOrganismAttributes().movementAttributes().getDirectionSteps() % STEPS_PER_DIRECTION == 0) {
+                organism.getOrganismAttributes().movementAttributes().setSpeedX(RandomGenerator.random.nextDouble(-1.0, 1.0));
+                organism.getOrganismAttributes().movementAttributes().setSpeedY(RandomGenerator.random.nextDouble(-1.0, 1.0));
             }
 
-            double newPosX = Math.clamp(organism.getMovementAttributes().getPosX() + organism.getMovementAttributes().getSpeedX(), 0.0, View.SCENE_WIDTH);
-            double newPosY = Math.clamp(organism.getMovementAttributes().getPosY() + organism.getMovementAttributes().getSpeedY(), 0.0, View.SCENE_HEIGHT);
+            double newPosX = Math.clamp(organism.getOrganismAttributes().movementAttributes().getPosX() + organism.getOrganismAttributes().movementAttributes().getSpeedX(), 0.0, View.SCENE_WIDTH);
+            double newPosY = Math.clamp(organism.getOrganismAttributes().movementAttributes().getPosY() + organism.getOrganismAttributes().movementAttributes().getSpeedY(), 0.0, View.SCENE_HEIGHT);
 
-            organism.getMovementAttributes().setPosX(newPosX);
-            organism.getMovementAttributes().setPosY(newPosY);
+            organism.getOrganismAttributes().movementAttributes().setPosX(newPosX);
+            organism.getOrganismAttributes().movementAttributes().setPosY(newPosY);
 
             organism.getImageView().setX(newPosX);
             organism.getImageView().setY(newPosY);
 
-            organism.getMovementAttributes().setDirectionSteps(organism.getMovementAttributes().getDirectionSteps() + 1);
+            organism.getOrganismAttributes().movementAttributes().setDirectionSteps(organism.getOrganismAttributes().movementAttributes().getDirectionSteps() + 1);
         }
 
     }

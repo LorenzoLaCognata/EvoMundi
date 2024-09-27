@@ -12,6 +12,9 @@ public class Log {
     private static final Logger logger = Logger.getLogger("Log");
     public static final String UNEXPECTED_VALUE_MESSAGE = "Unexpected value: ";
 
+    private Log() {
+    }
+
     public static String formatNumber(int integer) {
         return formatter.format(integer);
     }

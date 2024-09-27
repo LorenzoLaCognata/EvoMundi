@@ -1,9 +1,7 @@
 package model.environment;
 
-import model.enums.BiomassType;
-
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Biomass {
 
@@ -21,16 +19,16 @@ public class Biomass {
         this.quantity = quantity;
     }
 
-    public static Map<BiomassType, Biomass> initializeBiomass() {
+    public static Set<Biomass> initializeBiomass() {
 
-        Map<BiomassType, Biomass> biomassMap = new EnumMap<>(BiomassType.class);
+        Set<Biomass> biomassSet = new HashSet<>();
 
         // TODO: add additional biomass
         Biomass biomass = new Biomass(100.0);
 
-        biomassMap.put(BiomassType.NA, biomass);
+        biomassSet.add(biomass);
 
-        return biomassMap;
+        return biomassSet;
 
     }
 

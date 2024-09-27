@@ -33,18 +33,6 @@ public class ToolbarSection {
         return vBox;
     }
 
-    public Label getName() {
-        return name;
-    }
-
-    public Label getPopulation() {
-        return population;
-    }
-
-    public ImageView getImageView() {
-        return imageView;
-    }
-
     public CheckBox getCheckBox() {
         return checkBox;
     }

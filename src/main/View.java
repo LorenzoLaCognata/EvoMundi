@@ -1,9 +1,5 @@
 package main;
 
-import model.animals.Organism;
-import model.animals.Species;
-import utils.Log;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -15,6 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import model.animals.Organism;
+import model.animals.Species;
+import utils.Log;
 
 public class View {
 

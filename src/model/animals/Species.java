@@ -1,16 +1,16 @@
 package model.animals;
 
-import main.View;
-import model.enums.*;
-import utils.Log;
-import model.simulation.SimulationSettings;
-import model.constants.*;
-import utils.RandomGenerator;
-import view.ToolbarSection;
-
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import main.View;
+import model.constants.Bobcat;
+import model.constants.GrayWolf;
+import model.enums.*;
+import model.simulation.SimulationSettings;
+import utils.Log;
+import utils.RandomGenerator;
+import view.ToolbarSection;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -159,9 +159,9 @@ Species {
 
         String speciesName = species.speciesType.name();
         String speciesClassName = "model.constants." + Log.titleCase(speciesName.replace("_", " ")).replace(" ", "");
-        String speciesAttributeconstantName = speciesAttribute.name();
-        String maleConstantName = "MALE_" + speciesAttributeconstantName;
-        String femaleConstantName = "FEMALE_" + speciesAttributeconstantName;
+        String speciesAttributeConstantName = speciesAttribute.name();
+        String maleConstantName = "MALE_" + speciesAttributeConstantName;
+        String femaleConstantName = "FEMALE_" + speciesAttributeConstantName;
 
         return new SpeciesAttributeValue(
                 speciesAttribute,
@@ -258,7 +258,7 @@ Species {
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(mammalia, lagomorpha, leporidae, lepus);
         Species snowshoeHare = new Species(lepusTaxonomy, SpeciesType.SNOWSHOE_HARE, "Snowshoe Hare", "Lepus americanus", Diet.HERBIVORE, new Image("resources/images/snowshoehare_64x64.png"));
         snowshoeHareAttributes(snowshoeHare);
-        //snowshoeHare.initializeOrganisms();
+        snowshoeHare.initializeOrganisms();
         speciesMap.put(SpeciesType.SNOWSHOE_HARE, snowshoeHare);
 
         TaxonomyOrder rodentia = new TaxonomyOrder("Rodentia");
@@ -304,48 +304,61 @@ Species {
             double lifeSpan = RandomGenerator.generateGaussian(gender, femaleLifeSpan, maleLifeSpan, RandomGenerator.GAUSSIAN_VARIANCE);
             double femaleWeight = getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.FEMALE);
             double maleWeight = getAttribute(SpeciesAttribute.WEIGHT).getValue(Gender.MALE);
-            double femaleHeigth = getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE);
-            double maleHeigth = getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE);
+            double femaleHeight = getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.FEMALE);
+            double maleHeight = getAttribute(SpeciesAttribute.HEIGHT).getValue(Gender.MALE);
             double age = RandomGenerator.random.nextDouble() * lifeSpan;
             double posX = RandomGenerator.random.nextDouble() * View.SCENE_WIDTH;
             double posY = RandomGenerator.random.nextDouble() * View.SCENE_HEIGHT;
+
+            VitalsAttributes vitalsAttributes = new VitalsAttributes(
+                RandomGenerator.generateGaussian(femaleWeight, maleWeight, RandomGenerator.GAUSSIAN_VARIANCE),
+                RandomGenerator.generateGaussian(femaleHeight, maleHeight, RandomGenerator.GAUSSIAN_VARIANCE),
+                lifeSpan,
+                0,
+                getAttribute(SpeciesAttribute.ENERGY_LOSS).getValue(gender)
+            );
+
+            MovementAttributes movementAttributes = new MovementAttributes(
+                posX,
+                posY,
+                0.0,
+                0.0,
+                0.0
+            );
+
+            HuntingAttributes huntingAttributes = new HuntingAttributes(
+                getAttribute(SpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),
+                getAttribute(SpeciesAttribute.ENERGY_GAIN).getValue(gender),
+                getAttribute(SpeciesAttribute.PREY_EATEN).getValue(gender)
+            );
+
+            ReproductionAttributes reproductionAttributes = new ReproductionAttributes(
+                getAttribute(SpeciesAttribute.SEXUAL_MATURITY_START).getValue(gender),
+                getAttribute(SpeciesAttribute.SEXUAL_MATURITY_END).getValue(gender),
+                getAttribute(SpeciesAttribute.MATING_SEASON_START).getValue(gender),
+                getAttribute(SpeciesAttribute.MATING_SEASON_END).getValue(gender),
+                getAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN).getValue(gender),
+                getAttribute(SpeciesAttribute.GESTATION_PERIOD).getValue(gender),
+                getAttribute(SpeciesAttribute.AVERAGE_OFFSPRING).getValue(gender),
+                getAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
+                getAttribute(SpeciesAttribute.MATING_SUCCESS_RATE).getValue(gender),
+                getAttribute(SpeciesAttribute.MATING_ATTEMPTS).getValue(gender)
+            );
+
+            OrganismAttributes organismAttributes = new OrganismAttributes(
+                vitalsAttributes,
+                movementAttributes,
+                huntingAttributes,
+                reproductionAttributes
+            );
+
             Organism organism = new Organism(
                     speciesType,
                     gender,
                     baseDiet,
                     age,
                     new ImageView(image),
-                    new VitalsAttributes(
-                        RandomGenerator.generateGaussian(femaleWeight, maleWeight, RandomGenerator.GAUSSIAN_VARIANCE),
-                        RandomGenerator.generateGaussian(femaleHeigth, maleHeigth, RandomGenerator.GAUSSIAN_VARIANCE),
-                        lifeSpan,
-                        0,
-                        getAttribute(SpeciesAttribute.ENERGY_LOSS).getValue(gender)
-                    ),
-                    new MovementAttributes(
-                        posX,
-                        posY,
-                        0.0,
-                        0.0,
-                        0.0
-                    ),
-                    new HuntingAttributes(
-                        getAttribute(SpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),
-                        getAttribute(SpeciesAttribute.ENERGY_GAIN).getValue(gender),
-                        getAttribute(SpeciesAttribute.PREY_EATEN).getValue(gender)
-                    ),
-                    new ReproductionAttributes(
-                        getAttribute(SpeciesAttribute.SEXUAL_MATURITY_START).getValue(gender),
-                        getAttribute(SpeciesAttribute.SEXUAL_MATURITY_END).getValue(gender),
-                        getAttribute(SpeciesAttribute.MATING_SEASON_START).getValue(gender),
-                        getAttribute(SpeciesAttribute.MATING_SEASON_END).getValue(gender),
-                        getAttribute(SpeciesAttribute.PREGNANCY_COOLDOWN).getValue(gender),
-                        getAttribute(SpeciesAttribute.GESTATION_PERIOD).getValue(gender),
-                        getAttribute(SpeciesAttribute.AVERAGE_OFFSPRING).getValue(gender),
-                        getAttribute(SpeciesAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
-                        getAttribute(SpeciesAttribute.MATING_SUCCESS_RATE).getValue(gender),
-                        getAttribute(SpeciesAttribute.MATING_ATTEMPTS).getValue(gender)
-                    )
+                    organismAttributes
             );
             organism.getPreySpecies().putAll(basePreySpecies);
 

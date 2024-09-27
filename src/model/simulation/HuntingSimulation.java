@@ -51,7 +51,8 @@ public class HuntingSimulation {
 
                 int huntingAttemptNumber = 0;
 
-                while (predatorOrganism.getEnergy() < 1.0 && huntingAttemptNumber < predatorOrganism.getHuntingAttributes().huntAttempts())  {
+                while (predatorOrganism.getEnergy() < 1.0 &&
+                        huntingAttemptNumber < predatorOrganism.getOrganismAttributes().huntingAttributes().huntAttempts())  {
 
                     huntingAttempt(speciesMap, predatorOrganism);
 
@@ -99,8 +100,8 @@ public class HuntingSimulation {
             Log.log7(preyOrganism.getSpeciesType() + " " + preyOrganism.getGender() + " is hunted by a " + predatorOrganism.getSpeciesType());
         }
 
-        double preyKgEaten = Math.max(preyOrganism.getVitalsAttributes().weight(), predatorOrganism.getHuntingAttributes().preyEaten());
-        double baseEnergyGain = predatorOrganism.getHuntingAttributes().energyGain() * preyKgEaten;
+        double preyKgEaten = Math.max(preyOrganism.getOrganismAttributes().vitalsAttributes().weight(), predatorOrganism.getOrganismAttributes().huntingAttributes().preyEaten());
+        double baseEnergyGain = predatorOrganism.getOrganismAttributes().huntingAttributes().energyGain() * preyKgEaten;
         double energyGain = Math.min(baseEnergyGain, 1.0 - predatorOrganism.getEnergy());
         predatorOrganism.setEnergy(predatorOrganism.getEnergy() + energyGain);
     }

@@ -1,20 +1,24 @@
 package model.environment;
 
 import model.animals.Species;
-import model.enums.*;
+import model.enums.Gender;
+import model.enums.OrganismDeathReason;
+import model.enums.SpeciesAttribute;
+import model.enums.SpeciesType;
 import utils.Log;
 
 import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Ecosystem {
 
-    private final Map<BiomassType, Biomass> biomassMap = new HashMap<>();
+    private final Set<Biomass> biomassSet = new HashSet<>();
     private final Map<SpeciesType, Species> speciesMap = new EnumMap<>(SpeciesType.class);
 
-    public Map<BiomassType, Biomass> getBiomassMap() {
-        return biomassMap;
+    public Set<Biomass> getBiomassSet() {
+        return biomassSet;
     }
 
     public Map<SpeciesType, Species> getSpeciesMap() {

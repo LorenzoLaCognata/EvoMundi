@@ -15,17 +15,17 @@ public class AgingSimulation {
 
             organism.setAge(organism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
 
-            if (organism.getAge() >= organism.getVitalsAttributes().lifeSpan()) {
+            if (organism.getAge() >= organism.getOrganismAttributes().vitalsAttributes().lifeSpan()) {
                 organismDeathByAge(organism);
             }
 
             else {
 
-                if (organism.getReproductionStatus() == ReproductionStatus.MATURE && organism.getAge() >= organism.getReproductionAttributes().sexualMaturityEnd() && organism.getGender() == Gender.FEMALE) {
+                if (organism.getReproductionStatus() == ReproductionStatus.MATURE && organism.getAge() >= organism.getOrganismAttributes().reproductionAttributes().sexualMaturityEnd() && organism.getGender() == Gender.FEMALE) {
                     organismMenopause(organism);
                 }
 
-                else if (organism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && organism.getAge() >= organism.getReproductionAttributes().sexualMaturityStart()) {
+                else if (organism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && organism.getAge() >= organism.getOrganismAttributes().reproductionAttributes().sexualMaturityStart()) {
                     sexualMaturation(organism);
                 }
 
@@ -56,7 +56,7 @@ public class AgingSimulation {
     }
 
     public void energyLoss(Organism organism) {
-        organism.setEnergy(organism.getEnergy() - organism.getVitalsAttributes().energyLoss());
+        organism.setEnergy(organism.getEnergy() - organism.getOrganismAttributes().vitalsAttributes().energyLoss());
 
         if (organism.getEnergy() <= 0.0) {
             starve(organism);

@@ -1,5 +1,6 @@
 package model.constants;
 
+@SuppressWarnings("unused")
 public class GrayWolf {
 
     public static final double MALE_CARRYING_CAPACITY = 100;
@@ -42,5 +43,8 @@ public class GrayWolf {
 
     public static final double PREFERENCE_WHITETAIL_DEER = 0.75;
     public static final double PREFERENCE_MOOSE = 0.25;
+
+    private GrayWolf() {
+    }
 
 }

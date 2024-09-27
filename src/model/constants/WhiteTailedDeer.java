@@ -1,5 +1,6 @@
 package model.constants;
 
+@SuppressWarnings("unused")
 public class WhiteTailedDeer {
 
     public static final double MALE_CARRYING_CAPACITY = 5000;
@@ -39,5 +40,8 @@ public class WhiteTailedDeer {
     public static final double FEMALE_MATING_SUCCESS_RATE = 0.70;
     public static final double MALE_MATING_ATTEMPTS = 0.0;
     public static final double FEMALE_MATING_ATTEMPTS = 3.0;
+
+    private WhiteTailedDeer() {
+    }
 
 }

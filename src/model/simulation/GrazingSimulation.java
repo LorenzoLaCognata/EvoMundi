@@ -2,21 +2,20 @@ package model.simulation;
 
 import model.animals.Organism;
 import model.animals.Species;
-import model.enums.BiomassType;
 import model.environment.Biomass;
 
-import java.util.Map;
+import java.util.Set;
 
 public class GrazingSimulation {
 
-    public void speciesGraze(Map<BiomassType, Biomass> biomassMap, Species species) {
+    public void speciesGraze(Set<Biomass> biomassSet, Species species) {
 
         for (int i = 0; i < species.getOrganisms().size(); i++) {
 
             Organism organism = species.getOrganisms().get(i);
 
             // TODO: selection of the biomass to consume and not always the first one
-            Biomass biomass = biomassMap.entrySet().iterator().next().getValue();
+            Biomass biomass = biomassSet.iterator().next();
 
             if (biomass.getQuantity() > 0.0) {
                 graze(biomass, organism);

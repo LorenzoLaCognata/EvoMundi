@@ -1,8 +1,8 @@
 package model.animals;
 
+import javafx.scene.image.ImageView;
 import model.enums.*;
 import utils.Log;
-import javafx.scene.image.ImageView;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -14,10 +14,7 @@ public class Organism {
     private final Diet diet;
     private final ImageView imageView;
 
-    private final VitalsAttributes vitalsAttributes;
-    private final MovementAttributes movementAttributes;
-    private final HuntingAttributes huntingAttributes;
-    private final ReproductionAttributes reproductionAttributes;
+    private final OrganismAttributes organismAttributes;
 
     private double age;
     private double energy = 1.0;
@@ -34,16 +31,13 @@ public class Organism {
 
     private final Map<SpeciesType, PreySpeciesType> preySpecies = new EnumMap<>(SpeciesType.class);
 
-    public Organism(SpeciesType speciesType, Gender gender, Diet diet, double age, ImageView imageView, VitalsAttributes vitalsAttributes, MovementAttributes movementAttributes, HuntingAttributes huntingAttributes, ReproductionAttributes reproductionAttributes) {
+    public Organism(SpeciesType speciesType, Gender gender, Diet diet, double age, ImageView imageView, OrganismAttributes organismAttributes) {
         this.speciesType = speciesType;
         this.gender = gender;
         this.diet = diet;
         this.age = age;
         this.imageView = imageView;
-        this.vitalsAttributes = vitalsAttributes;
-        this.movementAttributes = movementAttributes;
-        this.huntingAttributes = huntingAttributes;
-        this.reproductionAttributes = reproductionAttributes;
+        this.organismAttributes = organismAttributes;
     }
 
     public SpeciesType getSpeciesType() {
@@ -70,20 +64,8 @@ public class Organism {
         return energy;
     }
 
-    public VitalsAttributes getVitalsAttributes() {
-        return vitalsAttributes;
-    }
-
-    public MovementAttributes getMovementAttributes() {
-        return movementAttributes;
-    }
-
-    public HuntingAttributes getHuntingAttributes() {
-        return huntingAttributes;
-    }
-
-    public ReproductionAttributes getReproductionAttributes() {
-        return reproductionAttributes;
+    public OrganismAttributes getOrganismAttributes() {
+        return organismAttributes;
     }
 
     public ReproductionStatus getReproductionStatus() {
