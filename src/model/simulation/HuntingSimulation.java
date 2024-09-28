@@ -1,12 +1,11 @@
 package model.simulation;
 
-import model.animals.Organism;
-import model.animals.PreySpeciesType;
-import model.animals.Species;
-import model.enums.OrganismDeathReason;
-import model.enums.OrganismStatus;
-import model.enums.SimulationStatus;
-import model.enums.SpeciesType;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.PreyAnimalSpecies;
+import model.environment.animals.base.AnimalSpecies;
+import model.environment.animals.enums.AnimalOrganismDeathReason;
+import model.environment.base.OrganismStatus;
+import model.environment.base.TaxonomySpecies;
 import utils.Log;
 import utils.RandomGenerator;
 
@@ -15,22 +14,22 @@ import java.util.Map;
 
 public class HuntingSimulation {
 
-    public Species choosePreySpecies(Map<SpeciesType, Species> speciesMap, Organism predatorOrganism) {
+    public AnimalSpecies choosePreySpecies(Map<TaxonomySpecies, AnimalSpecies> speciesMap, AnimalOrganism predatorAnimalOrganism) {
 
-    if (!predatorOrganism.getPreySpecies().isEmpty()) {
+    if (!predatorAnimalOrganism.getPreyAnimalSpecies().isEmpty()) {
 
         double preySpeciesTypeSelected = RandomGenerator.random.nextDouble();
         double preySpeciesTypeSelectorIndex = 0.0;
 
-        for (PreySpeciesType preySpeciesType : predatorOrganism.getPreySpecies().values()) {
+        for (PreyAnimalSpecies preyAnimalSpecies : predatorAnimalOrganism.getPreyAnimalSpecies().values()) {
 
             if (preySpeciesTypeSelected >= preySpeciesTypeSelectorIndex &&
-                    preySpeciesTypeSelected < preySpeciesTypeSelectorIndex + preySpeciesType.preferenceRate()) {
-                return speciesMap.get(preySpeciesType.speciesType());
+                    preySpeciesTypeSelected < preySpeciesTypeSelectorIndex + preyAnimalSpecies.preferenceRate()) {
+                return speciesMap.get(preyAnimalSpecies.taxonomySpecies());
             }
 
             else {
-                preySpeciesTypeSelectorIndex = preySpeciesTypeSelectorIndex + preySpeciesType.preferenceRate();
+                preySpeciesTypeSelectorIndex = preySpeciesTypeSelectorIndex + preyAnimalSpecies.preferenceRate();
             }
 
         }
@@ -41,20 +40,20 @@ public class HuntingSimulation {
 
 }
 
-    public void speciesHunt(Map<SpeciesType, Species> speciesMap, Species predatorSpecies) {
+    public void speciesHunt(Map<TaxonomySpecies, AnimalSpecies> speciesMap, AnimalSpecies predatorAnimalSpecies) {
 
-        for (int i = 0; i < predatorSpecies.getOrganisms().size(); i++) {
+        for (int i = 0; i < predatorAnimalSpecies.getOrganisms().size(); i++) {
 
-            Organism predatorOrganism = predatorSpecies.getOrganisms().get(i);
+            AnimalOrganism predatorAnimalOrganism = predatorAnimalSpecies.getOrganisms().get(i);
 
-            if (!predatorOrganism.getPreySpecies().isEmpty()) {
+            if (!predatorAnimalOrganism.getPreyAnimalSpecies().isEmpty()) {
 
                 int huntingAttemptNumber = 0;
 
-                while (predatorOrganism.getEnergy() < 1.0 &&
-                        huntingAttemptNumber < predatorOrganism.getOrganismAttributes().huntingAttributes().huntAttempts())  {
+                while (predatorAnimalOrganism.getEnergy() < 1.0 &&
+                        huntingAttemptNumber < predatorAnimalOrganism.getOrganismAttributes().huntingAttributes().huntAttempts())  {
 
-                    huntingAttempt(speciesMap, predatorOrganism);
+                    huntingAttempt(speciesMap, predatorAnimalOrganism);
 
                     huntingAttemptNumber++;
 
@@ -64,46 +63,46 @@ public class HuntingSimulation {
         }
     }
 
-    public void huntingAttempt(Map<SpeciesType, Species> speciesMap, Organism predatorOrganism) {
-        Species preySpecies = choosePreySpecies(speciesMap, predatorOrganism);
+    public void huntingAttempt(Map<TaxonomySpecies, AnimalSpecies> speciesMap, AnimalOrganism predatorAnimalOrganism) {
+        AnimalSpecies preyAnimalSpecies = choosePreySpecies(speciesMap, predatorAnimalOrganism);
 
-        if (preySpecies != null) {
+        if (preyAnimalSpecies != null) {
 
-            List<Organism> preyOrganisms = preySpecies.getOrganisms();
-            int preySpeciesPopulation = preySpecies.getPopulation();
+            List<AnimalOrganism> preyAnimalOrganisms = preyAnimalSpecies.getOrganisms();
+            int preySpeciesPopulation = preyAnimalSpecies.getPopulation();
 
             if (preySpeciesPopulation > 0) {
 
                 int preyOrganismSelected = RandomGenerator.random.nextInt(0, preySpeciesPopulation);
 
-                Organism preyOrganism = preyOrganisms.get(preyOrganismSelected);
-                double baseSuccessRate = predatorOrganism.calculateHuntSuccessRate(preySpecies, preyOrganism);
+                AnimalOrganism preyAnimalOrganism = preyAnimalOrganisms.get(preyOrganismSelected);
+                double baseSuccessRate = predatorAnimalOrganism.calculateHuntSuccessRate(preyAnimalSpecies, preyAnimalOrganism);
                 double huntSuccessRate = RandomGenerator.generateGaussian(baseSuccessRate, RandomGenerator.GAUSSIAN_VARIANCE);
 
                 if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
-                    huntingSuccess(predatorOrganism, preyOrganism);
+                    huntingSuccess(predatorAnimalOrganism, preyAnimalOrganism);
                 }
             }
         }
     }
 
-    public void huntingSuccess(Organism predatorOrganism, Organism preyOrganism) {
-        if (predatorOrganism.isImpersonatedOrganism()) {
-            Log.log7(predatorOrganism.getSpeciesType() + " " + predatorOrganism.getGender() + " hunts a " + preyOrganism.getSpeciesType());
+    public void huntingSuccess(AnimalOrganism predatorAnimalOrganism, AnimalOrganism preyAnimalOrganism) {
+        if (predatorAnimalOrganism.isImpersonatedOrganism()) {
+            Log.log7(predatorAnimalOrganism.getAnimalSpecies() + " " + predatorAnimalOrganism.getGender() + " hunts a " + preyAnimalOrganism.getAnimalSpecies());
         }
 
-        preyOrganism.setOrganismStatus(OrganismStatus.DEAD);
-        preyOrganism.setOrganismDeathReason(OrganismDeathReason.PREDATION);
+        preyAnimalOrganism.setOrganismStatus(OrganismStatus.DEAD);
+        preyAnimalOrganism.setOrganismDeathReason(AnimalOrganismDeathReason.PREDATION);
 
-        if (preyOrganism.isImpersonatedOrganism()) {
+        if (preyAnimalOrganism.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log7(preyOrganism.getSpeciesType() + " " + preyOrganism.getGender() + " is hunted by a " + predatorOrganism.getSpeciesType());
+            Log.log7(preyAnimalOrganism.getAnimalSpecies() + " " + preyAnimalOrganism.getGender() + " is hunted by a " + predatorAnimalOrganism.getAnimalSpecies());
         }
 
-        double preyKgEaten = Math.max(preyOrganism.getOrganismAttributes().vitalsAttributes().weight(), predatorOrganism.getOrganismAttributes().huntingAttributes().preyEaten());
-        double baseEnergyGain = predatorOrganism.getOrganismAttributes().huntingAttributes().energyGain() * preyKgEaten;
-        double energyGain = Math.min(baseEnergyGain, 1.0 - predatorOrganism.getEnergy());
-        predatorOrganism.setEnergy(predatorOrganism.getEnergy() + energyGain);
+        double preyKgEaten = Math.max(preyAnimalOrganism.getOrganismAttributes().vitalsAttributes().weight(), predatorAnimalOrganism.getOrganismAttributes().huntingAttributes().preyEaten());
+        double baseEnergyGain = predatorAnimalOrganism.getOrganismAttributes().huntingAttributes().energyGain() * preyKgEaten;
+        double energyGain = Math.min(baseEnergyGain, 1.0 - predatorAnimalOrganism.getEnergy());
+        predatorAnimalOrganism.setEnergy(predatorAnimalOrganism.getEnergy() + energyGain);
     }
 
 }

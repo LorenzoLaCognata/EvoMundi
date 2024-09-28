@@ -2,9 +2,9 @@ package main;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import model.animals.Organism;
-import model.animals.Species;
-import model.enums.SimulationStatus;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
+import model.simulation.SimulationStatus;
 import model.simulation.SimulationSettings;
 
 public class Controller {
@@ -32,29 +32,29 @@ public class Controller {
 
     private void addSpeciesIconsSpecies() {
 
-        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
-            view.addSpeciesIcons(species);
+        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
+            view.addSpeciesIcons(animalSpecies);
         }
 
     }
 
     private void addOrganismImagesSpecies() {
 
-        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
-            view.addOrganismImages(species);
+        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
+            view.addOrganismImages(animalSpecies);
         }
 
     }
 
     private void removeDeadOrganismImageViews() {
 
-        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
+        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
 
-            for (int i = 0; i < species.getDeadOrganisms().size(); i++) {
+            for (int i = 0; i < animalSpecies.getDeadOrganisms().size(); i++) {
 
-                Organism deadOrganism = species.getDeadOrganisms().get(i);
+                AnimalOrganism deadAnimalOrganism = animalSpecies.getDeadOrganisms().get(i);
 
-                species.getImageGroup().getChildren().removeAll(deadOrganism.getImageView());
+                animalSpecies.getImageGroup().getChildren().removeAll(deadAnimalOrganism.getImageView());
 
             }
 
@@ -64,15 +64,15 @@ public class Controller {
 
     private void viewSelectedSpeciesImageViews() {
 
-        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
+        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
 
-            for (int i = 0; i < species.getDeadOrganisms().size(); i++) {
+            for (int i = 0; i < animalSpecies.getDeadOrganisms().size(); i++) {
 
-                if (!species.getToolbarSection().getCheckBox().isSelected()) {
-                    view.removeCenterRegionGroup(species.getImageGroup());
+                if (!animalSpecies.getToolbarSection().getCheckBox().isSelected()) {
+                    view.removeCenterRegionGroup(animalSpecies.getImageGroup());
                 }
-                else if (!view.centerRegionContainsGroup(species.getImageGroup())) {
-                    view.addCenterRegionGroup(species.getImageGroup());
+                else if (!view.centerRegionContainsGroup(animalSpecies.getImageGroup())) {
+                    view.addCenterRegionGroup(animalSpecies.getImageGroup());
                 }
             }
 
@@ -118,8 +118,8 @@ public class Controller {
 
         view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-        for (Species species : model.getSimulation().getEcosystem().getSpeciesMap().values()) {
-            view.updateToolBarLabels(species);
+        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
+            view.updateToolBarLabels(animalSpecies);
         }
 
     }

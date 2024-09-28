@@ -1,8 +1,7 @@
 package model.simulation;
 
-import model.enums.Gender;
-import model.enums.SimulationStatus;
-import model.enums.SpeciesType;
+import model.environment.animals.enums.Gender;
+import model.environment.base.TaxonomySpecies;
 
 public class SimulationSettings {
 
@@ -14,7 +13,7 @@ public class SimulationSettings {
 
     private static SimulationStatus simulationStatus = SimulationStatus.PAUSED;
 
-    private static final SpeciesType impersonatingSpeciesType = SpeciesType.WHITE_TAILED_DEER;
+    private static final TaxonomySpecies impersonatingTaxonomySpecies = TaxonomySpecies.ODOCOILEUS_VIRGINIANUS;
     private static final Gender impersonatingGender = Gender.FEMALE;
 
     private SimulationSettings() {
@@ -29,8 +28,8 @@ public class SimulationSettings {
         return simulationStatus;
     }
 
-    public static SpeciesType getImpersonatingSpeciesType() {
-        return impersonatingSpeciesType;
+    public static TaxonomySpecies getImpersonatingTaxonomySpecies() {
+        return impersonatingTaxonomySpecies;
     }
 
     public static Gender getImpersonatingGender() {

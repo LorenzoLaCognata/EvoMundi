@@ -1,6 +1,6 @@
 package utils;
 
-import model.enums.Gender;
+import model.environment.animals.enums.Gender;
 
 import java.util.Random;
 

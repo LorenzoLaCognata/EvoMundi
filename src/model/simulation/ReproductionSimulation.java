@@ -1,14 +1,19 @@
 package model.simulation;
 
 import javafx.scene.image.ImageView;
-import model.animals.*;
-import model.enums.*;
+import model.environment.animals.attributes.*;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
+import model.environment.animals.enums.AnimalOrganismDeathReason;
+import model.environment.animals.enums.Gender;
+import model.environment.animals.enums.ReproductionStatus;
+import model.environment.base.OrganismStatus;
 import utils.Log;
 import utils.RandomGenerator;
 
 public class ReproductionSimulation {
 
-    public Organism birthing(Organism male, Organism female) {
+    public AnimalOrganism birthing(AnimalOrganism male, AnimalOrganism female) {
 
         Gender gender = Gender.FEMALE;
         if (RandomGenerator.random.nextDouble() < 0.50) {
@@ -63,8 +68,8 @@ public class ReproductionSimulation {
             offspringReproductionAttributes
         );
 
-        Organism offspring = new Organism(
-            female.getSpeciesType(),
+        AnimalOrganism offspring = new AnimalOrganism(
+            female.getAnimalSpecies(),
             gender,
             female.getDiet(),
             0.0,
@@ -72,88 +77,88 @@ public class ReproductionSimulation {
             offspringOrganismAttributes
         );
 
-        offspring.getPreySpecies().putAll(female.getPreySpecies());
+        offspring.getPreyAnimalSpecies().putAll(female.getPreyAnimalSpecies());
 
         return offspring;
 
     }
 
-    public void gestation(Species species, Organism organism) {
+    public void gestation(AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
 
-        organism.setGestationWeek(organism.getGestationWeek() + 1);
+        animalOrganism.setGestationWeek(animalOrganism.getGestationWeek() + 1);
 
-        ReproductionAttributes organismReproduction = organism.getOrganismAttributes().reproductionAttributes();
+        ReproductionAttributes organismReproduction = animalOrganism.getOrganismAttributes().reproductionAttributes();
 
-        if (organism.getGestationWeek() >= organism.getOrganismAttributes().reproductionAttributes().gestationPeriod()) {
+        if (animalOrganism.getGestationWeek() >= animalOrganism.getOrganismAttributes().reproductionAttributes().gestationPeriod()) {
 
             double baseOffspringCount = RandomGenerator.generateGaussian(organismReproduction.averageOffspring(), RandomGenerator.GAUSSIAN_VARIANCE);
             double offspringCount = Math.round(baseOffspringCount);
 
-            if (organism.isImpersonatedOrganism()) {
-                Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to " + offspringCount + " offsprings");
+            if (animalOrganism.isImpersonatedOrganism()) {
+                Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " gives birth to " + offspringCount + " offsprings");
             }
 
             for (int i=0; i < (int) offspringCount; i++) {
 
-                Organism offspring = birthing(organism, organism.getMate());
+                AnimalOrganism offspring = birthing(animalOrganism, animalOrganism.getMate());
 
-                if (RandomGenerator.random.nextDouble() >= organism.getOrganismAttributes().reproductionAttributes().juvenileSurvivalRate()) {
-                    juvenileDeath(organism, offspring);
+                if (RandomGenerator.random.nextDouble() >= animalOrganism.getOrganismAttributes().reproductionAttributes().juvenileSurvivalRate()) {
+                    juvenileDeath(animalOrganism, offspring);
                 }
 
                 else {
-                    if (organism.isImpersonatedOrganism()) {
-                        Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " gives birth to a " + offspring.getSpeciesType() + " " + offspring.getGender());
+                    if (animalOrganism.isImpersonatedOrganism()) {
+                        Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " gives birth to a " + offspring.getAnimalSpecies() + " " + offspring.getGender());
                     }
                 }
 
-                species.getOrganisms().add(offspring);
+                animalSpecies.getOrganisms().add(offspring);
 
             }
 
-            organism.setReproductionStatus(ReproductionStatus.COOLDOWN);
-            organism.setGestationWeek(0.0);
-            organism.setMate(null);
+            animalOrganism.setReproductionStatus(ReproductionStatus.COOLDOWN);
+            animalOrganism.setGestationWeek(0.0);
+            animalOrganism.setMate(null);
 
-            if (organism.isImpersonatedOrganism()) {
-                Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " enters reproduction cooldown");
+            if (animalOrganism.isImpersonatedOrganism()) {
+                Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " enters reproduction cooldown");
             }
 
         }
 
     }
 
-    public void juvenileDeath(Organism organism, Organism offspring) {
+    public void juvenileDeath(AnimalOrganism animalOrganism, AnimalOrganism offspring) {
         offspring.setOrganismStatus(OrganismStatus.DEAD);
-        offspring.setOrganismDeathReason(OrganismDeathReason.JUVENILE_DEATH);
+        offspring.setOrganismDeathReason(AnimalOrganismDeathReason.JUVENILE_DEATH);
 
-        if (organism.isImpersonatedOrganism()) {
-            Log.log7("The offspring of " + organism.getSpeciesType() + " " + organism.getGender() + " suffers a juvenile death");
+        if (animalOrganism.isImpersonatedOrganism()) {
+            Log.log7("The offspring of " + animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " suffers a juvenile death");
         }
 
         if (offspring.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log7(offspring.getSpeciesType() + " " + offspring.getGender() + " suffers a juvenile death");
+            Log.log7(offspring.getAnimalSpecies() + " " + offspring.getGender() + " suffers a juvenile death");
         }
     }
 
-    public void findMate(Species species, Organism organism) {
+    public void findMate(AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
 
-        for (int i = 0; i < species.getOrganisms().size(); i++) {
+        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
 
-            Organism mate = species.getOrganisms().get(i);
+            AnimalOrganism mate = animalSpecies.getOrganisms().get(i);
 
             if (mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
 
-                if (organism.isImpersonatedOrganism()) {
-                    Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " finds a mate");
+                if (animalOrganism.isImpersonatedOrganism()) {
+                    Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " finds a mate");
                 }
 
-                organism.setReproductionStatus(ReproductionStatus.PREGNANT);
-                organism.setMate(mate);
+                animalOrganism.setReproductionStatus(ReproductionStatus.PREGNANT);
+                animalOrganism.setMate(mate);
 
-                if (organism.isImpersonatedOrganism()) {
-                    Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " starts pregnancy");
+                if (animalOrganism.isImpersonatedOrganism()) {
+                    Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " starts pregnancy");
                 }
 
                 break;
@@ -163,41 +168,41 @@ public class ReproductionSimulation {
 
     }
 
-    public void matingCooldown(Organism organism) {
+    public void matingCooldown(AnimalOrganism animalOrganism) {
 
-        organism.setCooldownWeek(organism.getCooldownWeek() + 1);
+        animalOrganism.setCooldownWeek(animalOrganism.getCooldownWeek() + 1);
 
-        if (organism.getCooldownWeek() >= organism.getOrganismAttributes().reproductionAttributes().matingCooldown()) {
+        if (animalOrganism.getCooldownWeek() >= animalOrganism.getOrganismAttributes().reproductionAttributes().matingCooldown()) {
 
-            organism.setReproductionStatus(ReproductionStatus.MATURE);
-            organism.setCooldownWeek(0.0);
+            animalOrganism.setReproductionStatus(ReproductionStatus.MATURE);
+            animalOrganism.setCooldownWeek(0.0);
 
-            if (organism.isImpersonatedOrganism()) {
-                Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " finishes reproduction cooldown");
+            if (animalOrganism.isImpersonatedOrganism()) {
+                Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " finishes reproduction cooldown");
             }
 
         }
 
     }
 
-    public void speciesReproduction(Species species) {
+    public void speciesReproduction(AnimalSpecies animalSpecies) {
 
-        for (int i = 0; i < species.getOrganisms().size(); i++) {
+        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
 
-            Organism organism = species.getOrganisms().get(i);
+            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
 
-            if (organism.getGender() == Gender.FEMALE) {
+            if (animalOrganism.getGender() == Gender.FEMALE) {
 
-                if (organism.getReproductionStatus() == ReproductionStatus.COOLDOWN) {
-                    matingCooldown(organism);
+                if (animalOrganism.getReproductionStatus() == ReproductionStatus.COOLDOWN) {
+                    matingCooldown(animalOrganism);
                 }
 
-                if (organism.getReproductionStatus() == ReproductionStatus.PREGNANT) {
-                    gestation(species, organism);
+                if (animalOrganism.getReproductionStatus() == ReproductionStatus.PREGNANT) {
+                    gestation(animalSpecies, animalOrganism);
                 }
 
-                if (organism.getReproductionStatus() == ReproductionStatus.MATURE) {
-                    findMate(species, organism);
+                if (animalOrganism.getReproductionStatus() == ReproductionStatus.MATURE) {
+                    findMate(animalSpecies, animalOrganism);
                 }
 
             }

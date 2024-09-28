@@ -10,7 +10,8 @@ public class Log {
 
     private static final NumberFormat formatter = NumberFormat.getInstance(Locale.US);
     private static final Logger logger = Logger.getLogger("Log");
-    public static final String UNEXPECTED_VALUE_MESSAGE = "Unexpected value: ";
+    public static final String UNEXPECTED_PREDATOR_MESSAGE = "Unexpected predator: ";
+    public static final String UNEXPECTED_PREY_MESSAGE = "Unexpected prey: ";
 
     private Log() {
     }

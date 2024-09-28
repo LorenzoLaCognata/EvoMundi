@@ -1,35 +1,38 @@
 package model.simulation;
 
-import model.animals.Organism;
-import model.animals.Species;
-import model.enums.*;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
+import model.environment.animals.enums.AnimalOrganismDeathReason;
+import model.environment.animals.enums.Gender;
+import model.environment.animals.enums.ReproductionStatus;
+import model.environment.base.OrganismStatus;
 import utils.Log;
 
 public class AgingSimulation {
 
-    public void speciesAge(Species species) {
+    public void speciesAge(AnimalSpecies animalSpecies) {
 
-        for (int i = 0; i < species.getOrganisms().size(); i++) {
+        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
 
-            Organism organism = species.getOrganisms().get(i);
+            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
 
-            organism.setAge(organism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
+            animalOrganism.setAge(animalOrganism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
 
-            if (organism.getAge() >= organism.getOrganismAttributes().vitalsAttributes().lifeSpan()) {
-                organismDeathByAge(organism);
+            if (animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().vitalsAttributes().lifeSpan()) {
+                organismDeathByAge(animalOrganism);
             }
 
             else {
 
-                if (organism.getReproductionStatus() == ReproductionStatus.MATURE && organism.getAge() >= organism.getOrganismAttributes().reproductionAttributes().sexualMaturityEnd() && organism.getGender() == Gender.FEMALE) {
-                    organismMenopause(organism);
+                if (animalOrganism.getReproductionStatus() == ReproductionStatus.MATURE && animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().reproductionAttributes().sexualMaturityEnd() && animalOrganism.getGender() == Gender.FEMALE) {
+                    organismMenopause(animalOrganism);
                 }
 
-                else if (organism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && organism.getAge() >= organism.getOrganismAttributes().reproductionAttributes().sexualMaturityStart()) {
-                    sexualMaturation(organism);
+                else if (animalOrganism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().reproductionAttributes().sexualMaturityStart()) {
+                    sexualMaturation(animalOrganism);
                 }
 
-                energyLoss(organism);
+                energyLoss(animalOrganism);
 
             }
 
@@ -37,52 +40,52 @@ public class AgingSimulation {
 
     }
 
-    public void sexualMaturation(Organism organism) {
-        organism.setReproductionStatus(ReproductionStatus.MATURE);
+    public void sexualMaturation(AnimalOrganism animalOrganism) {
+        animalOrganism.setReproductionStatus(ReproductionStatus.MATURE);
 
-        if (organism.isImpersonatedOrganism()) {
-            Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " enters sexual maturity");
+        if (animalOrganism.isImpersonatedOrganism()) {
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " enters sexual maturity");
         }
     }
 
-    public void organismMenopause(Organism organism) {
+    public void organismMenopause(AnimalOrganism animalOrganism) {
 
-        organism.setReproductionStatus(ReproductionStatus.MENOPAUSE);
+        animalOrganism.setReproductionStatus(ReproductionStatus.MENOPAUSE);
 
-        if (organism.isImpersonatedOrganism()) {
-            Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " enters menopause");
+        if (animalOrganism.isImpersonatedOrganism()) {
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " enters menopause");
         }
 
     }
 
-    public void energyLoss(Organism organism) {
-        organism.setEnergy(organism.getEnergy() - organism.getOrganismAttributes().vitalsAttributes().energyLoss());
+    public void energyLoss(AnimalOrganism animalOrganism) {
+        animalOrganism.setEnergy(animalOrganism.getEnergy() - animalOrganism.getOrganismAttributes().vitalsAttributes().energyLoss());
 
-        if (organism.getEnergy() <= 0.0) {
-            starve(organism);
+        if (animalOrganism.getEnergy() <= 0.0) {
+            starve(animalOrganism);
         }
     }
 
-    public void starve(Organism organism) {
+    public void starve(AnimalOrganism animalOrganism) {
 
-        organism.setOrganismStatus(OrganismStatus.DEAD);
-        organism.setOrganismDeathReason(OrganismDeathReason.STARVATION);
+        animalOrganism.setOrganismStatus(OrganismStatus.DEAD);
+        animalOrganism.setOrganismDeathReason(AnimalOrganismDeathReason.STARVATION);
 
-        if (organism.isImpersonatedOrganism()) {
+        if (animalOrganism.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " dies by starvation");
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " dies by starvation");
         }
 
     }
 
-    public void organismDeathByAge(Organism organism) {
+    public void organismDeathByAge(AnimalOrganism animalOrganism) {
 
-        organism.setOrganismStatus(OrganismStatus.DEAD);
-        organism.setOrganismDeathReason(OrganismDeathReason.AGE);
+        animalOrganism.setOrganismStatus(OrganismStatus.DEAD);
+        animalOrganism.setOrganismDeathReason(AnimalOrganismDeathReason.AGE);
 
-        if (organism.isImpersonatedOrganism()) {
+        if (animalOrganism.isImpersonatedOrganism()) {
             SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log7(organism.getSpeciesType() + " " + organism.getGender() + " dies by age");
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " dies by age");
         }
 
     }

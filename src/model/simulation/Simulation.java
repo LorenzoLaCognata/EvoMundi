@@ -1,11 +1,11 @@
 package model.simulation;
 
-import model.animals.Organism;
-import model.animals.Species;
-import model.enums.OrganismStatus;
-import model.enums.SpeciesType;
-import model.environment.Biomass;
-import model.environment.Ecosystem;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
+import model.environment.base.OrganismStatus;
+import model.environment.base.TaxonomySpecies;
+import model.environment.plants.base.PlantPatch;
+import model.environment.base.Ecosystem;
 import utils.Log;
 
 import java.util.Iterator;
@@ -16,7 +16,7 @@ public class Simulation {
 
     private final Ecosystem ecosystem;
 
-    private final BiomassGrowthSimulation biomassGrowthSimulation;
+    private final PlantGrowthSimulation plantGrowthSimulation;
     private final GrazingSimulation grazingSimulation;
 
     private final MovementSimulation movementSimulation;
@@ -28,7 +28,7 @@ public class Simulation {
 
         ecosystem = new Ecosystem();
 
-        biomassGrowthSimulation = new BiomassGrowthSimulation();
+        plantGrowthSimulation = new PlantGrowthSimulation();
         grazingSimulation = new GrazingSimulation();
 
         movementSimulation = new MovementSimulation();
@@ -36,8 +36,8 @@ public class Simulation {
         reproductionSimulation = new ReproductionSimulation();
         huntingSimulation = new HuntingSimulation();
 
-        ecosystem.getBiomassSet().addAll(Biomass.initializeBiomass());
-        ecosystem.getSpeciesMap().putAll(Species.initializeSpecies());
+        ecosystem.getPlantPatchSet().addAll(PlantPatch.initializePlantPatchSet());
+        ecosystem.getAnimalSpeciesMap().putAll(AnimalSpecies.initializeSpecies());
 
     }
 
@@ -45,13 +45,13 @@ public class Simulation {
         return ecosystem;
     }
 
-    private static void buryDead(Species species) {
+    private static void buryDead(AnimalSpecies animalSpecies) {
 
-        Iterator<Organism> iterator = species.getOrganisms().iterator();
+        Iterator<AnimalOrganism> iterator = animalSpecies.getOrganisms().iterator();
         while (iterator.hasNext()) {
-            Organism organism = iterator.next();
-            if (organism.getOrganismStatus() == OrganismStatus.DEAD) {
-                species.getDeadOrganisms().add(organism);
+            AnimalOrganism animalOrganism = iterator.next();
+            if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
+                animalSpecies.getDeadOrganisms().add(animalOrganism);
                 iterator.remove();
             }
         }
@@ -63,36 +63,36 @@ public class Simulation {
         SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
         Log.log5("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-        Set<Biomass> biomassSet = ecosystem.getBiomassSet();
+        Set<PlantPatch> plantPatchSet = ecosystem.getPlantPatchSet();
 
-        for (Biomass biomass : biomassSet) {
-            biomassGrowthSimulation.biomassRegenerate(biomass);
+        for (PlantPatch plantPatch : plantPatchSet) {
+            plantGrowthSimulation.plantPatchRegeneration(plantPatch);
         }
 
-        Map<SpeciesType, Species> speciesMap = ecosystem.getSpeciesMap();
+        Map<TaxonomySpecies, AnimalSpecies> speciesMap = ecosystem.getAnimalSpeciesMap();
 
-        for (Species species : speciesMap.values()) {
-            movementSimulation.speciesMove(species);
+        for (AnimalSpecies animalSpecies : speciesMap.values()) {
+            movementSimulation.speciesMove(animalSpecies);
         }
 
-        for (Species species : speciesMap.values()) {
-            agingSimulation.speciesAge(species);
+        for (AnimalSpecies animalSpecies : speciesMap.values()) {
+            agingSimulation.speciesAge(animalSpecies);
         }
 
-        for (Species species : speciesMap.values()) {
-            grazingSimulation.speciesGraze(biomassSet, species);
+        for (AnimalSpecies animalSpecies : speciesMap.values()) {
+            grazingSimulation.speciesGraze(plantPatchSet, animalSpecies);
         }
 
-        for (Species species : speciesMap.values()) {
-            huntingSimulation.speciesHunt(speciesMap, species);
+        for (AnimalSpecies animalSpecies : speciesMap.values()) {
+            huntingSimulation.speciesHunt(speciesMap, animalSpecies);
         }
 
-        for (Species species : speciesMap.values()) {
-            reproductionSimulation.speciesReproduction(species);
+        for (AnimalSpecies animalSpecies : speciesMap.values()) {
+            reproductionSimulation.speciesReproduction(animalSpecies);
         }
 
-        for (Species species : speciesMap.values()) {
-            buryDead(species);
+        for (AnimalSpecies animalSpecies : speciesMap.values()) {
+            buryDead(animalSpecies);
         }
 
         ecosystem.printSpeciesDistribution();

@@ -11,8 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import model.animals.Organism;
-import model.animals.Species;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
 import utils.Log;
 
 public class View {
@@ -84,8 +84,8 @@ public class View {
         return new Pane();
     }
 
-    public void addSpeciesIcons(Species species) {
-        toolBar.getItems().add(species.getToolbarSection().getvBox());
+    public void addSpeciesIcons(AnimalSpecies animalSpecies) {
+        toolBar.getItems().add(animalSpecies.getToolbarSection().getvBox());
     }
 
     public boolean centerRegionContainsGroup(Group group) {
@@ -100,19 +100,19 @@ public class View {
         centerRegion.getChildren().remove(group);
     }
 
-    public void addOrganismImages(Species species) {
+    public void addOrganismImages(AnimalSpecies animalSpecies) {
 
-        for (int i = 0; i < species.getOrganisms().size(); i++) {
-            Organism organism = species.getOrganisms().get(i);
-            species.getImageGroup().getChildren().add(organism.getImageView());
+        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
+            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
+            animalSpecies.getImageGroup().getChildren().add(animalOrganism.getImageView());
         }
 
-        addCenterRegionGroup(species.getImageGroup());
+        addCenterRegionGroup(animalSpecies.getImageGroup());
     }
 
-    public void updateToolBarLabels(Species species) {
-        String populationFormatted = " ".repeat(7 - Log.formatNumber(species.getPopulation()).length()) + Log.formatNumber(species.getPopulation());
-        species.getToolbarSection().setPopulation(populationFormatted);
+    public void updateToolBarLabels(AnimalSpecies animalSpecies) {
+        String populationFormatted = " ".repeat(7 - Log.formatNumber(animalSpecies.getPopulation()).length()) + Log.formatNumber(animalSpecies.getPopulation());
+        animalSpecies.getToolbarSection().setPopulation(populationFormatted);
     }
 
 }

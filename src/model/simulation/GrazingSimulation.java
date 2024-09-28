@@ -1,39 +1,39 @@
 package model.simulation;
 
-import model.animals.Organism;
-import model.animals.Species;
-import model.environment.Biomass;
+import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
+import model.environment.plants.base.PlantPatch;
 
 import java.util.Set;
 
 public class GrazingSimulation {
 
-    public void speciesGraze(Set<Biomass> biomassSet, Species species) {
+    public void speciesGraze(Set<PlantPatch> plantPatchSet, AnimalSpecies animalSpecies) {
 
-        for (int i = 0; i < species.getOrganisms().size(); i++) {
+        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
 
-            Organism organism = species.getOrganisms().get(i);
+            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
 
-            // TODO: selection of the biomass to consume and not always the first one
-            Biomass biomass = biomassSet.iterator().next();
+            // TODO: selection of the plant patch to consume and not always the first one
+            PlantPatch plantPatch = plantPatchSet.iterator().next();
 
-            if (biomass.getQuantity() > 0.0) {
-                graze(biomass, organism);
+            if (plantPatch.getQuantity() > 0.0) {
+                graze(plantPatch, animalOrganism);
             }
 
         }
     }
 
-    public void graze(Biomass biomass, Organism organism) {
+    public void graze(PlantPatch plantPatch, AnimalOrganism animalOrganism) {
 
-        // TODO: biomass consumption following a formula variable by species (use variables for parameters)
-        double quantityConsumed = Math.min(0.001, biomass.getQuantity());
+        // TODO: plant consumption following a formula variable by species (use variables for parameters)
+        double quantityConsumed = Math.min(0.001, plantPatch.getQuantity());
 
         // TODO: energy gain following a formula variable by species (use variables for parameters)
-        double energyGained = Math.min(70.0, 100.0 - organism.getEnergy());
+        double energyGained = Math.min(70.0, 100.0 - animalOrganism.getEnergy());
 
-        biomass.setQuantity(biomass.getQuantity() - quantityConsumed);
-        organism.setEnergy(organism.getEnergy() + energyGained);
+        plantPatch.setQuantity(plantPatch.getQuantity() - quantityConsumed);
+        animalOrganism.setEnergy(animalOrganism.getEnergy() + energyGained);
 
     }
 
