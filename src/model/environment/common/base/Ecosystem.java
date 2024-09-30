@@ -38,36 +38,23 @@ public class Ecosystem {
     public void printSpeciesDistribution() {
 
         for (PlantSpecies plantSpecies : plantSpeciesMap.values()) {
-            String s = plantSpecies.getCommonName();
-            s = s + " ".repeat(20 - plantSpecies.getCommonName().length());
-            s = s + " | " + " ".repeat(10 - Log.formatNumber(plantSpecies.getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue()).length());
-            s = s + Log.formatNumber(plantSpecies.getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue()) + " CAP";
-            s = s + " | " + " ".repeat(10 - Log.formatNumber(plantSpecies.getQuantity()).length());
-            s = s + Log.formatNumber(plantSpecies.getQuantity()) + " QTY";
+            String s = Log.padRight(16, plantSpecies.getCommonName());
+            s = s + " | " + Log.padLeft(24, Log.formatNumber(plantSpecies.getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue()) + " CAP");
+            s = s + " | " + Log.padLeft(24, Log.formatNumber(plantSpecies.getQuantity()) + " QTY");
             Log.log4(s);
         }
 
         for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            String s = animalSpecies.getCommonName();
-            s = s + " ".repeat(20 - animalSpecies.getCommonName().length());
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getAttribute(AnimalAttribute.CARRYING_CAPACITY).getAverageValue()).length());
-            s = s + Log.formatNumber(animalSpecies.getAttribute(AnimalAttribute.CARRYING_CAPACITY).getAverageValue()) + " CAP";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getPopulation()).length());
-            s = s + Log.formatNumber(animalSpecies.getPopulation()) + " ALIVE";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getPopulation(Gender.MALE)).length());
-            s = s + Log.formatNumber(animalSpecies.getPopulation(Gender.MALE)) + " M";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getPopulation(Gender.FEMALE)).length());
-            s = s + Log.formatNumber(animalSpecies.getPopulation(Gender.FEMALE)) + " F";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getDeadPopulation()).length());
-            s = s + Log.formatNumber(animalSpecies.getDeadPopulation()) + " DEAD";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.PREDATION)).length());
-            s = s + Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.PREDATION)) + " PRE";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.STARVATION)).length());
-            s = s + Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.STARVATION)) + " STA";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.AGE)).length());
-            s = s + Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.AGE)) + " AGE";
-            s = s + " | " + " ".repeat(7 - Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.JUVENILE_DEATH)).length());
-            s = s + Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.JUVENILE_DEATH)) + " JUV";
+            String s = Log.padRight(16, animalSpecies.getCommonName());
+            s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getAttribute(AnimalAttribute.CARRYING_CAPACITY).getAverageValue()) + " CAP");
+            s = s + " | " + Log.padLeft(14, Log.formatNumber(animalSpecies.getPopulation()) + " ALIVE");
+            s = s + " | " + Log.padLeft(10, Log.formatNumber(animalSpecies.getPopulation(Gender.MALE)) + " M");
+            s = s + " | " + Log.padLeft(10, Log.formatNumber(animalSpecies.getPopulation(Gender.FEMALE)) + " F");
+            s = s + " | " + Log.padLeft(13, Log.formatNumber(animalSpecies.getDeadPopulation()) + " DEAD");
+            s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.PREDATION)) + " PRE");
+            s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.STARVATION)) + " STA");
+            s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.AGE)) + " AGE");
+            s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.JUVENILE_DEATH)) + " JUV");
             Log.log7(s);
         }
 

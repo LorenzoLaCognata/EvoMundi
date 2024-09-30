@@ -1,5 +1,7 @@
 package utils;
 
+import model.environment.plants.enums.PlantAttribute;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -16,12 +18,24 @@ public class Log {
     private Log() {
     }
 
+    public static void initializeLog() {
+        formatter.setMaximumFractionDigits(0);
+    }
+
     public static String formatNumber(int integer) {
         return formatter.format(integer);
     }
 
     public static String formatNumber(double d) {
         return formatter.format(d);
+    }
+
+    public static String padLeft(int chars, String string) {
+        return " ".repeat(Math.max(0, chars - string.length())) + string;
+    }
+
+    public static String padRight(int chars, String string) {
+        return string + " ".repeat(Math.max(0, chars - string.length()));
     }
 
     public static String titleCase(String text) {

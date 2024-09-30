@@ -7,6 +7,7 @@ import model.environment.animals.base.AnimalSpecies;
 import model.environment.plants.base.PlantSpecies;
 import model.simulation.base.SimulationStatus;
 import model.simulation.base.SimulationSettings;
+import utils.Log;
 
 public class Controller {
 
@@ -86,6 +87,7 @@ public class Controller {
     }
 
     public Controller() {
+        Log.initializeLog();
         view.initializeToolBar();
         view.setButtonStartStop(this::handleStartStopButton);
         addSpeciesIconsSpecies();

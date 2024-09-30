@@ -14,13 +14,13 @@ public class LepusAmericanus {
 
     public static final double MALE_HUNT_ATTEMPTS = 0.0;
     public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
-    public static final double MALE_ENERGY_LOSS = 0.40;
-    public static final double FEMALE_ENERGY_LOSS = 0.40;
-    public static final double MALE_ENERGY_GAIN = 0.0;
-    public static final double FEMALE_ENERGY_GAIN = 0.0;
+    public static final double MALE_ENERGY_LOSS = 0.95;
+    public static final double FEMALE_ENERGY_LOSS = 0.95;
+    public static final double MALE_ENERGY_GAIN = 1.0;
+    public static final double FEMALE_ENERGY_GAIN = 1.0;
     public static final double MALE_PREY_EATEN = 0.0;
     public static final double FEMALE_PREY_EATEN = 0.0;
-    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.55;
+    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.60;
     public static final double FEMALE_PLANT_CONSUMPTION_RATE = 0.55;
 
     public static final double MALE_SEXUAL_MATURITY_START = 0.0;

@@ -194,7 +194,8 @@ public class AnimalReproductionSimulation {
 
             AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
 
-            if (animalOrganism.getGender() == Gender.FEMALE) {
+            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                animalOrganism.getGender() == Gender.FEMALE) {
 
                 if (animalOrganism.getReproductionStatus() == ReproductionStatus.COOLDOWN) {
                     matingCooldown(animalOrganism);

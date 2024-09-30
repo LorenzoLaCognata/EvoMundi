@@ -2,9 +2,11 @@ package model.simulation.animals;
 
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
+import model.environment.common.enums.OrganismStatus;
 import model.environment.common.enums.TaxonomySpecies;
 import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
+import model.environment.plants.enums.PlantAttribute;
 import utils.Log;
 
 import java.util.Map;
@@ -17,11 +19,14 @@ public class AnimalGrazingSimulation {
 
             AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
 
-            // TODO: selection of the plant species and organism to consume and not always the first organism of any species
-            PlantOrganism plantOrganism = plantSpeciesMap.entrySet().iterator().next().getValue().getOrganisms().getFirst();
+            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
+                // TODO: selection of the plant species and organism to consume and not always the first of any species
+                PlantOrganism plantOrganism = plantSpeciesMap.entrySet().iterator().next().getValue().getOrganisms().getFirst();
 
-            if (plantOrganism.getQuantity() > 0.0) {
-                graze(plantOrganism, animalOrganism);
+                if (plantOrganism.getQuantity() > 0.0) {
+                    graze(plantOrganism, animalOrganism);
+                }
+
             }
 
         }
@@ -29,19 +34,23 @@ public class AnimalGrazingSimulation {
 
     public void graze(PlantOrganism plantOrganism, AnimalOrganism animalOrganism) {
 
-        double consumptionConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().plantConsumption();
-        double consumptionQuantity = consumptionConstant * Math.pow(animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight(), 0.75);
+        double consumptionSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().plantConsumption();
+        double baseConsumptionQuantity = consumptionSpeciesConstant * Math.pow(animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight(), 0.75);
+        double consumptionQuantity = baseConsumptionQuantity * (plantOrganism.getQuantity() / plantOrganism.getPlantSpecies().getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue());
         double quantityConsumed = Math.min(consumptionQuantity, plantOrganism.getQuantity());
 
-        // TODO: revert to log7 function when debugging is complete
         if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " graze a " + plantOrganism.getPlantSpecies());
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " graze " + quantityConsumed + " KGs of " + plantOrganism.getPlantSpecies());
         }
 
         plantOrganism.setQuantity(plantOrganism.getQuantity() - quantityConsumed);
 
-        // TODO: energy gain following a formula variable by species (use variables for parameters)
-        double energyGained = Math.min(5.0, 100.0 - animalOrganism.getEnergy());
+        double gainSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().energyGain();
+        double energyGained = Math.min(quantityConsumed * gainSpeciesConstant, 1.0 - animalOrganism.getEnergy());
+
+        if (animalOrganism.isImpersonatedOrganism()) {
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " recovers " + (energyGained*100) + " % of energy");
+        }
 
         animalOrganism.setEnergy(animalOrganism.getEnergy() + energyGained);
 

@@ -48,12 +48,13 @@ public class AnimalHuntingSimulation {
 
             AnimalOrganism predatorAnimalOrganism = predatorAnimalSpecies.getOrganisms().get(i);
 
-            if (!predatorAnimalOrganism.getPreyAnimalSpecies().isEmpty()) {
+            if (predatorAnimalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                !predatorAnimalOrganism.getPreyAnimalSpecies().isEmpty()) {
 
                 int huntingAttemptNumber = 0;
 
                 while (predatorAnimalOrganism.getEnergy() < 1.0 &&
-                        huntingAttemptNumber < predatorAnimalOrganism.getOrganismAttributes().animalNutritionAttributes().huntAttempts())  {
+                        huntingAttemptNumber < predatorAnimalOrganism.getOrganismAttributes().animalNutritionAttributes().huntAttempts()) {
 
                     huntingAttempt(speciesMap, predatorAnimalOrganism);
 
@@ -62,6 +63,7 @@ public class AnimalHuntingSimulation {
                 }
 
             }
+
         }
     }
 

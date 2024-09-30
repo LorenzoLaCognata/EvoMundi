@@ -8,7 +8,7 @@ public enum AnimalAttribute {
 
     HUNT_ATTEMPTS, // Per Week
     ENERGY_LOSS, // Per Week
-    ENERGY_GAIN, // Per Kilogram of Prey hunted
+    ENERGY_GAIN, // Per Kilogram of Prey hunted or Kilogram of Plant eaten
     PREY_EATEN, // Per Kilogram of Prey per Week
     PLANT_CONSUMPTION_RATE, // Constant Number
 

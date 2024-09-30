@@ -113,12 +113,13 @@ public class View {
     }
 
     public void updateToolBarLabels(PlantSpecies plantSpecies) {
-        String populationFormatted = " ".repeat(10 - Log.formatNumber(plantSpecies.getQuantity()).length()) + Log.formatNumber(plantSpecies.getQuantity());
+        String populationFormatted = Log.formatNumber(plantSpecies.getQuantity());
         plantSpecies.getToolbarSection().setValue(populationFormatted);
     }
 
     public void updateToolBarLabels(AnimalSpecies animalSpecies) {
-        String populationFormatted = " ".repeat(10 - Log.formatNumber(animalSpecies.getPopulation()).length()) + Log.formatNumber(animalSpecies.getPopulation());
+//        String populationFormatted = Log.padLeft(14, Log.formatNumber(animalSpecies.getPopulation()));
+        String populationFormatted = Log.formatNumber(animalSpecies.getPopulation());
         animalSpecies.getToolbarSection().setValue(populationFormatted);
     }
 
