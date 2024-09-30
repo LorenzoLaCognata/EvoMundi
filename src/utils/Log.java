@@ -44,6 +44,10 @@ public class Log {
         logger.info(string);
     }
 
+    public static void log4(String string) {
+        logger.config(string);
+    }
+
     public static void log5(String string) {
         logger.fine(string);
     }

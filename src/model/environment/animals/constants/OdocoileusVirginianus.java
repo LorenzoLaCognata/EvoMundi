@@ -11,6 +11,7 @@ public class OdocoileusVirginianus {
     public static final double FEMALE_WEIGHT = 65.0;
     public static final double MALE_HEIGHT = 0.95;
     public static final double FEMALE_HEIGHT = 0.85;
+
     public static final double MALE_HUNT_ATTEMPTS = 0.0;
     public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
     public static final double MALE_ENERGY_LOSS = 0.30;
@@ -19,6 +20,8 @@ public class OdocoileusVirginianus {
     public static final double FEMALE_ENERGY_GAIN = 0.0;
     public static final double MALE_PREY_EATEN = 0.0;
     public static final double FEMALE_PREY_EATEN = 0.0;
+    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.65;
+    public static final double FEMALE_PLANT_CONSUMPTION_RATE = 0.65;
 
     public static final double MALE_SEXUAL_MATURITY_START = 0.0;
     public static final double FEMALE_SEXUAL_MATURITY_START = 1.5;

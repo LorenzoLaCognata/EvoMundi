@@ -4,8 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
-import model.simulation.SimulationStatus;
-import model.simulation.SimulationSettings;
+import model.environment.plants.base.PlantSpecies;
+import model.simulation.base.SimulationStatus;
+import model.simulation.base.SimulationSettings;
 
 public class Controller {
 
@@ -31,6 +32,10 @@ public class Controller {
     };
 
     private void addSpeciesIconsSpecies() {
+
+        for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
+            view.addSpeciesIcons(plantSpecies);
+        }
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
             view.addSpeciesIcons(animalSpecies);
@@ -117,6 +122,10 @@ public class Controller {
         viewSelectedSpeciesImageViews();
 
         view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
+
+        for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
+            view.updateToolBarLabels(plantSpecies);
+        }
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
             view.updateToolBarLabels(animalSpecies);

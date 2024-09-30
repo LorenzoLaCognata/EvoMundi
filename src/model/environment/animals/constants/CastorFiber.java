@@ -11,6 +11,7 @@ public class CastorFiber {
     public static final double FEMALE_WEIGHT = 16.0;
     public static final double MALE_HEIGHT = 0.35;
     public static final double FEMALE_HEIGHT = 0.32;
+
     public static final double MALE_HUNT_ATTEMPTS = 0.0;
     public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
     public static final double MALE_ENERGY_LOSS = 0.25;
@@ -19,6 +20,8 @@ public class CastorFiber {
     public static final double FEMALE_ENERGY_GAIN = 0.0;
     public static final double MALE_PREY_EATEN = 0.0;
     public static final double FEMALE_PREY_EATEN = 0.0;
+    public static final double MALE_PLANT_CONSUMPTION_RATE = 1.20;
+    public static final double FEMALE_PLANT_CONSUMPTION_RATE = 1.20;
 
     public static final double MALE_SEXUAL_MATURITY_START = 0.0;
     public static final double FEMALE_SEXUAL_MATURITY_START = 1.0;

@@ -13,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
+import model.environment.common.base.Species;
+import model.environment.plants.base.PlantSpecies;
 import utils.Log;
 
 public class View {
@@ -84,8 +86,8 @@ public class View {
         return new Pane();
     }
 
-    public void addSpeciesIcons(AnimalSpecies animalSpecies) {
-        toolBar.getItems().add(animalSpecies.getToolbarSection().getvBox());
+    public void addSpeciesIcons(Species species) {
+        toolBar.getItems().add(species.getToolbarSection().getvBox());
     }
 
     public boolean centerRegionContainsGroup(Group group) {
@@ -110,9 +112,14 @@ public class View {
         addCenterRegionGroup(animalSpecies.getImageGroup());
     }
 
+    public void updateToolBarLabels(PlantSpecies plantSpecies) {
+        String populationFormatted = " ".repeat(10 - Log.formatNumber(plantSpecies.getQuantity()).length()) + Log.formatNumber(plantSpecies.getQuantity());
+        plantSpecies.getToolbarSection().setValue(populationFormatted);
+    }
+
     public void updateToolBarLabels(AnimalSpecies animalSpecies) {
-        String populationFormatted = " ".repeat(7 - Log.formatNumber(animalSpecies.getPopulation()).length()) + Log.formatNumber(animalSpecies.getPopulation());
-        animalSpecies.getToolbarSection().setPopulation(populationFormatted);
+        String populationFormatted = " ".repeat(10 - Log.formatNumber(animalSpecies.getPopulation()).length()) + Log.formatNumber(animalSpecies.getPopulation());
+        animalSpecies.getToolbarSection().setValue(populationFormatted);
     }
 
 }

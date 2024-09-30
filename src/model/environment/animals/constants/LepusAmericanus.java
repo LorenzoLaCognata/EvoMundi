@@ -11,6 +11,7 @@ public class LepusAmericanus {
     public static final double FEMALE_WEIGHT = 1.4;
     public static final double MALE_HEIGHT = 0.35;
     public static final double FEMALE_HEIGHT = 0.40;
+
     public static final double MALE_HUNT_ATTEMPTS = 0.0;
     public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
     public static final double MALE_ENERGY_LOSS = 0.40;
@@ -19,6 +20,8 @@ public class LepusAmericanus {
     public static final double FEMALE_ENERGY_GAIN = 0.0;
     public static final double MALE_PREY_EATEN = 0.0;
     public static final double FEMALE_PREY_EATEN = 0.0;
+    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.55;
+    public static final double FEMALE_PLANT_CONSUMPTION_RATE = 0.55;
 
     public static final double MALE_SEXUAL_MATURITY_START = 0.0;
     public static final double FEMALE_SEXUAL_MATURITY_START = 1.0;

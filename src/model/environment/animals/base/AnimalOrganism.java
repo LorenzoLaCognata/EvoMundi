@@ -1,11 +1,11 @@
 package model.environment.animals.base;
 
 import javafx.scene.image.ImageView;
-import model.environment.animals.enums.AnimalSpeciesAttribute;
-import model.environment.animals.attributes.OrganismAttributes;
+import model.environment.animals.enums.AnimalAttribute;
+import model.environment.animals.attributes.AnimalOrganismAttributes;
 import model.environment.animals.enums.*;
-import model.environment.base.OrganismStatus;
-import model.environment.base.TaxonomySpecies;
+import model.environment.common.enums.OrganismStatus;
+import model.environment.common.enums.TaxonomySpecies;
 import utils.Log;
 
 import java.util.EnumMap;
@@ -18,7 +18,7 @@ public class AnimalOrganism {
     private final Diet diet;
     private final ImageView imageView;
 
-    private final OrganismAttributes organismAttributes;
+    private final AnimalOrganismAttributes animalOrganismAttributes;
 
     private double age;
     private double energy = 1.0;
@@ -35,13 +35,13 @@ public class AnimalOrganism {
 
     private final Map<TaxonomySpecies, PreyAnimalSpecies> preyAnimalSpecies = new EnumMap<>(TaxonomySpecies.class);
 
-    public AnimalOrganism(AnimalSpecies animalSpecies, Gender gender, Diet diet, double age, ImageView imageView, OrganismAttributes organismAttributes) {
+    public AnimalOrganism(AnimalSpecies animalSpecies, Gender gender, Diet diet, double age, ImageView imageView, AnimalOrganismAttributes animalOrganismAttributes) {
         this.animalSpecies = animalSpecies;
         this.gender = gender;
         this.diet = diet;
         this.age = age;
         this.imageView = imageView;
-        this.organismAttributes = organismAttributes;
+        this.animalOrganismAttributes = animalOrganismAttributes;
     }
 
     public AnimalSpecies getAnimalSpecies() {
@@ -68,8 +68,8 @@ public class AnimalOrganism {
         return energy;
     }
 
-    public OrganismAttributes getOrganismAttributes() {
-        return organismAttributes;
+    public AnimalOrganismAttributes getOrganismAttributes() {
+        return animalOrganismAttributes;
     }
 
     public ReproductionStatus getReproductionStatus() {
@@ -164,7 +164,7 @@ public class AnimalOrganism {
                 throw new IllegalStateException(Log.UNEXPECTED_PREDATOR_MESSAGE + this.animalSpecies.getSpeciesTaxonomy().taxonomySpecies());
         }
 
-        return baseSuccessRate * (preyAnimalSpecies.getPopulation() / preyAnimalSpecies.getAttribute (AnimalSpeciesAttribute.CARRYING_CAPACITY).getValue());
+        return baseSuccessRate * (preyAnimalSpecies.getPopulation() / preyAnimalSpecies.getAttribute (AnimalAttribute.CARRYING_CAPACITY).getAverageValue());
 
     }
 

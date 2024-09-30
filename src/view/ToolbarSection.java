@@ -13,7 +13,7 @@ public class ToolbarSection {
 
     private final VBox vBox = new VBox(5);
     private final Label name = new Label();
-    private final Label population = new Label();
+    private final Label value = new Label();
     private final ImageView imageView = new ImageView();
     private final CheckBox checkBox = new CheckBox();
 
@@ -23,10 +23,10 @@ public class ToolbarSection {
         this.vBox.setMinWidth(128);
         this.name.setText(name);
         this.name.setTextFill(Color.WHITE);
-        this.population.setTextFill(Color.WHITE);
+        this.value.setTextFill(Color.WHITE);
         this.imageView.setImage(image);
         this.checkBox.setSelected(Boolean.TRUE);
-        this.vBox.getChildren().addAll(this.name, this.population, this.imageView, this.checkBox);
+        this.vBox.getChildren().addAll(this.name, this.value, this.imageView, this.checkBox);
     }
 
     public VBox getvBox() {
@@ -37,8 +37,8 @@ public class ToolbarSection {
         return checkBox;
     }
 
-    public void setPopulation(String string) {
-        this.population.setText(string);
+    public void setValue(String string) {
+        this.value.setText(string);
     }
 
 }

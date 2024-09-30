@@ -11,6 +11,7 @@ public class CanisLupus {
     public static final double FEMALE_WEIGHT = 35.0;
     public static final double MALE_HEIGHT = 0.80;
     public static final double FEMALE_HEIGHT = 0.70;
+
     public static final double MALE_HUNT_ATTEMPTS = 5.0;
     public static final double FEMALE_HUNT_ATTEMPTS = 5.0;
     public static final double MALE_ENERGY_LOSS = 0.30;
@@ -19,6 +20,8 @@ public class CanisLupus {
     public static final double FEMALE_ENERGY_GAIN = 0.022;
     public static final double MALE_PREY_EATEN = 50.0;
     public static final double FEMALE_PREY_EATEN = 45.0;
+    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.0;
+    public static final double FEMALE_PLANT_CONSUMPTION_RATE = 0.0;
 
     public static final double MALE_SEXUAL_MATURITY_START = 0.0;
     public static final double FEMALE_SEXUAL_MATURITY_START = 2.0;

@@ -1,0 +1,5 @@
+package model.environment.animals.attributes;
+
+public record AnimalOrganismAttributes(AnimalVitalsAttributes animalVitalsAttributes, AnimalMovementAttributes animalMovementAttributes, AnimalNutritionAttributes animalNutritionAttributes, AnimalReproductionAttributes animalReproductionAttributes) {
+
+}

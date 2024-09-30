@@ -1,6 +1,6 @@
 package main;
 
-import model.simulation.Simulation;
+import model.simulation.base.Simulation;
 
 public class Model {
 

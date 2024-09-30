@@ -3,19 +3,20 @@ package model.environment.animals.base;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.View;
-import model.environment.animals.enums.AnimalSpeciesAttribute;
-import model.environment.animals.SpeciesAttributeValue;
+import model.environment.animals.enums.AnimalAttribute;
+import model.environment.common.attributes.AttributeValue;
 import model.environment.animals.constants.LynxRufus;
 import model.environment.animals.constants.CanisLupus;
 import model.environment.animals.attributes.*;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Diet;
 import model.environment.animals.enums.Gender;
-import model.environment.base.*;
-import model.simulation.SimulationSettings;
+import model.environment.common.base.Species;
+import model.environment.common.base.SpeciesTaxonomy;
+import model.environment.common.enums.*;
+import model.simulation.base.SimulationSettings;
 import utils.Log;
 import utils.RandomGenerator;
-import view.ToolbarSection;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -25,9 +26,8 @@ import java.util.Map;
 public class AnimalSpecies extends Species {
 
     private final Diet baseDiet;
-    private final ToolbarSection toolbarSection;
 
-    private final Map<AnimalSpeciesAttribute, SpeciesAttributeValue> attributes = new EnumMap<>(AnimalSpeciesAttribute.class);
+    private final Map<AnimalAttribute, AttributeValue> attributes = new EnumMap<>(AnimalAttribute.class);
 
     private final Map<TaxonomySpecies, PreyAnimalSpecies> basePreyAnimalSpecies = new EnumMap<>(TaxonomySpecies.class);
     private final ArrayList<AnimalOrganism> animalOrganisms = new ArrayList<>();
@@ -36,7 +36,6 @@ public class AnimalSpecies extends Species {
     public AnimalSpecies(SpeciesTaxonomy speciesTaxonomy, String commonName, Image image, Diet baseDiet) {
         super(speciesTaxonomy, commonName, image);
         this.baseDiet = baseDiet;
-        this.toolbarSection = new ToolbarSection(this.commonName, this.getImage());
     }
 
 
@@ -44,8 +43,8 @@ public class AnimalSpecies extends Species {
         return baseDiet;
     }
 
-    public SpeciesAttributeValue getAttribute(AnimalSpeciesAttribute speciesAttribute) {
-        return attributes.get(speciesAttribute);
+    public AttributeValue getAttribute(AnimalAttribute animalAttribute) {
+        return attributes.get(animalAttribute);
     }
 
     public Map<TaxonomySpecies, PreyAnimalSpecies> getBasePreyAnimalSpecies() {
@@ -96,140 +95,124 @@ public class AnimalSpecies extends Species {
 
     }
 
-    public void addAttribute(AnimalSpeciesAttribute speciesAttribute, SpeciesAttributeValue speciesAttributeValue) {
-        attributes.put(speciesAttribute, speciesAttributeValue);
+    public void addAttribute(AnimalAttribute animalAttribute, AttributeValue attributeValue) {
+        attributes.put(animalAttribute, attributeValue);
     }
 
     public void addBasePreyAnimalSpecies(PreyAnimalSpecies preyAnimalSpecies) {
         basePreyAnimalSpecies.put(preyAnimalSpecies.taxonomySpecies(), preyAnimalSpecies);
     }
 
-    public ToolbarSection getToolbarSection() {
-        return toolbarSection;
-    }
-
-    // TODO: review energy loss for herbivores
-    public static double classDoubleConstant(String className, String constantName) {
-
-        Class<?> speciesClass;
-        try {
-            speciesClass = Class.forName(className);
-            return speciesClass.getField(constantName).getDouble(null);
-
-        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private static SpeciesAttributeValue speciesConstants(AnimalSpecies animalSpecies, AnimalSpeciesAttribute speciesAttribute) {
+    private static AttributeValue animalSpeciesConstants(AnimalSpecies animalSpecies, AnimalAttribute animalAttribute) {
 
         String speciesName = animalSpecies.getSpeciesTaxonomy().taxonomySpecies().name();
         String speciesClassName = "model.environment.animals.constants." + Log.titleCase(speciesName.replace("_", " ")).replace(" ", "");
-        String speciesAttributeConstantName = speciesAttribute.name();
+        String speciesAttributeConstantName = animalAttribute.name();
         String maleConstantName = "MALE_" + speciesAttributeConstantName;
         String femaleConstantName = "FEMALE_" + speciesAttributeConstantName;
 
-        return new SpeciesAttributeValue(
-                speciesAttribute,
-                classDoubleConstant(speciesClassName, maleConstantName),
-                classDoubleConstant(speciesClassName, femaleConstantName)
-        );
+        Map<Gender, Double> values = new EnumMap<>(Gender.class);
+        values.put(Gender.MALE, classDoubleConstant(speciesClassName, maleConstantName));
+        values.put(Gender.FEMALE, classDoubleConstant(speciesClassName, femaleConstantName));
+        return new AttributeValue(values);
 
     }
 
-    private static void speciesAttribute(AnimalSpecies animalSpecies) {
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.CARRYING_CAPACITY, speciesConstants(animalSpecies, AnimalSpeciesAttribute.CARRYING_CAPACITY));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.LIFESPAN, speciesConstants(animalSpecies, AnimalSpeciesAttribute.LIFESPAN));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.WEIGHT, speciesConstants(animalSpecies, AnimalSpeciesAttribute.WEIGHT));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.HEIGHT, speciesConstants(animalSpecies, AnimalSpeciesAttribute.HEIGHT));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.HUNT_ATTEMPTS, speciesConstants(animalSpecies, AnimalSpeciesAttribute.HUNT_ATTEMPTS));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.ENERGY_GAIN, speciesConstants(animalSpecies, AnimalSpeciesAttribute.ENERGY_GAIN));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.ENERGY_LOSS, speciesConstants(animalSpecies, AnimalSpeciesAttribute.ENERGY_LOSS));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.PREY_EATEN, speciesConstants(animalSpecies, AnimalSpeciesAttribute.PREY_EATEN));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.SEXUAL_MATURITY_START, speciesConstants(animalSpecies, AnimalSpeciesAttribute.SEXUAL_MATURITY_START));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.SEXUAL_MATURITY_END, speciesConstants(animalSpecies, AnimalSpeciesAttribute.SEXUAL_MATURITY_END));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.MATING_SEASON_START, speciesConstants(animalSpecies, AnimalSpeciesAttribute.MATING_SEASON_START));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.MATING_SEASON_END, speciesConstants(animalSpecies, AnimalSpeciesAttribute.MATING_SEASON_END));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.PREGNANCY_COOLDOWN, speciesConstants(animalSpecies, AnimalSpeciesAttribute.PREGNANCY_COOLDOWN));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.GESTATION_PERIOD, speciesConstants(animalSpecies, AnimalSpeciesAttribute.GESTATION_PERIOD));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.AVERAGE_OFFSPRING, speciesConstants(animalSpecies, AnimalSpeciesAttribute.AVERAGE_OFFSPRING));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.JUVENILE_SURVIVAL_RATE, speciesConstants(animalSpecies, AnimalSpeciesAttribute.JUVENILE_SURVIVAL_RATE));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.MATING_SUCCESS_RATE, speciesConstants(animalSpecies, AnimalSpeciesAttribute.MATING_SUCCESS_RATE));
-        animalSpecies.addAttribute(AnimalSpeciesAttribute.MATING_ATTEMPTS, speciesConstants(animalSpecies, AnimalSpeciesAttribute.MATING_ATTEMPTS));
+    private static void animalSpeciesAttribute(AnimalSpecies animalSpecies) {
+        animalSpecies.addAttribute(AnimalAttribute.CARRYING_CAPACITY, animalSpeciesConstants(animalSpecies, AnimalAttribute.CARRYING_CAPACITY));
+        animalSpecies.addAttribute(AnimalAttribute.LIFESPAN, animalSpeciesConstants(animalSpecies, AnimalAttribute.LIFESPAN));
+        animalSpecies.addAttribute(AnimalAttribute.WEIGHT, animalSpeciesConstants(animalSpecies, AnimalAttribute.WEIGHT));
+        animalSpecies.addAttribute(AnimalAttribute.HEIGHT, animalSpeciesConstants(animalSpecies, AnimalAttribute.HEIGHT));
+
+        animalSpecies.addAttribute(AnimalAttribute.HUNT_ATTEMPTS, animalSpeciesConstants(animalSpecies, AnimalAttribute.HUNT_ATTEMPTS));
+        animalSpecies.addAttribute(AnimalAttribute.ENERGY_GAIN, animalSpeciesConstants(animalSpecies, AnimalAttribute.ENERGY_GAIN));
+        animalSpecies.addAttribute(AnimalAttribute.ENERGY_LOSS, animalSpeciesConstants(animalSpecies, AnimalAttribute.ENERGY_LOSS));
+        animalSpecies.addAttribute(AnimalAttribute.PREY_EATEN, animalSpeciesConstants(animalSpecies, AnimalAttribute.PREY_EATEN));
+        animalSpecies.addAttribute(AnimalAttribute.PLANT_CONSUMPTION_RATE, animalSpeciesConstants(animalSpecies, AnimalAttribute.PLANT_CONSUMPTION_RATE));
+
+        animalSpecies.addAttribute(AnimalAttribute.SEXUAL_MATURITY_START, animalSpeciesConstants(animalSpecies, AnimalAttribute.SEXUAL_MATURITY_START));
+        animalSpecies.addAttribute(AnimalAttribute.SEXUAL_MATURITY_END, animalSpeciesConstants(animalSpecies, AnimalAttribute.SEXUAL_MATURITY_END));
+        animalSpecies.addAttribute(AnimalAttribute.MATING_SEASON_START, animalSpeciesConstants(animalSpecies, AnimalAttribute.MATING_SEASON_START));
+        animalSpecies.addAttribute(AnimalAttribute.MATING_SEASON_END, animalSpeciesConstants(animalSpecies, AnimalAttribute.MATING_SEASON_END));
+        animalSpecies.addAttribute(AnimalAttribute.PREGNANCY_COOLDOWN, animalSpeciesConstants(animalSpecies, AnimalAttribute.PREGNANCY_COOLDOWN));
+        animalSpecies.addAttribute(AnimalAttribute.GESTATION_PERIOD, animalSpeciesConstants(animalSpecies, AnimalAttribute.GESTATION_PERIOD));
+        animalSpecies.addAttribute(AnimalAttribute.AVERAGE_OFFSPRING, animalSpeciesConstants(animalSpecies, AnimalAttribute.AVERAGE_OFFSPRING));
+        animalSpecies.addAttribute(AnimalAttribute.JUVENILE_SURVIVAL_RATE, animalSpeciesConstants(animalSpecies, AnimalAttribute.JUVENILE_SURVIVAL_RATE));
+        animalSpecies.addAttribute(AnimalAttribute.MATING_SUCCESS_RATE, animalSpeciesConstants(animalSpecies, AnimalAttribute.MATING_SUCCESS_RATE));
+        animalSpecies.addAttribute(AnimalAttribute.MATING_ATTEMPTS, animalSpeciesConstants(animalSpecies, AnimalAttribute.MATING_ATTEMPTS));
     }
 
     private static void bobcatAttributes(AnimalSpecies bobcat) {
-        speciesAttribute(bobcat);
+        animalSpeciesAttribute(bobcat);
         bobcat.addBasePreyAnimalSpecies(new PreyAnimalSpecies(TaxonomySpecies.LEPUS_AMERICANUS, LynxRufus.PREFERENCE_SNOWSHOE_HARE));
         bobcat.addBasePreyAnimalSpecies(new PreyAnimalSpecies(TaxonomySpecies.CASTOR_FIBER, LynxRufus.PREFERENCE_EUROPEAN_BEAVER));
         bobcat.addBasePreyAnimalSpecies(new PreyAnimalSpecies(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, LynxRufus.PREFERENCE_WHITETAIL_DEER));
     }
 
     private static void europeanBeaverAttributes(AnimalSpecies europeanBeaver) {
-        speciesAttribute(europeanBeaver);
+        animalSpeciesAttribute(europeanBeaver);
     }
 
     private static void snowshoeHareAttributes(AnimalSpecies snowshoeHare) {
-        speciesAttribute(snowshoeHare);
+        animalSpeciesAttribute(snowshoeHare);
     }
 
     private static void grayWolfAttributes(AnimalSpecies grayWolf) {
-        speciesAttribute(grayWolf);
+        animalSpeciesAttribute(grayWolf);
         grayWolf.addBasePreyAnimalSpecies(new PreyAnimalSpecies(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, CanisLupus.PREFERENCE_WHITETAIL_DEER));
         grayWolf.addBasePreyAnimalSpecies(new PreyAnimalSpecies(TaxonomySpecies.ALCES_ALCES, CanisLupus.PREFERENCE_MOOSE));
     }
 
     private static void mooseAttributes(AnimalSpecies moose) {
-        speciesAttribute(moose);
+        animalSpeciesAttribute(moose);
     }
 
     private static void whiteTailedDeerAttributes(AnimalSpecies whiteTailedDeer) {
-        speciesAttribute(whiteTailedDeer);
+        animalSpeciesAttribute(whiteTailedDeer);
     }
 
-    public static Map<TaxonomySpecies, AnimalSpecies> initializeSpecies() {
+    public static Map<TaxonomySpecies, AnimalSpecies> initializeAnimalSpecies() {
 
-        Map<TaxonomySpecies, AnimalSpecies> speciesMap = new EnumMap<>(TaxonomySpecies.class);
+        Map<TaxonomySpecies, AnimalSpecies> animalSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
 
         SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ODOCOILEUS, TaxonomySpecies.ODOCOILEUS_VIRGINIANUS);
 
-        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("resources/images/whitetaildeer_64x64.png"), Diet.HERBIVORE);
+        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("resources/images/whiteTailedDeer.png"), Diet.HERBIVORE);
         whiteTailedDeerAttributes(whiteTailedDeer);
-        whiteTailedDeer.initializeOrganisms();
-        speciesMap.put(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, whiteTailedDeer);
+        whiteTailedDeer.initializeAnimalOrganisms();
+        animalSpeciesMap.put(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, whiteTailedDeer);
 
         SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ALCES, TaxonomySpecies.ALCES_ALCES);
-        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("resources/images/moose_64x64.png"), Diet.HERBIVORE);
+        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("resources/images/moose.png"), Diet.HERBIVORE);
         mooseAttributes(moose);
-        moose.initializeOrganisms();
-        speciesMap.put(TaxonomySpecies.ALCES_ALCES, moose);
+        moose.initializeAnimalOrganisms();
+        animalSpeciesMap.put(TaxonomySpecies.ALCES_ALCES, moose);
 
         SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.CANIDAE, TaxonomyGenus.CANIS, TaxonomySpecies.CANIS_LUPUS);
-        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("resources/images/graywolf_64x64.png"), Diet.CARNIVORE);
+        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("resources/images/grayWolf.png"), Diet.CARNIVORE);
         grayWolfAttributes(grayWolf);
-        grayWolf.initializeOrganisms();
-        speciesMap.put(TaxonomySpecies.CANIS_LUPUS, grayWolf);
+        grayWolf.initializeAnimalOrganisms();
+        animalSpeciesMap.put(TaxonomySpecies.CANIS_LUPUS, grayWolf);
 
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.LAGOMORPHA, TaxonomyFamily.LEPORIDAE, TaxonomyGenus.LEPUS, TaxonomySpecies.LEPUS_AMERICANUS);
-        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("resources/images/snowshoehare_64x64.png"), Diet.HERBIVORE);
+        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("resources/images/snowshoeHare.png"), Diet.HERBIVORE);
         snowshoeHareAttributes(snowshoeHare);
-        snowshoeHare.initializeOrganisms();
-        speciesMap.put(TaxonomySpecies.LEPUS_AMERICANUS, snowshoeHare);
+        snowshoeHare.initializeAnimalOrganisms();
+        animalSpeciesMap.put(TaxonomySpecies.LEPUS_AMERICANUS, snowshoeHare);
 
         SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.RODENTIA, TaxonomyFamily.CASTORIDAE, TaxonomyGenus.CASTOR, TaxonomySpecies.CASTOR_FIBER);
-        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("resources/images/europeanbeaver_64x64.png"), Diet.HERBIVORE);
+        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("resources/images/europeanBeaver.png"), Diet.HERBIVORE);
         europeanBeaverAttributes(europeanBeaver);
-        europeanBeaver.initializeOrganisms();
-        speciesMap.put(TaxonomySpecies.CASTOR_FIBER, europeanBeaver);
+        europeanBeaver.initializeAnimalOrganisms();
+        animalSpeciesMap.put(TaxonomySpecies.CASTOR_FIBER, europeanBeaver);
 
         SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.FELIDAE, TaxonomyGenus.LYNX, TaxonomySpecies.LYNX_RUFUS);
-        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("resources/images/bobcat_64x64.png"), Diet.CARNIVORE);
+        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("resources/images/bobcat.png"), Diet.CARNIVORE);
         bobcatAttributes(bobcat);
-        bobcat.initializeOrganisms();
-        speciesMap.put(TaxonomySpecies.LYNX_RUFUS, bobcat);
+        bobcat.initializeAnimalOrganisms();
+        animalSpeciesMap.put(TaxonomySpecies.LYNX_RUFUS, bobcat);
 
-        return speciesMap;
+        return animalSpeciesMap;
 
     }
 
@@ -237,11 +220,11 @@ public class AnimalSpecies extends Species {
         return (gender == SimulationSettings.getImpersonatingGender() && taxonomySpecies == SimulationSettings.getImpersonatingTaxonomySpecies());
     }
 
-    private void initializeOrganisms() {
+    private void initializeAnimalOrganisms() {
 
         boolean impersonatingOrganismFound = false;
 
-        int carryingCapacity = (int) getAttribute(AnimalSpeciesAttribute.CARRYING_CAPACITY).getValue();
+        int carryingCapacity = (int) getAttribute(AnimalAttribute.CARRYING_CAPACITY).getAverageValue();
 
         for (int i=0; i<carryingCapacity; i++) {
 
@@ -250,26 +233,26 @@ public class AnimalSpecies extends Species {
                 gender = Gender.MALE;
             }
 
-            double femaleLifeSpan = getAttribute(AnimalSpeciesAttribute.LIFESPAN).getValue(Gender.FEMALE);
-            double maleLifeSpan = getAttribute(AnimalSpeciesAttribute.LIFESPAN).getValue(Gender.MALE);
+            double femaleLifeSpan = getAttribute(AnimalAttribute.LIFESPAN).getValue(Gender.FEMALE);
+            double maleLifeSpan = getAttribute(AnimalAttribute.LIFESPAN).getValue(Gender.MALE);
             double lifeSpan = RandomGenerator.generateGaussian(gender, femaleLifeSpan, maleLifeSpan, RandomGenerator.GAUSSIAN_VARIANCE);
-            double femaleWeight = getAttribute(AnimalSpeciesAttribute.WEIGHT).getValue(Gender.FEMALE);
-            double maleWeight = getAttribute(AnimalSpeciesAttribute.WEIGHT).getValue(Gender.MALE);
-            double femaleHeight = getAttribute(AnimalSpeciesAttribute.HEIGHT).getValue(Gender.FEMALE);
-            double maleHeight = getAttribute(AnimalSpeciesAttribute.HEIGHT).getValue(Gender.MALE);
+            double femaleWeight = getAttribute(AnimalAttribute.WEIGHT).getValue(Gender.FEMALE);
+            double maleWeight = getAttribute(AnimalAttribute.WEIGHT).getValue(Gender.MALE);
+            double femaleHeight = getAttribute(AnimalAttribute.HEIGHT).getValue(Gender.FEMALE);
+            double maleHeight = getAttribute(AnimalAttribute.HEIGHT).getValue(Gender.MALE);
             double age = RandomGenerator.random.nextDouble() * lifeSpan;
             double posX = RandomGenerator.random.nextDouble() * View.SCENE_WIDTH;
             double posY = RandomGenerator.random.nextDouble() * View.SCENE_HEIGHT;
 
-            VitalsAttributes vitalsAttributes = new VitalsAttributes(
+            AnimalVitalsAttributes animalVitalsAttributes = new AnimalVitalsAttributes(
                 RandomGenerator.generateGaussian(femaleWeight, maleWeight, RandomGenerator.GAUSSIAN_VARIANCE),
                 RandomGenerator.generateGaussian(femaleHeight, maleHeight, RandomGenerator.GAUSSIAN_VARIANCE),
                 lifeSpan,
                 0,
-                getAttribute(AnimalSpeciesAttribute.ENERGY_LOSS).getValue(gender)
+                getAttribute(AnimalAttribute.ENERGY_LOSS).getValue(gender)
             );
 
-            MovementAttributes movementAttributes = new MovementAttributes(
+            AnimalMovementAttributes animalMovementAttributes = new AnimalMovementAttributes(
                 posX,
                 posY,
                 0.0,
@@ -277,30 +260,31 @@ public class AnimalSpecies extends Species {
                 0.0
             );
 
-            HuntingAttributes huntingAttributes = new HuntingAttributes(
-                getAttribute(AnimalSpeciesAttribute.HUNT_ATTEMPTS).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.ENERGY_GAIN).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.PREY_EATEN).getValue(gender)
+            AnimalNutritionAttributes animalNutritionAttributes = new AnimalNutritionAttributes(
+                getAttribute(AnimalAttribute.HUNT_ATTEMPTS).getValue(gender),
+                getAttribute(AnimalAttribute.ENERGY_GAIN).getValue(gender),
+                getAttribute(AnimalAttribute.PREY_EATEN).getValue(gender),
+                getAttribute(AnimalAttribute.PLANT_CONSUMPTION_RATE).getValue(gender)
             );
 
-            ReproductionAttributes reproductionAttributes = new ReproductionAttributes(
-                getAttribute(AnimalSpeciesAttribute.SEXUAL_MATURITY_START).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.SEXUAL_MATURITY_END).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.MATING_SEASON_START).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.MATING_SEASON_END).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.PREGNANCY_COOLDOWN).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.GESTATION_PERIOD).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.AVERAGE_OFFSPRING).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.MATING_SUCCESS_RATE).getValue(gender),
-                getAttribute(AnimalSpeciesAttribute.MATING_ATTEMPTS).getValue(gender)
+            AnimalReproductionAttributes animalReproductionAttributes = new AnimalReproductionAttributes(
+                getAttribute(AnimalAttribute.SEXUAL_MATURITY_START).getValue(gender),
+                getAttribute(AnimalAttribute.SEXUAL_MATURITY_END).getValue(gender),
+                getAttribute(AnimalAttribute.MATING_SEASON_START).getValue(gender),
+                getAttribute(AnimalAttribute.MATING_SEASON_END).getValue(gender),
+                getAttribute(AnimalAttribute.PREGNANCY_COOLDOWN).getValue(gender),
+                getAttribute(AnimalAttribute.GESTATION_PERIOD).getValue(gender),
+                getAttribute(AnimalAttribute.AVERAGE_OFFSPRING).getValue(gender),
+                getAttribute(AnimalAttribute.JUVENILE_SURVIVAL_RATE).getValue(gender),
+                getAttribute(AnimalAttribute.MATING_SUCCESS_RATE).getValue(gender),
+                getAttribute(AnimalAttribute.MATING_ATTEMPTS).getValue(gender)
             );
 
-            OrganismAttributes organismAttributes = new OrganismAttributes(
-                vitalsAttributes,
-                movementAttributes,
-                huntingAttributes,
-                reproductionAttributes
+            AnimalOrganismAttributes animalOrganismAttributes = new AnimalOrganismAttributes(
+                    animalVitalsAttributes,
+                    animalMovementAttributes,
+                    animalNutritionAttributes,
+                    animalReproductionAttributes
             );
 
             AnimalOrganism animalOrganism = new AnimalOrganism(
@@ -309,7 +293,7 @@ public class AnimalSpecies extends Species {
                     baseDiet,
                     age,
                     new ImageView(image),
-                    organismAttributes
+                    animalOrganismAttributes
             );
             animalOrganism.getPreyAnimalSpecies().putAll(basePreyAnimalSpecies);
 
