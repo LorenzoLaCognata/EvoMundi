@@ -35,7 +35,7 @@ public class AnimalGrazingSimulation {
     public void graze(PlantOrganism plantOrganism, AnimalOrganism animalOrganism) {
 
         double consumptionSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().plantConsumption();
-        double baseConsumptionQuantity = consumptionSpeciesConstant * Math.pow(animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight(), 0.75);
+        double baseConsumptionQuantity = consumptionSpeciesConstant * animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight();
         double consumptionQuantity = baseConsumptionQuantity * (plantOrganism.getQuantity() / plantOrganism.getPlantSpecies().getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue());
         double quantityConsumed = Math.min(consumptionQuantity, plantOrganism.getQuantity());
 

@@ -14,14 +14,14 @@ public class CastorFiber {
 
     public static final double MALE_HUNT_ATTEMPTS = 0.0;
     public static final double FEMALE_HUNT_ATTEMPTS = 0.0;
-    public static final double MALE_ENERGY_LOSS = 0.75;
-    public static final double FEMALE_ENERGY_LOSS = 0.65;
-    public static final double MALE_ENERGY_GAIN = 0.10;
-    public static final double FEMALE_ENERGY_GAIN = 0.10;
+    public static final double MALE_ENERGY_LOSS = 0.70;
+    public static final double FEMALE_ENERGY_LOSS = 0.70;
+    public static final double MALE_ENERGY_GAIN = 0.095;
+    public static final double FEMALE_ENERGY_GAIN = 0.120;
     public static final double MALE_PREY_EATEN = 0.0;
     public static final double FEMALE_PREY_EATEN = 0.0;
-    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.50;
-    public static final double FEMALE_PLANT_CONSUMPTION_RATE = 0.45;
+    public static final double MALE_PLANT_CONSUMPTION_RATE = 0.85;
+    public static final double FEMALE_PLANT_CONSUMPTION_RATE = 0.75;
 
     public static final double MALE_SEXUAL_MATURITY_START = 0.0;
     public static final double FEMALE_SEXUAL_MATURITY_START = 1.0;

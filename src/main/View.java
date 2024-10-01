@@ -19,7 +19,7 @@ import utils.Log;
 
 public class View {
 
-    public static final double SCENE_WIDTH = 1600;
+    public static final double SCENE_WIDTH = 1400;
     public static final double SCENE_HEIGHT = 500;
 
     private final BorderPane borderPane = new BorderPane();
