@@ -18,6 +18,10 @@ public class Log {
     private Log() {
     }
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
     public static void initializeLog() {
         formatter.setMaximumFractionDigits(0);
     }

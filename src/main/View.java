@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Species;
+import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
 import utils.Log;
 
@@ -110,6 +111,16 @@ public class View {
         }
 
         addCenterRegionGroup(animalSpecies.getImageGroup());
+    }
+
+    public void addOrganismImages(PlantSpecies plantSpecies) {
+
+        for (int i = 0; i < plantSpecies.getOrganisms().size(); i++) {
+            PlantOrganism plantOrganism = plantSpecies.getOrganisms().get(i);
+            plantSpecies.getImageGroup().getChildren().add(plantOrganism.getImageView());
+        }
+
+        addCenterRegionGroup(plantSpecies.getImageGroup());
     }
 
     public void updateToolBarLabels(PlantSpecies plantSpecies) {

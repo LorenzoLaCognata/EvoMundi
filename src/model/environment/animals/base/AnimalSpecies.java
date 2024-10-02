@@ -252,7 +252,7 @@ public class AnimalSpecies extends Species {
                 getAttribute(AnimalAttribute.ENERGY_LOSS).getValue(gender)
             );
 
-            AnimalMovementAttributes animalMovementAttributes = new AnimalMovementAttributes(
+            AnimalPositionAttributes animalPositionAttributes = new AnimalPositionAttributes(
                 posX,
                 posY,
                 0.0,
@@ -282,7 +282,7 @@ public class AnimalSpecies extends Species {
 
             AnimalOrganismAttributes animalOrganismAttributes = new AnimalOrganismAttributes(
                     animalVitalsAttributes,
-                    animalMovementAttributes,
+                    animalPositionAttributes,
                     animalNutritionAttributes,
                     animalReproductionAttributes
             );

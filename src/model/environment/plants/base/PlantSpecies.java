@@ -1,11 +1,14 @@
 package model.environment.plants.base;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.environment.animals.enums.Gender;
 import model.environment.common.attributes.AttributeValue;
 import model.environment.common.base.Species;
 import model.environment.common.base.SpeciesTaxonomy;
 import model.environment.common.enums.*;
+import model.environment.plants.attributes.PlantOrganismAttributes;
+import model.environment.plants.attributes.PlantPositionAttributes;
 import model.environment.plants.enums.PlantAttribute;
 import utils.Log;
 
@@ -58,8 +61,13 @@ public class PlantSpecies extends Species {
 
         PlantOrganism plantOrganism = new PlantOrganism(
             this,
+            new ImageView(image),
+            new PlantOrganismAttributes(new PlantPositionAttributes(300.0, 300.0)),
             carryingCapacity
         );
+
+        plantOrganism.getImageView().setX(plantOrganism.getPlantOrganismAttributes().plantPositionAttributes().getPosX());
+        plantOrganism.getImageView().setY(plantOrganism.getPlantOrganismAttributes().plantPositionAttributes().getPosY());
 
         plantOrganisms.add(plantOrganism);
 

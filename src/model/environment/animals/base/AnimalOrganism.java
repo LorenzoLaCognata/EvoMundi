@@ -17,7 +17,6 @@ public class AnimalOrganism {
     private final Gender gender;
     private final Diet diet;
     private final ImageView imageView;
-
     private final AnimalOrganismAttributes animalOrganismAttributes;
 
     private double age;

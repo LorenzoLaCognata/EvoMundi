@@ -46,24 +46,12 @@ public class Controller {
 
     private void addOrganismImagesSpecies() {
 
-        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
-            view.addOrganismImages(animalSpecies);
+        for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
+            view.addOrganismImages(plantSpecies);
         }
 
-    }
-
-    private void removeDeadOrganismImageViews() {
-
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
-
-            for (int i = 0; i < animalSpecies.getDeadOrganisms().size(); i++) {
-
-                AnimalOrganism deadAnimalOrganism = animalSpecies.getDeadOrganisms().get(i);
-
-                animalSpecies.getImageGroup().getChildren().removeAll(deadAnimalOrganism.getImageView());
-
-            }
-
+            view.addOrganismImages(animalSpecies);
         }
 
     }
@@ -72,14 +60,11 @@ public class Controller {
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
 
-            for (int i = 0; i < animalSpecies.getDeadOrganisms().size(); i++) {
-
-                if (!animalSpecies.getToolbarSection().getCheckBox().isSelected()) {
-                    view.removeCenterRegionGroup(animalSpecies.getImageGroup());
-                }
-                else if (!view.centerRegionContainsGroup(animalSpecies.getImageGroup())) {
-                    view.addCenterRegionGroup(animalSpecies.getImageGroup());
-                }
+            if (!animalSpecies.getToolbarSection().getCheckBox().isSelected()) {
+                view.removeCenterRegionGroup(animalSpecies.getImageGroup());
+            }
+            else if (!view.centerRegionContainsGroup(animalSpecies.getImageGroup())) {
+                view.addCenterRegionGroup(animalSpecies.getImageGroup());
             }
 
         }
@@ -120,7 +105,6 @@ public class Controller {
             addOrganismImagesSpecies();
         }
 
-        removeDeadOrganismImageViews();
         viewSelectedSpeciesImageViews();
 
         view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());

@@ -12,6 +12,7 @@ import utils.Log;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class Simulation {
 
@@ -53,6 +54,7 @@ public class Simulation {
             AnimalOrganism animalOrganism = iterator.next();
             if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
                 animalSpecies.getDeadOrganisms().add(animalOrganism);
+                animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getImageView());
                 iterator.remove();
             }
         }
@@ -96,8 +98,9 @@ public class Simulation {
             buryDead(animalSpecies);
         }
 
-        ecosystem.printSpeciesDistribution();
-
+        if (Log.getLogger().getLevel().intValue() >= Level.FINEST.intValue() ) {
+            ecosystem.printSpeciesDistribution();
+        }
     }
 
 

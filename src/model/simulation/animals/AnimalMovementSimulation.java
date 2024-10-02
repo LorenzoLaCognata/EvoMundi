@@ -15,21 +15,21 @@ public class AnimalMovementSimulation {
 
             AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
 
-            if (animalOrganism.getOrganismAttributes().animalMovementAttributes().getDirectionSteps() % STEPS_PER_DIRECTION == 0) {
-                animalOrganism.getOrganismAttributes().animalMovementAttributes().setSpeedX(RandomGenerator.random.nextDouble(-1.0, 1.0));
-                animalOrganism.getOrganismAttributes().animalMovementAttributes().setSpeedY(RandomGenerator.random.nextDouble(-1.0, 1.0));
+            if (animalOrganism.getOrganismAttributes().animalPositionAttributes().getDirectionSteps() % STEPS_PER_DIRECTION == 0) {
+                animalOrganism.getOrganismAttributes().animalPositionAttributes().setSpeedX(RandomGenerator.random.nextDouble(-1.0, 1.0));
+                animalOrganism.getOrganismAttributes().animalPositionAttributes().setSpeedY(RandomGenerator.random.nextDouble(-1.0, 1.0));
             }
 
-            double newPosX = Math.clamp(animalOrganism.getOrganismAttributes().animalMovementAttributes().getPosX() + animalOrganism.getOrganismAttributes().animalMovementAttributes().getSpeedX(), 0.0, View.SCENE_WIDTH);
-            double newPosY = Math.clamp(animalOrganism.getOrganismAttributes().animalMovementAttributes().getPosY() + animalOrganism.getOrganismAttributes().animalMovementAttributes().getSpeedY(), 0.0, View.SCENE_HEIGHT);
+            double newPosX = Math.clamp(animalOrganism.getOrganismAttributes().animalPositionAttributes().getPosX() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getSpeedX(), 0.0, View.SCENE_WIDTH);
+            double newPosY = Math.clamp(animalOrganism.getOrganismAttributes().animalPositionAttributes().getPosY() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getSpeedY(), 0.0, View.SCENE_HEIGHT);
 
-            animalOrganism.getOrganismAttributes().animalMovementAttributes().setPosX(newPosX);
-            animalOrganism.getOrganismAttributes().animalMovementAttributes().setPosY(newPosY);
+            animalOrganism.getOrganismAttributes().animalPositionAttributes().setPosX(newPosX);
+            animalOrganism.getOrganismAttributes().animalPositionAttributes().setPosY(newPosY);
 
             animalOrganism.getImageView().setX(newPosX);
             animalOrganism.getImageView().setY(newPosY);
 
-            animalOrganism.getOrganismAttributes().animalMovementAttributes().setDirectionSteps(animalOrganism.getOrganismAttributes().animalMovementAttributes().getDirectionSteps() + 1);
+            animalOrganism.getOrganismAttributes().animalPositionAttributes().setDirectionSteps(animalOrganism.getOrganismAttributes().animalPositionAttributes().getDirectionSteps() + 1);
         }
 
     }

@@ -36,9 +36,9 @@ public class AnimalReproductionSimulation {
             RandomGenerator.generateGaussian(gender, femaleVitals.energyLoss(), maleVitals.energyLoss(), RandomGenerator.GAUSSIAN_VARIANCE)
         );
 
-        AnimalMovementAttributes offspringAnimalMovementAttributes = new AnimalMovementAttributes(
-            female.getOrganismAttributes().animalMovementAttributes().getPosX(),
-            female.getOrganismAttributes().animalMovementAttributes().getPosY(),
+        AnimalPositionAttributes offspringAnimalPositionAttributes = new AnimalPositionAttributes(
+            female.getOrganismAttributes().animalPositionAttributes().getPosX(),
+            female.getOrganismAttributes().animalPositionAttributes().getPosY(),
             0.0,
             0.0,
             0.0
@@ -66,7 +66,7 @@ public class AnimalReproductionSimulation {
 
         AnimalOrganismAttributes offspringAnimalOrganismAttributes = new AnimalOrganismAttributes(
                 offspringAnimalVitalsAttributes,
-                offspringAnimalMovementAttributes,
+                offspringAnimalPositionAttributes,
                 offspringAnimalNutritionAttributes,
                 offspringAnimalReproductionAttributes
         );

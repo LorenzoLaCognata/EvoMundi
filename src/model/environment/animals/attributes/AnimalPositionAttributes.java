@@ -1,6 +1,6 @@
 package model.environment.animals.attributes;
 
-public class AnimalMovementAttributes {
+public class AnimalPositionAttributes {
 
     private double posX;
     private double posY;
@@ -8,7 +8,7 @@ public class AnimalMovementAttributes {
     private double speedY;
     private double directionSteps;
 
-    public AnimalMovementAttributes(double posX, double posY, double speedX, double speedY, double directionSteps) {
+    public AnimalPositionAttributes(double posX, double posY, double speedX, double speedY, double directionSteps) {
         this.posX = posX;
         this.posY = posY;
         this.speedX = speedX;

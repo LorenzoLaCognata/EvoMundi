@@ -1,5 +1,5 @@
 package model.environment.animals.attributes;
 
-public record AnimalOrganismAttributes(AnimalVitalsAttributes animalVitalsAttributes, AnimalMovementAttributes animalMovementAttributes, AnimalNutritionAttributes animalNutritionAttributes, AnimalReproductionAttributes animalReproductionAttributes) {
+public record AnimalOrganismAttributes(AnimalVitalsAttributes animalVitalsAttributes, AnimalPositionAttributes animalPositionAttributes, AnimalNutritionAttributes animalNutritionAttributes, AnimalReproductionAttributes animalReproductionAttributes) {
 
 }
