@@ -1,30 +1,25 @@
 package model.environment.plants.base;
 
 import javafx.scene.image.ImageView;
-import model.environment.animals.attributes.AnimalOrganismAttributes;
+import model.environment.common.base.Organism;
 import model.environment.plants.attributes.PlantOrganismAttributes;
 
-public class PlantOrganism {
+public class PlantOrganism extends Organism {
 
     private final PlantSpecies plantSpecies;
-    private final ImageView imageView;
 
     private final PlantOrganismAttributes plantOrganismAttributes;
     private double quantity;
 
     public PlantOrganism(PlantSpecies plantSpecies, ImageView imageView, PlantOrganismAttributes plantOrganismAttributes, double quantity) {
+        super(imageView);
         this.plantSpecies = plantSpecies;
-        this.imageView = imageView;
         this.plantOrganismAttributes = plantOrganismAttributes;
         this.quantity = quantity;
     }
 
     public PlantSpecies getPlantSpecies() {
         return plantSpecies;
-    }
-
-    public ImageView getImageView() {
-        return imageView;
     }
 
     public PlantOrganismAttributes getPlantOrganismAttributes() {

@@ -66,9 +66,8 @@ public class PlantSpecies extends Species {
             carryingCapacity
         );
 
-        plantOrganism.getImageView().setX(plantOrganism.getPlantOrganismAttributes().plantPositionAttributes().getPosX());
-        plantOrganism.getImageView().setY(plantOrganism.getPlantOrganismAttributes().plantPositionAttributes().getPosY());
-
+        plantOrganism.getOrganismIcons().getStackPane().setLayoutX(plantOrganism.getPlantOrganismAttributes().plantPositionAttributes().getPosX());
+        plantOrganism.getOrganismIcons().getStackPane().setLayoutY(plantOrganism.getPlantOrganismAttributes().plantPositionAttributes().getPosY());
         plantOrganisms.add(plantOrganism);
 
     }

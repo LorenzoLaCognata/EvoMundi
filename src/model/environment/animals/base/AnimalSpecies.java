@@ -3,14 +3,14 @@ package model.environment.animals.base;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.View;
-import model.environment.animals.enums.AnimalAttribute;
-import model.environment.common.attributes.AttributeValue;
-import model.environment.animals.constants.LynxRufus;
-import model.environment.animals.constants.CanisLupus;
 import model.environment.animals.attributes.*;
+import model.environment.animals.constants.CanisLupus;
+import model.environment.animals.constants.LynxRufus;
+import model.environment.animals.enums.AnimalAttribute;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Diet;
 import model.environment.animals.enums.Gender;
+import model.environment.common.attributes.AttributeValue;
 import model.environment.common.base.Species;
 import model.environment.common.base.SpeciesTaxonomy;
 import model.environment.common.enums.*;
@@ -37,7 +37,6 @@ public class AnimalSpecies extends Species {
         super(speciesTaxonomy, commonName, image);
         this.baseDiet = baseDiet;
     }
-
 
     public Diet getBaseDiet() {
         return baseDiet;
@@ -177,37 +176,37 @@ public class AnimalSpecies extends Species {
 
         SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ODOCOILEUS, TaxonomySpecies.ODOCOILEUS_VIRGINIANUS);
 
-        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("resources/images/whiteTailedDeer.png"), Diet.HERBIVORE);
+        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("resources/images/whiteTailedDeer.png", 64, 64, false, false), Diet.HERBIVORE);
         whiteTailedDeerAttributes(whiteTailedDeer);
         whiteTailedDeer.initializeAnimalOrganisms();
         animalSpeciesMap.put(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, whiteTailedDeer);
 
         SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ALCES, TaxonomySpecies.ALCES_ALCES);
-        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("resources/images/moose.png"), Diet.HERBIVORE);
+        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("resources/images/moose.png", 64, 64, false, false), Diet.HERBIVORE);
         mooseAttributes(moose);
         moose.initializeAnimalOrganisms();
         animalSpeciesMap.put(TaxonomySpecies.ALCES_ALCES, moose);
 
         SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.CANIDAE, TaxonomyGenus.CANIS, TaxonomySpecies.CANIS_LUPUS);
-        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("resources/images/grayWolf.png"), Diet.CARNIVORE);
+        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("resources/images/grayWolf.png", 64, 64, false, false), Diet.CARNIVORE);
         grayWolfAttributes(grayWolf);
         grayWolf.initializeAnimalOrganisms();
         animalSpeciesMap.put(TaxonomySpecies.CANIS_LUPUS, grayWolf);
 
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.LAGOMORPHA, TaxonomyFamily.LEPORIDAE, TaxonomyGenus.LEPUS, TaxonomySpecies.LEPUS_AMERICANUS);
-        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("resources/images/snowshoeHare.png"), Diet.HERBIVORE);
+        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("resources/images/snowshoeHare.png", 64, 64, false, false), Diet.HERBIVORE);
         snowshoeHareAttributes(snowshoeHare);
         snowshoeHare.initializeAnimalOrganisms();
         animalSpeciesMap.put(TaxonomySpecies.LEPUS_AMERICANUS, snowshoeHare);
 
         SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.RODENTIA, TaxonomyFamily.CASTORIDAE, TaxonomyGenus.CASTOR, TaxonomySpecies.CASTOR_FIBER);
-        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("resources/images/europeanBeaver.png"), Diet.HERBIVORE);
+        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("resources/images/europeanBeaver.png", 64, 64, false, false), Diet.HERBIVORE);
         europeanBeaverAttributes(europeanBeaver);
         europeanBeaver.initializeAnimalOrganisms();
         animalSpeciesMap.put(TaxonomySpecies.CASTOR_FIBER, europeanBeaver);
 
         SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.FELIDAE, TaxonomyGenus.LYNX, TaxonomySpecies.LYNX_RUFUS);
-        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("resources/images/bobcat.png"), Diet.CARNIVORE);
+        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("resources/images/bobcat.png", 64, 64, false, false), Diet.CARNIVORE);
         bobcatAttributes(bobcat);
         bobcat.initializeAnimalOrganisms();
         animalSpeciesMap.put(TaxonomySpecies.LYNX_RUFUS, bobcat);
@@ -216,13 +215,46 @@ public class AnimalSpecies extends Species {
 
     }
 
-    public boolean isImpersonatedOrganism(Gender gender, TaxonomySpecies taxonomySpecies) {
+    public boolean organismCanBeImpersonated(TaxonomySpecies taxonomySpecies) {
+        return (taxonomySpecies == SimulationSettings.getImpersonatingTaxonomySpecies());
+    }
+
+    public boolean organismCanBeImpersonated(Gender gender, TaxonomySpecies taxonomySpecies) {
         return (gender == SimulationSettings.getImpersonatingGender() && taxonomySpecies == SimulationSettings.getImpersonatingTaxonomySpecies());
     }
 
-    private void initializeAnimalOrganisms() {
+    public void chooseImpersonatingOrganism() {
 
         boolean impersonatingOrganismFound = false;
+
+        for (AnimalOrganism animalOrganism : animalOrganisms) {
+
+            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                    organismCanBeImpersonated(animalOrganism.getGender(), speciesTaxonomy.taxonomySpecies())) {
+                animalOrganism.setImpersonatedOrganism(true);
+                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+
+                return;
+            }
+
+        }
+
+        for (AnimalOrganism animalOrganism : animalOrganisms) {
+
+            if (!impersonatingOrganismFound &&
+                    animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                    organismCanBeImpersonated(speciesTaxonomy.taxonomySpecies())) {
+                animalOrganism.setImpersonatedOrganism(true);
+                impersonatingOrganismFound = true;
+                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+
+            }
+
+        }
+
+    }
+
+    private void initializeAnimalOrganisms() {
 
         int carryingCapacity = (int) getAttribute(AnimalAttribute.CARRYING_CAPACITY).getAverageValue();
 
@@ -297,13 +329,11 @@ public class AnimalSpecies extends Species {
             );
             animalOrganism.getPreyAnimalSpecies().putAll(basePreyAnimalSpecies);
 
-            if (!impersonatingOrganismFound && isImpersonatedOrganism(gender, speciesTaxonomy.taxonomySpecies())) {
-                animalOrganism.setImpersonatedOrganism(true);
-                impersonatingOrganismFound = true;
-            }
-
             animalOrganisms.add(animalOrganism);
         }
+
+        chooseImpersonatingOrganism();
+
     }
 
 }

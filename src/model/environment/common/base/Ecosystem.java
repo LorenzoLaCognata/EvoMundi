@@ -1,13 +1,14 @@
 package model.environment.common.base;
 
+import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
-import model.environment.animals.enums.Gender;
-import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.AnimalAttribute;
+import model.environment.animals.enums.AnimalOrganismDeathReason;
+import model.environment.animals.enums.Gender;
 import model.environment.common.enums.TaxonomySpecies;
-import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
+import model.simulation.base.SimulationSettings;
 import utils.Log;
 
 import java.util.EnumMap;
@@ -17,6 +18,7 @@ public class Ecosystem {
 
     private final Map<TaxonomySpecies, PlantSpecies> plantSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
     private final Map<TaxonomySpecies, AnimalSpecies> animalSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
+
 
     public Map<TaxonomySpecies, PlantSpecies> getPlantSpeciesMap() {
         return plantSpeciesMap;
@@ -41,7 +43,7 @@ public class Ecosystem {
             String s = Log.padRight(16, plantSpecies.getCommonName());
             s = s + " | " + Log.padLeft(24, Log.formatNumber(plantSpecies.getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue()) + " CAP");
             s = s + " | " + Log.padLeft(24, Log.formatNumber(plantSpecies.getQuantity()) + " QTY");
-            Log.log4(s);
+            Log.log7(s);
         }
 
         for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
@@ -56,6 +58,23 @@ public class Ecosystem {
             s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.AGE)) + " AGE");
             s = s + " | " + Log.padLeft(12, Log.formatNumber(animalSpecies.getDeadPopulation(AnimalOrganismDeathReason.JUVENILE_DEATH)) + " JUV");
             Log.log7(s);
+        }
+
+    }
+
+    public void printImpersonatedOrganism() {
+
+        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
+
+            if (animalSpecies.getSpeciesTaxonomy().taxonomySpecies() == SimulationSettings.getImpersonatingTaxonomySpecies()) {
+                for (AnimalOrganism animalOrganism : animalSpecies.getOrganisms()) {
+
+                    if (animalOrganism.isImpersonatedOrganism()) {
+                        Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + ": " + Log.formatNumber(animalOrganism.getEnergy()));
+                    }
+
+                }
+            }
         }
 
     }

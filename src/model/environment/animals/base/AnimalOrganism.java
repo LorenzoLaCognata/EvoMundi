@@ -1,9 +1,10 @@
 package model.environment.animals.base;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import model.environment.animals.enums.AnimalAttribute;
 import model.environment.animals.attributes.AnimalOrganismAttributes;
 import model.environment.animals.enums.*;
+import model.environment.common.base.Organism;
 import model.environment.common.enums.OrganismStatus;
 import model.environment.common.enums.TaxonomySpecies;
 import utils.Log;
@@ -11,12 +12,11 @@ import utils.Log;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class AnimalOrganism {
+public class AnimalOrganism extends Organism {
 
     private final AnimalSpecies animalSpecies;
     private final Gender gender;
     private final Diet diet;
-    private final ImageView imageView;
     private final AnimalOrganismAttributes animalOrganismAttributes;
 
     private double age;
@@ -35,11 +35,11 @@ public class AnimalOrganism {
     private final Map<TaxonomySpecies, PreyAnimalSpecies> preyAnimalSpecies = new EnumMap<>(TaxonomySpecies.class);
 
     public AnimalOrganism(AnimalSpecies animalSpecies, Gender gender, Diet diet, double age, ImageView imageView, AnimalOrganismAttributes animalOrganismAttributes) {
+        super(imageView);
         this.animalSpecies = animalSpecies;
         this.gender = gender;
         this.diet = diet;
         this.age = age;
-        this.imageView = imageView;
         this.animalOrganismAttributes = animalOrganismAttributes;
     }
 
@@ -49,10 +49,6 @@ public class AnimalOrganism {
 
     public Gender getGender() {
         return gender;
-    }
-
-    public ImageView getImageView() {
-        return imageView;
     }
 
     public Diet getDiet() {
@@ -136,7 +132,14 @@ public class AnimalOrganism {
     }
 
     public void setImpersonatedOrganism(boolean impersonatedOrganism) {
+
         this.impersonatedOrganism = impersonatedOrganism;
+
+        if (impersonatedOrganism) {
+            ImageView imageView = new ImageView(new Image("resources/images/impersonated.png", 64, 64, false, false));
+            this.getOrganismIcons().setImpersonatedIcon(imageView);
+        }
+
     }
 
     public double calculateHuntSuccessRate(AnimalSpecies preyAnimalSpecies, AnimalOrganism preyOrganism) {

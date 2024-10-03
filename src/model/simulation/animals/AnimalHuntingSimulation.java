@@ -1,13 +1,11 @@
 package model.simulation.animals;
 
 import model.environment.animals.base.AnimalOrganism;
-import model.environment.animals.base.PreyAnimalSpecies;
 import model.environment.animals.base.AnimalSpecies;
+import model.environment.animals.base.PreyAnimalSpecies;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.common.enums.OrganismStatus;
 import model.environment.common.enums.TaxonomySpecies;
-import model.simulation.base.SimulationSettings;
-import model.simulation.base.SimulationStatus;
 import utils.Log;
 import utils.RandomGenerator;
 
@@ -93,15 +91,16 @@ public class AnimalHuntingSimulation {
     public void huntingSuccess(AnimalOrganism predatorAnimalOrganism, AnimalOrganism preyAnimalOrganism) {
 
         if (predatorAnimalOrganism.isImpersonatedOrganism()) {
-            Log.log6(predatorAnimalOrganism.getAnimalSpecies() + " " + predatorAnimalOrganism.getGender() + " hunts a " + preyAnimalOrganism.getAnimalSpecies());
+            Log.log6(predatorAnimalOrganism.getAnimalSpecies() + " " + predatorAnimalOrganism.getId() + " hunts a " + preyAnimalOrganism.getAnimalSpecies());
         }
 
         preyAnimalOrganism.setOrganismStatus(OrganismStatus.DEAD);
         preyAnimalOrganism.setOrganismDeathReason(AnimalOrganismDeathReason.PREDATION);
 
         if (preyAnimalOrganism.isImpersonatedOrganism()) {
-            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log6(preyAnimalOrganism.getAnimalSpecies() + " " + preyAnimalOrganism.getGender() + " is hunted by a " + predatorAnimalOrganism.getAnimalSpecies());
+            Log.log6(preyAnimalOrganism.getAnimalSpecies() + " " + preyAnimalOrganism.getId() + " is hunted by a " + predatorAnimalOrganism.getAnimalSpecies());
+            preyAnimalOrganism.setImpersonatedOrganism(false);
+            preyAnimalOrganism.getAnimalSpecies().chooseImpersonatingOrganism();
         }
 
         double preyKgEaten = Math.max(preyAnimalOrganism.getOrganismAttributes().animalVitalsAttributes().weight(), predatorAnimalOrganism.getOrganismAttributes().animalNutritionAttributes().preyEaten());

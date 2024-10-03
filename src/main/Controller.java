@@ -2,11 +2,10 @@ package main;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.plants.base.PlantSpecies;
-import model.simulation.base.SimulationStatus;
 import model.simulation.base.SimulationSettings;
+import model.simulation.base.SimulationStatus;
 import utils.Log;
 
 public class Controller {

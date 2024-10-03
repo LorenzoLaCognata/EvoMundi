@@ -9,7 +9,6 @@ import model.environment.animals.enums.Gender;
 import model.environment.animals.enums.ReproductionStatus;
 import model.environment.common.enums.OrganismStatus;
 import model.simulation.base.SimulationSettings;
-import model.simulation.base.SimulationStatus;
 import utils.Log;
 import utils.RandomGenerator;
 
@@ -76,11 +75,13 @@ public class AnimalReproductionSimulation {
             gender,
             female.getDiet(),
             0.0,
-            new ImageView(female.getImageView().getImage()),
+            new ImageView(female.getOrganismIcons().getSpeciesIcon().getImage()),
                 offspringAnimalOrganismAttributes
         );
 
         offspring.getPreyAnimalSpecies().putAll(female.getPreyAnimalSpecies());
+
+        offspring.getAnimalSpecies().getImageGroup().getChildren().add(offspring.getOrganismIcons().getStackPane());
 
         return offspring;
 
@@ -98,7 +99,7 @@ public class AnimalReproductionSimulation {
             double offspringCount = Math.round(baseOffspringCount);
 
             if (animalOrganism.isImpersonatedOrganism()) {
-                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " gives birth to " + offspringCount + " offsprings");
+                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " gives birth to " + offspringCount + " offsprings");
             }
 
             for (int i=0; i < (int) offspringCount; i++) {
@@ -111,7 +112,7 @@ public class AnimalReproductionSimulation {
 
                 else {
                     if (animalOrganism.isImpersonatedOrganism()) {
-                        Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " gives birth to a " + offspring.getAnimalSpecies() + " " + offspring.getGender());
+                        Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " gives birth to a " + offspring.getGender() + " " + offspring.getAnimalSpecies() + " " + offspring.getId());
                     }
                 }
 
@@ -124,7 +125,7 @@ public class AnimalReproductionSimulation {
             animalOrganism.setMate(null);
 
             if (animalOrganism.isImpersonatedOrganism()) {
-                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " enters reproduction cooldown");
+                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " enters reproduction cooldown");
             }
 
         }
@@ -136,12 +137,13 @@ public class AnimalReproductionSimulation {
         offspring.setOrganismDeathReason(AnimalOrganismDeathReason.JUVENILE_DEATH);
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log6("The offspring of " + animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " suffers a juvenile death");
+            Log.log6("The offspring of " + animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " suffers a juvenile death");
         }
 
         if (offspring.isImpersonatedOrganism()) {
-            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log6(offspring.getAnimalSpecies() + " " + offspring.getGender() + " suffers a juvenile death");
+            Log.log6(offspring.getAnimalSpecies() + " " + offspring.getId() + " suffers a juvenile death");
+            offspring.setImpersonatedOrganism(false);
+            offspring.getAnimalSpecies().chooseImpersonatingOrganism();
         }
     }
 
@@ -154,14 +156,14 @@ public class AnimalReproductionSimulation {
             if (mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
 
                 if (animalOrganism.isImpersonatedOrganism()) {
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " finds a mate");
+                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " finds a mate");
                 }
 
                 animalOrganism.setReproductionStatus(ReproductionStatus.PREGNANT);
                 animalOrganism.setMate(mate);
 
                 if (animalOrganism.isImpersonatedOrganism()) {
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " starts pregnancy");
+                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " starts pregnancy");
                 }
 
                 break;
@@ -181,7 +183,7 @@ public class AnimalReproductionSimulation {
             animalOrganism.setCooldownWeek(0.0);
 
             if (animalOrganism.isImpersonatedOrganism()) {
-                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " finishes reproduction cooldown");
+                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " finishes reproduction cooldown");
             }
 
         }

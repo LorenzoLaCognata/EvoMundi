@@ -2,12 +2,12 @@ package model.simulation.base;
 
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
+import model.environment.common.base.Ecosystem;
 import model.environment.common.enums.OrganismStatus;
 import model.environment.common.enums.TaxonomySpecies;
-import model.environment.common.base.Ecosystem;
 import model.environment.plants.base.PlantSpecies;
-import model.simulation.plants.PlantGrowthSimulation;
 import model.simulation.animals.*;
+import model.simulation.plants.PlantGrowthSimulation;
 import utils.Log;
 
 import java.util.Iterator;
@@ -54,7 +54,7 @@ public class Simulation {
             AnimalOrganism animalOrganism = iterator.next();
             if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
                 animalSpecies.getDeadOrganisms().add(animalOrganism);
-                animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getImageView());
+                animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
                 iterator.remove();
             }
         }
@@ -98,8 +98,14 @@ public class Simulation {
             buryDead(animalSpecies);
         }
 
-        if (Log.getLogger().getLevel().intValue() >= Level.FINEST.intValue() ) {
-            ecosystem.printSpeciesDistribution();
+        if (Log.getLogger().getLevel().intValue() >= Level.FINER.intValue()) {
+
+            ecosystem.printImpersonatedOrganism();
+
+            if (Log.getLogger().getLevel().intValue() >= Level.FINEST.intValue()) {
+                ecosystem.printSpeciesDistribution();
+            }
+
         }
     }
 

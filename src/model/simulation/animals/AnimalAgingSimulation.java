@@ -7,7 +7,6 @@ import model.environment.animals.enums.Gender;
 import model.environment.animals.enums.ReproductionStatus;
 import model.environment.common.enums.OrganismStatus;
 import model.simulation.base.SimulationSettings;
-import model.simulation.base.SimulationStatus;
 import utils.Log;
 
 public class AnimalAgingSimulation {
@@ -46,7 +45,7 @@ public class AnimalAgingSimulation {
         animalOrganism.setReproductionStatus(ReproductionStatus.MATURE);
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " enters sexual maturity");
+            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " enters sexual maturity");
         }
     }
 
@@ -55,7 +54,7 @@ public class AnimalAgingSimulation {
         animalOrganism.setReproductionStatus(ReproductionStatus.MENOPAUSE);
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " enters menopause");
+            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " enters menopause");
         }
 
     }
@@ -74,8 +73,9 @@ public class AnimalAgingSimulation {
         animalOrganism.setOrganismDeathReason(AnimalOrganismDeathReason.STARVATION);
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " dies by starvation");
+            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " dies by starvation");
+            animalOrganism.setImpersonatedOrganism(false);
+            animalOrganism.getAnimalSpecies().chooseImpersonatingOrganism();
         }
 
     }
@@ -86,8 +86,9 @@ public class AnimalAgingSimulation {
         animalOrganism.setOrganismDeathReason(AnimalOrganismDeathReason.AGE);
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            SimulationSettings.setSimulationStatus(SimulationStatus.PAUSED);
-            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " dies by age");
+            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " dies by age");
+            animalOrganism.setImpersonatedOrganism(false);
+            animalOrganism.getAnimalSpecies().chooseImpersonatingOrganism();
         }
 
     }

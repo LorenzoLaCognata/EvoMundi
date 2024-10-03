@@ -40,7 +40,7 @@ public class AnimalGrazingSimulation {
         double quantityConsumed = Math.min(consumptionQuantity, plantOrganism.getQuantity());
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " graze " + quantityConsumed + " KGs of " + plantOrganism.getPlantSpecies());
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " graze " + quantityConsumed + " KGs of " + plantOrganism.getPlantSpecies());
         }
 
         plantOrganism.setQuantity(plantOrganism.getQuantity() - quantityConsumed);
@@ -49,7 +49,7 @@ public class AnimalGrazingSimulation {
         double energyGained = Math.min(quantityConsumed * gainSpeciesConstant, 1.0 - animalOrganism.getEnergy());
 
         if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getGender() + " recovers " + (energyGained*100) + " % of energy");
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " recovers " + (energyGained*100) + " % of energy");
         }
 
         animalOrganism.setEnergy(animalOrganism.getEnergy() + energyGained);

@@ -107,7 +107,7 @@ public class View {
 
         for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
             AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
-            animalSpecies.getImageGroup().getChildren().add(animalOrganism.getImageView());
+            animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
         }
 
         addCenterRegionGroup(animalSpecies.getImageGroup());
@@ -117,7 +117,7 @@ public class View {
 
         for (int i = 0; i < plantSpecies.getOrganisms().size(); i++) {
             PlantOrganism plantOrganism = plantSpecies.getOrganisms().get(i);
-            plantSpecies.getImageGroup().getChildren().add(plantOrganism.getImageView());
+            plantSpecies.getImageGroup().getChildren().add(plantOrganism.getOrganismIcons().getStackPane());
         }
 
         addCenterRegionGroup(plantSpecies.getImageGroup());
@@ -129,7 +129,6 @@ public class View {
     }
 
     public void updateToolBarLabels(AnimalSpecies animalSpecies) {
-//        String populationFormatted = Log.padLeft(14, Log.formatNumber(animalSpecies.getPopulation()));
         String populationFormatted = Log.formatNumber(animalSpecies.getPopulation());
         animalSpecies.getToolbarSection().setValue(populationFormatted);
     }

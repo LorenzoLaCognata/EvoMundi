@@ -6,14 +6,14 @@ import model.environment.common.enums.TaxonomySpecies;
 public class SimulationSettings {
 
     public static final int SIMULATION_SPEED_WEEKS = 1;
-    public static final int SIMULATION_LENGTH_WEEKS = 52;
+    public static final int SIMULATION_LENGTH_WEEKS = 520;
     public static final int TARGET_FPS = 30;
     public static final long FRAME_DURATION = 1_000_000_000 / TARGET_FPS;
     private static int currentWeek = -1;
 
     private static SimulationStatus simulationStatus = SimulationStatus.PAUSED;
 
-    private static final TaxonomySpecies impersonatingTaxonomySpecies = TaxonomySpecies.LEPUS_AMERICANUS;
+    private static final TaxonomySpecies impersonatingTaxonomySpecies = TaxonomySpecies.ODOCOILEUS_VIRGINIANUS;
     private static final Gender impersonatingGender = Gender.MALE;
 
     private SimulationSettings() {

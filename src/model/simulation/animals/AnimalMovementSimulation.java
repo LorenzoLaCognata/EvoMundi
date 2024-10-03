@@ -26,8 +26,8 @@ public class AnimalMovementSimulation {
             animalOrganism.getOrganismAttributes().animalPositionAttributes().setPosX(newPosX);
             animalOrganism.getOrganismAttributes().animalPositionAttributes().setPosY(newPosY);
 
-            animalOrganism.getImageView().setX(newPosX);
-            animalOrganism.getImageView().setY(newPosY);
+            animalOrganism.getOrganismIcons().getStackPane().setLayoutX(newPosX);
+            animalOrganism.getOrganismIcons().getStackPane().setLayoutY(newPosY);
 
             animalOrganism.getOrganismAttributes().animalPositionAttributes().setDirectionSteps(animalOrganism.getOrganismAttributes().animalPositionAttributes().getDirectionSteps() + 1);
         }
