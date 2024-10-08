@@ -3,6 +3,7 @@ package main;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.simulation.base.SimulationSettings;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -14,7 +15,7 @@ public class Main extends Application {
 
         Controller controller = new Controller();
 
-        Scene scene = new Scene(controller.getView().getBorderPane(), View.SCENE_WIDTH, View.SCENE_HEIGHT);
+        Scene scene = new Scene(controller.getView().getBorderPane(), SimulationSettings.SCENE_WIDTH, SimulationSettings.SCENE_HEIGHT);
         stage.setTitle("EvoMundi");
         stage.setMaximized(true);
         stage.setScene(scene);

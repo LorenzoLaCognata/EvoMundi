@@ -3,7 +3,6 @@ package model.simulation.animals;
 import javafx.scene.image.ImageView;
 import model.environment.animals.attributes.*;
 import model.environment.animals.base.AnimalOrganism;
-import model.environment.animals.base.AnimalSpecies;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Gender;
 import model.environment.animals.enums.ReproductionStatus;
@@ -11,6 +10,11 @@ import model.environment.common.enums.OrganismStatus;
 import model.simulation.base.SimulationSettings;
 import utils.Log;
 import utils.RandomGenerator;
+import view.Geography;
+import view.TileOrganisms;
+
+import java.awt.*;
+import java.util.Map;
 
 public class AnimalReproductionSimulation {
 
@@ -36,11 +40,8 @@ public class AnimalReproductionSimulation {
         );
 
         AnimalPositionAttributes offspringAnimalPositionAttributes = new AnimalPositionAttributes(
-            female.getOrganismAttributes().animalPositionAttributes().getPosX(),
-            female.getOrganismAttributes().animalPositionAttributes().getPosY(),
-            0.0,
-            0.0,
-            0.0
+            female.getOrganismAttributes().animalPositionAttributes().getLatitude(),
+            female.getOrganismAttributes().animalPositionAttributes().getLongitude()
         );
 
         AnimalNutritionAttributes offspringAnimalNutritionAttributes = new AnimalNutritionAttributes(
@@ -76,7 +77,7 @@ public class AnimalReproductionSimulation {
             female.getDiet(),
             0.0,
             new ImageView(female.getOrganismIcons().getSpeciesIcon().getImage()),
-                offspringAnimalOrganismAttributes
+            offspringAnimalOrganismAttributes
         );
 
         offspring.getPreyAnimalSpecies().putAll(female.getPreyAnimalSpecies());
@@ -87,7 +88,7 @@ public class AnimalReproductionSimulation {
 
     }
 
-    public void gestation(AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
+    public void gestation(Map<Point, TileOrganisms> worldMap, AnimalOrganism animalOrganism) {
 
         animalOrganism.setGestationWeek(animalOrganism.getGestationWeek() + 1);
 
@@ -116,7 +117,14 @@ public class AnimalReproductionSimulation {
                     }
                 }
 
-                animalSpecies.getOrganisms().add(offspring);
+
+
+                AnimalPositionAttributes offspringPositionAttributes = offspring.getOrganismAttributes().animalPositionAttributes();
+
+                Point currentTile = Geography.calculateTile(offspringPositionAttributes.getLatitude(), offspringPositionAttributes.getLongitude());
+
+                worldMap.get(currentTile).AnimalOrganisms().add(offspring);
+                offspring.getAnimalSpecies().setOrganismCount(offspring.getAnimalSpecies().getOrganismCount() + 1);
 
             }
 
@@ -143,31 +151,34 @@ public class AnimalReproductionSimulation {
         if (offspring.isImpersonatedOrganism()) {
             Log.log6(offspring.getAnimalSpecies() + " " + offspring.getId() + " suffers a juvenile death");
             offspring.setImpersonatedOrganism(false);
-            offspring.getAnimalSpecies().chooseImpersonatingOrganism();
         }
     }
 
-    public void findMate(AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
+    public void findMate(Map<Point, TileOrganisms> worldMap, AnimalOrganism animalOrganism) {
 
-        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
+        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            AnimalOrganism mate = animalSpecies.getOrganisms().get(i);
+            for (AnimalOrganism mate : tile.getValue().AnimalOrganisms()) {
 
-            if (mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
+                if (mate.getAnimalSpecies() == animalOrganism.getAnimalSpecies()) {
 
-                if (animalOrganism.isImpersonatedOrganism()) {
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " finds a mate");
+                    if (mate.getGender() == Gender.MALE && mate.getReproductionStatus() != ReproductionStatus.NOT_MATURE ) {
+
+                        if (animalOrganism.isImpersonatedOrganism()) {
+                            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " finds a mate");
+                        }
+
+                        animalOrganism.setReproductionStatus(ReproductionStatus.PREGNANT);
+                        animalOrganism.setMate(mate);
+
+                        if (animalOrganism.isImpersonatedOrganism()) {
+                            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " starts pregnancy");
+                        }
+
+                        return;
+
+                    }
                 }
-
-                animalOrganism.setReproductionStatus(ReproductionStatus.PREGNANT);
-                animalOrganism.setMate(mate);
-
-                if (animalOrganism.isImpersonatedOrganism()) {
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " starts pregnancy");
-                }
-
-                break;
-
             }
         }
 
@@ -190,27 +201,28 @@ public class AnimalReproductionSimulation {
 
     }
 
-    public void speciesReproduction(AnimalSpecies animalSpecies) {
+    public void animalReproduction(Map<Point, TileOrganisms> worldMap) {
 
-        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
+        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
+            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
 
-            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
-                animalOrganism.getGender() == Gender.FEMALE) {
+                if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                    animalOrganism.getGender() == Gender.FEMALE) {
 
-                if (animalOrganism.getReproductionStatus() == ReproductionStatus.COOLDOWN) {
-                    matingCooldown(animalOrganism);
+                    if (animalOrganism.getReproductionStatus() == ReproductionStatus.COOLDOWN) {
+                        matingCooldown(animalOrganism);
+                    }
+
+                    if (animalOrganism.getReproductionStatus() == ReproductionStatus.PREGNANT) {
+                        gestation(worldMap, animalOrganism);
+                    }
+
+                    if (animalOrganism.getReproductionStatus() == ReproductionStatus.MATURE) {
+                        findMate(worldMap, animalOrganism);
+                    }
+
                 }
-
-                if (animalOrganism.getReproductionStatus() == ReproductionStatus.PREGNANT) {
-                    gestation(animalSpecies, animalOrganism);
-                }
-
-                if (animalOrganism.getReproductionStatus() == ReproductionStatus.MATURE) {
-                    findMate(animalSpecies, animalOrganism);
-                }
-
             }
         }
 

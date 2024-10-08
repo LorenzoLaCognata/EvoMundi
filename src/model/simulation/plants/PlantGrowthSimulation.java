@@ -3,22 +3,30 @@ package model.simulation.plants;
 import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
+import view.TileOrganisms;
+
+import java.awt.*;
+import java.util.Map;
 
 public class PlantGrowthSimulation {
 
-    public void plantSpeciesRegeneration(PlantSpecies plantSpecies) {
+    public void plantRegeneration(Map<Point, TileOrganisms> worldMap) {
 
-        for (int i = 0; i < plantSpecies.getOrganisms().size(); i++) {
+        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            PlantOrganism plantOrganism = plantSpecies.getOrganisms().get(i);
+            for (PlantOrganism plantOrganism : tile.getValue().PlantOrganisms()) {
 
-            double growthRate = plantSpecies.getAttribute(PlantAttribute.GROWTH_RATE).getValue();
-            double currentQuantity = plantOrganism.getQuantity();
-            double carryingCapacity = plantSpecies.getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue();
-            double growthQuantity = currentQuantity * growthRate * (1.0 - (currentQuantity / carryingCapacity) );
+                PlantSpecies plantSpecies = plantOrganism.getPlantSpecies();
 
-            plantOrganism.setQuantity(currentQuantity + growthQuantity);
+                double growthRate = plantSpecies.getAttribute(PlantAttribute.GROWTH_RATE).getValue();
+                double currentQuantity = plantOrganism.getQuantity();
+                double carryingCapacity = plantSpecies.getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue();
+                double growthQuantity = currentQuantity * growthRate * (1.0 - (currentQuantity / carryingCapacity));
 
+                plantOrganism.setQuantity(currentQuantity + growthQuantity);
+                plantSpecies.setOrganismCount(plantSpecies.getOrganismCount() + growthQuantity);
+
+            }
         }
 
     }

@@ -1,59 +1,39 @@
 package model.environment.animals.attributes;
 
-public class AnimalPositionAttributes {
+import model.environment.animals.base.PositionAttributes;
 
-    private double posX;
-    private double posY;
-    private double speedX;
-    private double speedY;
-    private double directionSteps;
+public class AnimalPositionAttributes extends PositionAttributes {
 
-    public AnimalPositionAttributes(double posX, double posY, double speedX, double speedY, double directionSteps) {
-        this.posX = posX;
-        this.posY = posY;
-        this.speedX = speedX;
-        this.speedY = speedY;
-        this.directionSteps = directionSteps;
+    private double latitudeSpeed = 0.0;
+    private double longitudeSpeed = 0.0;
+    private double animationStep = 0.0;
+
+    public AnimalPositionAttributes(double latitude, double longitude) {
+        super(latitude, longitude);
     }
 
-    public double getPosX() {
-        return posX;
+    public double getLongitudeSpeed() {
+        return longitudeSpeed;
     }
 
-    public void setPosX(double posX) {
-        this.posX = posX;
+    public void setLongitudeSpeed(double longitudeSpeed) {
+        this.longitudeSpeed = longitudeSpeed;
     }
 
-    public double getPosY() {
-        return posY;
+    public double getLatitudeSpeed() {
+        return latitudeSpeed;
     }
 
-    public void setPosY(double posY) {
-        this.posY = posY;
+    public void setLatitudeSpeed(double latitudeSpeed) {
+        this.latitudeSpeed = latitudeSpeed;
     }
 
-    public double getSpeedX() {
-        return speedX;
+    public double getAnimationStep() {
+        return animationStep;
     }
 
-    public void setSpeedX(double speedX) {
-        this.speedX = speedX;
-    }
-
-    public double getSpeedY() {
-        return speedY;
-    }
-
-    public void setSpeedY(double speedY) {
-        this.speedY = speedY;
-    }
-
-    public double getDirectionSteps() {
-        return directionSteps;
-    }
-
-    public void setDirectionSteps(double directionSteps) {
-        this.directionSteps = directionSteps;
+    public void setAnimationStep(double animationStep) {
+        this.animationStep = animationStep;
     }
 
 }

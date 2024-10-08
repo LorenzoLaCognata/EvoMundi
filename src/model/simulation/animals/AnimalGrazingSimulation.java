@@ -1,30 +1,37 @@
 package model.simulation.animals;
 
 import model.environment.animals.base.AnimalOrganism;
-import model.environment.animals.base.AnimalSpecies;
+import model.environment.animals.enums.Diet;
 import model.environment.common.enums.OrganismStatus;
-import model.environment.common.enums.TaxonomySpecies;
 import model.environment.plants.base.PlantOrganism;
-import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
 import utils.Log;
+import view.TileOrganisms;
 
+import java.awt.*;
 import java.util.Map;
 
 public class AnimalGrazingSimulation {
 
-    public void speciesGraze(Map<TaxonomySpecies, PlantSpecies> plantSpeciesMap, AnimalSpecies animalSpecies) {
+    public void animalGraze(Map<Point, TileOrganisms> worldMap) {
 
-        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
+        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
+            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
 
-            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
-                // TODO: selection of the plant species and organism to consume and not always the first of any species
-                PlantOrganism plantOrganism = plantSpeciesMap.entrySet().iterator().next().getValue().getOrganisms().getFirst();
+                if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                        animalOrganism.getAnimalSpecies().getBaseDiet() == Diet.HERBIVORE) {
 
-                if (plantOrganism.getQuantity() > 0.0) {
-                    graze(plantOrganism, animalOrganism);
+                    if (tile.getValue().PlantOrganisms().iterator().hasNext()) {
+
+                        // TODO: selection of the plant species and organism to consume and not always a random one
+                        PlantOrganism plantOrganism = tile.getValue().PlantOrganisms().iterator().next();
+
+                        if (plantOrganism.getQuantity() > 0.0) {
+                            graze(plantOrganism, animalOrganism);
+                        }
+
+                    }
                 }
 
             }
@@ -44,6 +51,7 @@ public class AnimalGrazingSimulation {
         }
 
         plantOrganism.setQuantity(plantOrganism.getQuantity() - quantityConsumed);
+        plantOrganism.getPlantSpecies().setOrganismCount(plantOrganism.getPlantSpecies().getOrganismCount() - quantityConsumed);
 
         double gainSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().energyGain();
         double energyGained = Math.min(quantityConsumed * gainSpeciesConstant, 1.0 - animalOrganism.getEnergy());

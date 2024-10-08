@@ -3,6 +3,7 @@ package model.environment.common.base;
 import javafx.scene.image.ImageView;
 import view.OrganismIcons;
 
+import java.awt.*;
 import java.util.UUID;
 
 public class Organism {
@@ -12,7 +13,7 @@ public class Organism {
 
     public Organism(ImageView imageView) {
         this.id = UUID.randomUUID().toString();
-        this.organismIcons = new OrganismIcons(imageView);
+        this.organismIcons = new OrganismIcons(imageView, new Label(id));
     }
 
     public String getId() {

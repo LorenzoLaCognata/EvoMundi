@@ -4,12 +4,12 @@ import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Ecosystem;
 import model.environment.common.enums.OrganismStatus;
-import model.environment.common.enums.TaxonomySpecies;
-import model.environment.plants.base.PlantSpecies;
 import model.simulation.animals.*;
 import model.simulation.plants.PlantGrowthSimulation;
 import utils.Log;
+import view.TileOrganisms;
 
+import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -20,7 +20,6 @@ public class Simulation {
 
     private final PlantGrowthSimulation plantGrowthSimulation;
     private final AnimalGrazingSimulation animalGrazingSimulation;
-
     private final AnimalMovementSimulation animalMovementSimulation;
     private final AnimalAgingSimulation animalAgingSimulation;
     private final AnimalReproductionSimulation animalReproductionSimulation;
@@ -38,8 +37,8 @@ public class Simulation {
         animalReproductionSimulation = new AnimalReproductionSimulation();
         animalHuntingSimulation = new AnimalHuntingSimulation();
 
-        ecosystem.getPlantSpeciesMap().putAll(PlantSpecies.initializePlantSpecies());
-        ecosystem.getAnimalSpeciesMap().putAll(AnimalSpecies.initializeAnimalSpecies());
+        ecosystem.initializePlantSpecies();
+        ecosystem.initializeAnimalSpecies();
 
     }
 
@@ -47,18 +46,49 @@ public class Simulation {
         return ecosystem;
     }
 
-    private static void buryDead(AnimalSpecies animalSpecies) {
+    public PlantGrowthSimulation getPlantGrowthSimulation() {
+        return plantGrowthSimulation;
+    }
 
-        Iterator<AnimalOrganism> iterator = animalSpecies.getOrganisms().iterator();
-        while (iterator.hasNext()) {
-            AnimalOrganism animalOrganism = iterator.next();
-            if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
-                animalSpecies.getDeadOrganisms().add(animalOrganism);
-                animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
-                iterator.remove();
+    public AnimalGrazingSimulation getAnimalGrazingSimulation() {
+        return animalGrazingSimulation;
+    }
+
+    public AnimalMovementSimulation getAnimalMovementSimulation() {
+        return animalMovementSimulation;
+    }
+
+    public AnimalAgingSimulation getAnimalAgingSimulation() {
+        return animalAgingSimulation;
+    }
+
+    public AnimalReproductionSimulation getAnimalReproductionSimulation() {
+        return animalReproductionSimulation;
+    }
+
+    public AnimalHuntingSimulation getAnimalHuntingSimulation() {
+        return animalHuntingSimulation;
+    }
+
+    private void buryDead() {
+
+        for (Map.Entry<Point, TileOrganisms> tile : ecosystem.getWorldMap().entrySet()) {
+
+            Iterator<AnimalOrganism> iterator = tile.getValue().AnimalOrganisms().iterator();
+
+            while (iterator.hasNext()) {
+                AnimalOrganism animalOrganism = iterator.next();
+                AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
+
+                if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
+                    animalSpecies.getDeadOrganisms().add(animalOrganism);
+                    animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
+                    iterator.remove();
+                    animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() - 1);
+                }
             }
-        }
 
+        }
     }
 
     public void simulate() {
@@ -66,37 +96,17 @@ public class Simulation {
         SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
         Log.log5("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-        Map<TaxonomySpecies, PlantSpecies> plantSpeciesMap = ecosystem.getPlantSpeciesMap();
+        plantGrowthSimulation.plantRegeneration(ecosystem.getWorldMap());
 
-        for (PlantSpecies plantSpecies : plantSpeciesMap.values()) {
-            plantGrowthSimulation.plantSpeciesRegeneration(plantSpecies);
-        }
+        animalAgingSimulation.animalAge(ecosystem.getWorldMap());
 
-        Map<TaxonomySpecies, AnimalSpecies> animalSpeciesMap = ecosystem.getAnimalSpeciesMap();
+        animalGrazingSimulation.animalGraze(ecosystem.getWorldMap());
 
-        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            animalMovementSimulation.speciesMove(animalSpecies);
-        }
+        animalHuntingSimulation.animalHunt(ecosystem.getWorldMap(), ecosystem.getAnimalSpeciesMap());
 
-        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            animalAgingSimulation.speciesAge(animalSpecies);
-        }
+        animalReproductionSimulation.animalReproduction(ecosystem.getWorldMap());
 
-        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            animalGrazingSimulation.speciesGraze(plantSpeciesMap, animalSpecies);
-        }
-
-        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            animalHuntingSimulation.speciesHunt(animalSpeciesMap, animalSpecies);
-        }
-
-        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            animalReproductionSimulation.speciesReproduction(animalSpecies);
-        }
-
-        for (AnimalSpecies animalSpecies : animalSpeciesMap.values()) {
-            buryDead(animalSpecies);
-        }
+        buryDead();
 
         if (Log.getLogger().getLevel().intValue() >= Level.FINER.intValue()) {
 
@@ -108,6 +118,5 @@ public class Simulation {
 
         }
     }
-
 
 }

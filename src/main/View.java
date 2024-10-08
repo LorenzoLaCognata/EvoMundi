@@ -11,17 +11,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import model.environment.animals.base.AnimalOrganism;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Species;
-import model.environment.plants.base.PlantOrganism;
+import model.environment.plants.attributes.PlantPositionAttributes;
 import model.environment.plants.base.PlantSpecies;
+import model.simulation.base.SimulationSettings;
 import utils.Log;
 
 public class View {
-
-    public static final double SCENE_WIDTH = 1400;
-    public static final double SCENE_HEIGHT = 500;
 
     private final BorderPane borderPane = new BorderPane();
     private final ToolBar toolBar = new ToolBar();
@@ -84,7 +83,24 @@ public class View {
 
     private Pane createCenterContent() {
 
-        return new Pane();
+        Pane pane = new Pane();
+
+        double rows = Math.abs(SimulationSettings.MAX_LATITUDE - SimulationSettings.MIN_LATITUDE) / SimulationSettings.DEGREES_PER_TILE;
+        double cols = Math.abs(SimulationSettings.MAX_LONGITUDE - SimulationSettings.MIN_LONGITUDE) / SimulationSettings.DEGREES_PER_TILE;
+
+        for (int row = 0; row <= rows; row++) {
+            Line line = new Line(0, row * SimulationSettings.PIXELS_PER_TILE, cols * SimulationSettings.PIXELS_PER_TILE, row * SimulationSettings.PIXELS_PER_TILE);
+            line.setStroke(Color.GRAY);
+            pane.getChildren().add(line);
+        }
+
+        for (int col = 0; col <= cols; col++) {
+            Line line = new Line(col * SimulationSettings.PIXELS_PER_TILE, 0, col * SimulationSettings.PIXELS_PER_TILE, rows * SimulationSettings.PIXELS_PER_TILE);
+            line.setStroke(Color.GRAY);
+            pane.getChildren().add(line);
+        }
+
+        return pane;
     }
 
     public void addSpeciesIcons(Species species) {
@@ -103,33 +119,13 @@ public class View {
         centerRegion.getChildren().remove(group);
     }
 
-    public void addOrganismImages(AnimalSpecies animalSpecies) {
-
-        for (int i = 0; i < animalSpecies.getOrganisms().size(); i++) {
-            AnimalOrganism animalOrganism = animalSpecies.getOrganisms().get(i);
-            animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
-        }
-
-        addCenterRegionGroup(animalSpecies.getImageGroup());
-    }
-
-    public void addOrganismImages(PlantSpecies plantSpecies) {
-
-        for (int i = 0; i < plantSpecies.getOrganisms().size(); i++) {
-            PlantOrganism plantOrganism = plantSpecies.getOrganisms().get(i);
-            plantSpecies.getImageGroup().getChildren().add(plantOrganism.getOrganismIcons().getStackPane());
-        }
-
-        addCenterRegionGroup(plantSpecies.getImageGroup());
-    }
-
     public void updateToolBarLabels(PlantSpecies plantSpecies) {
-        String populationFormatted = Log.formatNumber(plantSpecies.getQuantity());
+        String populationFormatted = Log.formatNumber(plantSpecies.getOrganismCount());
         plantSpecies.getToolbarSection().setValue(populationFormatted);
     }
 
     public void updateToolBarLabels(AnimalSpecies animalSpecies) {
-        String populationFormatted = Log.formatNumber(animalSpecies.getPopulation());
+        String populationFormatted = Log.formatNumber(animalSpecies.getOrganismCount());
         animalSpecies.getToolbarSection().setValue(populationFormatted);
     }
 

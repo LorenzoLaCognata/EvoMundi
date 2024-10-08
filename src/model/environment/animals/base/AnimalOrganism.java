@@ -166,7 +166,7 @@ public class AnimalOrganism extends Organism {
                 throw new IllegalStateException(Log.UNEXPECTED_PREDATOR_MESSAGE + this.animalSpecies.getSpeciesTaxonomy().taxonomySpecies());
         }
 
-        return baseSuccessRate * (preyAnimalSpecies.getPopulation() / preyAnimalSpecies.getAttribute (AnimalAttribute.CARRYING_CAPACITY).getAverageValue());
+        return baseSuccessRate * (preyAnimalSpecies.getOrganismCount() / preyAnimalSpecies.getAttribute (AnimalAttribute.CARRYING_CAPACITY).getAverageValue());
 
     }
 

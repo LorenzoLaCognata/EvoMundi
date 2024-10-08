@@ -9,6 +9,8 @@ public class Species {
     protected final SpeciesTaxonomy speciesTaxonomy;
     protected final String commonName;
 
+    protected double organismCount;
+
     protected final Image image;
     protected final Group imageGroup = new Group();
 
@@ -29,6 +31,14 @@ public class Species {
         return commonName;
     }
 
+    public double getOrganismCount() {
+        return organismCount;
+    }
+
+    public void setOrganismCount(double organismCount) {
+        this.organismCount = organismCount;
+    }
+    
     public Image getImage() {
         return image;
     }
@@ -46,7 +56,7 @@ public class Species {
         return commonName;
     }
 
-    // TODO: review energy loss for herbivores
+    // TODO: delete and keep the version present in Ecosystem only
     public static double classDoubleConstant(String className, String constantName) {
 
         Class<?> speciesClass;

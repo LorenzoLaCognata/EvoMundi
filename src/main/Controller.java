@@ -10,8 +10,8 @@ import utils.Log;
 
 public class Controller {
 
-    private final View view = new View();
     private final Model model = new Model();
+    private final View view = new View();
     private final AnimationTimer timer = new AnimationTimer() {
 
         private long lastUpdateTime = 0;
@@ -43,19 +43,18 @@ public class Controller {
 
     }
 
-    private void addOrganismImagesSpecies() {
+    private void viewSelectedSpeciesImageViews() {
 
         for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
-            view.addOrganismImages(plantSpecies);
+
+            if (!plantSpecies.getToolbarSection().getCheckBox().isSelected()) {
+                view.removeCenterRegionGroup(plantSpecies.getImageGroup());
+            }
+            else if (!view.centerRegionContainsGroup(plantSpecies.getImageGroup())) {
+                view.addCenterRegionGroup(plantSpecies.getImageGroup());
+            }
+
         }
-
-        for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
-            view.addOrganismImages(animalSpecies);
-        }
-
-    }
-
-    private void viewSelectedSpeciesImageViews() {
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
 
@@ -100,10 +99,6 @@ public class Controller {
 
     public void updateView() {
 
-        if (SimulationSettings.getCurrentWeek() == 0) {
-            addOrganismImagesSpecies();
-        }
-
         viewSelectedSpeciesImageViews();
 
         view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
@@ -120,8 +115,11 @@ public class Controller {
 
     public void run() {
 
+        model.getSimulation().getAnimalMovementSimulation().animalMove(model.getSimulation().getEcosystem().getWorldMap());
         model.getSimulation().simulate();
+
         Platform.runLater(this::updateView);
+
 
     }
 

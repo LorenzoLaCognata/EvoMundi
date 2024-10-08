@@ -1,29 +1,11 @@
 package model.environment.plants.attributes;
 
-public class PlantPositionAttributes {
+import model.environment.animals.base.PositionAttributes;
 
-    private double posX;
-    private double posY;
+public class PlantPositionAttributes extends PositionAttributes  {
 
-    public PlantPositionAttributes(double posX, double posY) {
-        this.posX = posX;
-        this.posY = posY;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
+    public PlantPositionAttributes(double latitude, double longitude) {
+        super(latitude, longitude);
     }
 
 }
