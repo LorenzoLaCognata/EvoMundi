@@ -2,7 +2,9 @@ package view;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import java.awt.*;
+import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class OrganismIcons {
 
@@ -17,8 +19,8 @@ public class OrganismIcons {
         this.label = label;
         this.impersonatedIcon = null;
         this.stackPane = new StackPane();
-        this.stackPane.getChildren().add(this.speciesIcon);
-        // TODO: add Label to StackPane (must be inserted within a Node)
+        this.stackPane.getChildren().addAll(this.speciesIcon, this.label);
+        StackPane.setAlignment(label,Pos.BOTTOM_RIGHT);
     }
 
     public ImageView getSpeciesIcon() {

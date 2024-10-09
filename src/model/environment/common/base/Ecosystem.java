@@ -472,7 +472,7 @@ public class Ecosystem {
                 if (animalSpecies.getSpeciesTaxonomy().taxonomySpecies() == SimulationSettings.getImpersonatingTaxonomySpecies()) {
 
                     if (animalOrganism.isImpersonatedOrganism()) {
-                        Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + ": " + Log.formatNumber(animalOrganism.getEnergy()));
+                        Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + ": " + Log.formatPercentage(animalOrganism.getEnergy()));
                     }
 
                 }

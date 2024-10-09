@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 public class Log {
 
     private static final NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+    private static final NumberFormat formatterPercentage = NumberFormat.getPercentInstance(Locale.US);
     private static final Logger logger = Logger.getLogger("Log");
     public static final String UNEXPECTED_PREDATOR_MESSAGE = "Unexpected predator: ";
     public static final String UNEXPECTED_PREY_MESSAGE = "Unexpected prey: ";
@@ -22,6 +23,10 @@ public class Log {
 
     public static void initializeLog() {
         formatter.setMaximumFractionDigits(0);
+    }
+
+    public static String formatPercentage(double d) {
+        return formatterPercentage.format(d);
     }
 
     public static String formatNumber(int integer) {

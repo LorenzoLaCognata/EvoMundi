@@ -105,6 +105,7 @@ public class AnimalOrganism extends Organism {
 
     public void setEnergy(double energy) {
         this.energy = energy;
+        this.setOrganismIconLabel(Log.formatPercentage(energy));
     }
 
     public void setReproductionStatus(ReproductionStatus reproductionStatus) {

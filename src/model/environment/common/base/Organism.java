@@ -1,19 +1,19 @@
 package model.environment.common.base;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Label;
 import view.OrganismIcons;
 
-import java.awt.*;
 import java.util.UUID;
 
 public class Organism {
 
-    private final String id;
-    private final OrganismIcons organismIcons;
+    protected final String id;
+    protected final OrganismIcons organismIcons;
 
     public Organism(ImageView imageView) {
         this.id = UUID.randomUUID().toString();
-        this.organismIcons = new OrganismIcons(imageView, new Label(id));
+        this.organismIcons = new OrganismIcons(imageView, new Label(""));
     }
 
     public String getId() {
@@ -22,6 +22,10 @@ public class Organism {
 
     public OrganismIcons getOrganismIcons() {
         return organismIcons;
+    }
+
+    public void setOrganismIconLabel(String string) {
+        this.organismIcons.getLabel().setText(string);
     }
 
 }
