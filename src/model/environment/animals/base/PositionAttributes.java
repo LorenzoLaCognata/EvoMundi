@@ -1,6 +1,5 @@
 package model.environment.animals.base;
 
-import model.simulation.base.SimulationSettings;
 import view.Geography;
 
 public class PositionAttributes {

@@ -1,7 +1,7 @@
 package model.environment.common.base;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import view.OrganismIcons;
 
 import java.util.UUID;
