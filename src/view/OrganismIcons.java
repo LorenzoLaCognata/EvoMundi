@@ -30,10 +30,6 @@ public class OrganismIcons {
         return label;
     }
 
-    public ImageView getImpersonatedIcon() {
-        return impersonatedIcon;
-    }
-
     public void setImpersonatedIcon(ImageView impersonatedIcon) {
         this.impersonatedIcon = impersonatedIcon;
         this.stackPane.getChildren().addLast(this.impersonatedIcon);

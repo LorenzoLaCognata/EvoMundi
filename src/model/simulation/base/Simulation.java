@@ -10,6 +10,7 @@ import utils.Log;
 import view.TileOrganisms;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -46,48 +47,34 @@ public class Simulation {
         return ecosystem;
     }
 
-    public PlantGrowthSimulation getPlantGrowthSimulation() {
-        return plantGrowthSimulation;
-    }
-
-    public AnimalGrazingSimulation getAnimalGrazingSimulation() {
-        return animalGrazingSimulation;
-    }
-
     public AnimalMovementSimulation getAnimalMovementSimulation() {
         return animalMovementSimulation;
     }
 
-    public AnimalAgingSimulation getAnimalAgingSimulation() {
-        return animalAgingSimulation;
-    }
-
-    public AnimalReproductionSimulation getAnimalReproductionSimulation() {
-        return animalReproductionSimulation;
-    }
-
-    public AnimalHuntingSimulation getAnimalHuntingSimulation() {
-        return animalHuntingSimulation;
-    }
-
     private void buryDead() {
 
-        for (Map.Entry<Point, TileOrganisms> tile : ecosystem.getWorldMap().entrySet()) {
+        for (Map.Entry<Point, TileOrganisms> entry : ecosystem.getWorldMap().entrySet()) {
 
-            Iterator<AnimalOrganism> iterator = tile.getValue().AnimalOrganisms().iterator();
+            TileOrganisms tileOrganisms = entry.getValue();
 
-            while (iterator.hasNext()) {
-                AnimalOrganism animalOrganism = iterator.next();
-                AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
+            for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
 
-                if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
-                    animalSpecies.getDeadOrganisms().add(animalOrganism);
-                    animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
-                    iterator.remove();
-                    animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() - 1);
+                ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+
+                Iterator<AnimalOrganism> iterator = animalOrganisms.iterator();
+
+                while (iterator.hasNext()) {
+                    AnimalOrganism animalOrganism = iterator.next();
+                    AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
+
+                    if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
+                        animalSpecies.getDeadOrganisms().add(animalOrganism);
+                        animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
+                        iterator.remove();
+                        animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() - 1);
+                    }
                 }
             }
-
         }
     }
 
@@ -96,15 +83,15 @@ public class Simulation {
         SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
         Log.log5("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-        plantGrowthSimulation.plantRegeneration(ecosystem.getWorldMap());
+        plantGrowthSimulation.plantRegeneration(ecosystem);
 
-        animalAgingSimulation.animalAge(ecosystem.getWorldMap());
+        animalAgingSimulation.animalAge(ecosystem);
 
-        animalGrazingSimulation.animalGraze(ecosystem.getWorldMap());
+        animalGrazingSimulation.animalGraze(ecosystem);
 
-        animalHuntingSimulation.animalHunt(ecosystem.getWorldMap(), ecosystem.getAnimalSpeciesMap());
+        animalHuntingSimulation.animalHunt(ecosystem);
 
-        animalReproductionSimulation.animalReproduction(ecosystem.getWorldMap());
+        animalReproductionSimulation.animalReproduction(ecosystem);
 
         buryDead();
 

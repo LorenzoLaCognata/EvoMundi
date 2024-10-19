@@ -50,7 +50,7 @@ public class Controller {
             if (!plantSpecies.getToolbarSection().getCheckBox().isSelected()) {
                 view.removeCenterRegionGroup(plantSpecies.getImageGroup());
             }
-            else if (!view.centerRegionContainsGroup(plantSpecies.getImageGroup())) {
+            else if (view.groupMissingFromCenterRegion(plantSpecies.getImageGroup())) {
                 view.addCenterRegionGroup(plantSpecies.getImageGroup());
             }
 
@@ -61,7 +61,7 @@ public class Controller {
             if (!animalSpecies.getToolbarSection().getCheckBox().isSelected()) {
                 view.removeCenterRegionGroup(animalSpecies.getImageGroup());
             }
-            else if (!view.centerRegionContainsGroup(animalSpecies.getImageGroup())) {
+            else if (view.groupMissingFromCenterRegion(animalSpecies.getImageGroup())) {
                 view.addCenterRegionGroup(animalSpecies.getImageGroup());
             }
 
@@ -93,10 +93,6 @@ public class Controller {
         return view;
     }
 
-    public Model getModel() {
-        return model;
-    }
-
     public void updateView() {
 
         viewSelectedSpeciesImageViews();
@@ -115,7 +111,7 @@ public class Controller {
 
     public void run() {
 
-        model.getSimulation().getAnimalMovementSimulation().animalMove(model.getSimulation().getEcosystem().getWorldMap());
+        model.getSimulation().getAnimalMovementSimulation().animalMove(model.getSimulation().getEcosystem());
         model.getSimulation().simulate();
 
         Platform.runLater(this::updateView);

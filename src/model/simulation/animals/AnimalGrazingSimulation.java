@@ -2,44 +2,39 @@ package model.simulation.animals;
 
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.enums.Diet;
+import model.environment.common.base.Ecosystem;
+import model.environment.common.base.Organism;
 import model.environment.common.enums.OrganismStatus;
 import model.environment.plants.base.PlantOrganism;
+import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
 import utils.Log;
-import view.TileOrganisms;
+import utils.TriConsumer;
 
-import java.awt.*;
-import java.util.Map;
+import java.util.function.Predicate;
 
 public class AnimalGrazingSimulation {
 
-    public void animalGraze(Map<Point, TileOrganisms> worldMap) {
+    private final Predicate<AnimalOrganism> animalOrganismIsAliveHerbivore =
+        animalOrganism ->
+            animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+            animalOrganism.getAnimalSpecies().getBaseDiet() == Diet.HERBIVORE;
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
-
-            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
-
-                if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
-                        animalOrganism.getAnimalSpecies().getBaseDiet() == Diet.HERBIVORE) {
-
-                    if (tile.getValue().PlantOrganisms().iterator().hasNext()) {
-
-                        // TODO: selection of the plant species and organism to consume and not always a random one
-                        PlantOrganism plantOrganism = tile.getValue().PlantOrganisms().iterator().next();
-
-                        if (plantOrganism.getQuantity() > 0.0) {
-                            graze(plantOrganism, animalOrganism);
-                        }
-
-                    }
-                }
-
+    private final TriConsumer<PlantOrganism, PlantSpecies, AnimalOrganism> animalGrazeConsumer =
+        (plantOrganism, ignored, animalOrganism) -> {
+            if (animalOrganism.getEnergy() < 1.0 && plantOrganism.getQuantity() > 0.0) {
+                graze(animalOrganism, plantOrganism);
             }
+        };
 
-        }
+    @SuppressWarnings("unchecked")
+    public <X extends Organism, Y, Z> void animalGraze(Ecosystem ecosystem) {
+        ecosystem.iteratePlantOrganismsPerEachAnimalOrganism(
+                (Predicate<X>) animalOrganismIsAliveHerbivore, (TriConsumer<X, Y, Z>) animalGrazeConsumer
+        );
     }
 
-    public void graze(PlantOrganism plantOrganism, AnimalOrganism animalOrganism) {
+    public void graze(AnimalOrganism animalOrganism, PlantOrganism plantOrganism) {
 
         double consumptionSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().plantConsumption();
         double baseConsumptionQuantity = consumptionSpeciesConstant * animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight();

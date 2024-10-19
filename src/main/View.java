@@ -105,8 +105,8 @@ public class View {
         toolBar.getItems().add(species.getToolbarSection().getvBox());
     }
 
-    public boolean centerRegionContainsGroup(Group group) {
-        return  centerRegion.getChildren().contains(group);
+    public boolean groupMissingFromCenterRegion(Group group) {
+        return !centerRegion.getChildren().contains(group);
     }
 
     public void addCenterRegionGroup(Group group) {

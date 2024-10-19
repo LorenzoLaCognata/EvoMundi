@@ -1,42 +1,35 @@
 package model.simulation.animals;
 
 import model.environment.animals.base.AnimalOrganism;
+import model.environment.animals.base.AnimalSpecies;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Gender;
 import model.environment.animals.enums.ReproductionStatus;
+import model.environment.common.base.Ecosystem;
 import model.environment.common.enums.OrganismStatus;
 import model.simulation.base.SimulationSettings;
 import utils.Log;
-import view.TileOrganisms;
-
-import java.awt.*;
-import java.util.Map;
 
 public class AnimalAgingSimulation {
 
-    public void animalAge(Map<Point, TileOrganisms> worldMap) {
+    public void animalAge(Ecosystem ecosystem) {
+        ecosystem.iterateAnimalOrganismsBiConsumer(Ecosystem.animalTruePredicate, this::animalAgeOrganism);
+    }
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+    private void animalAgeOrganism(AnimalOrganism animalOrganism, AnimalSpecies ignored) {
+        animalOrganism.setAge(animalOrganism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
 
-            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
+        if (animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().animalVitalsAttributes().lifeSpan()) {
+            organismDeathByAge(animalOrganism);
+        } else {
 
-                animalOrganism.setAge(animalOrganism.getAge() + (SimulationSettings.SIMULATION_SPEED_WEEKS / 52.0));
-
-                if (animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().animalVitalsAttributes().lifeSpan()) {
-                    organismDeathByAge(animalOrganism);
-                } else {
-
-                    if (animalOrganism.getReproductionStatus() == ReproductionStatus.MATURE && animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().animalReproductionAttributes().sexualMaturityEnd() && animalOrganism.getGender() == Gender.FEMALE) {
-                        organismMenopause(animalOrganism);
-                    } else if (animalOrganism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().animalReproductionAttributes().sexualMaturityStart()) {
-                        sexualMaturation(animalOrganism);
-                    }
-
-                    energyLoss(animalOrganism);
-
-                }
-
+            if (animalOrganism.getReproductionStatus() == ReproductionStatus.MATURE && animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().animalReproductionAttributes().sexualMaturityEnd() && animalOrganism.getGender() == Gender.FEMALE) {
+                organismMenopause(animalOrganism);
+            } else if (animalOrganism.getReproductionStatus() == ReproductionStatus.NOT_MATURE && animalOrganism.getAge() >= animalOrganism.getOrganismAttributes().animalReproductionAttributes().sexualMaturityStart()) {
+                sexualMaturation(animalOrganism);
             }
+
+            energyLoss(animalOrganism);
 
         }
     }

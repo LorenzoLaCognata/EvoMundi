@@ -22,21 +22,30 @@ import model.environment.plants.enums.PlantAttribute;
 import model.simulation.base.SimulationSettings;
 import utils.Log;
 import utils.RandomGenerator;
+import utils.TriConsumer;
 import view.Geography;
 import view.TileOrganisms;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Ecosystem {
 
     private final Map<TaxonomySpecies, PlantSpecies> plantSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
     private final Map<TaxonomySpecies, AnimalSpecies> animalSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
-
     private final Map<Point, TileOrganisms> worldMap = new HashMap<>();
+
+    public static final Predicate<AnimalOrganism> animalTruePredicate =
+        ignored -> true;
+
+    public static final Predicate<PlantOrganism> plantTruePredicate =
+        ignored -> true;
 
     public Map<TaxonomySpecies, PlantSpecies> getPlantSpeciesMap() {
         return plantSpeciesMap;
@@ -50,52 +59,59 @@ public class Ecosystem {
         return worldMap;
     }
 
-    public void addPlantOrganism(Point tile, PlantOrganism plantOrganism) {
+    public void addPlantOrganism(Point tile, PlantSpecies plantSpecies, PlantOrganism plantOrganism) {
 
-        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, k -> new TileOrganisms(new HashSet<>(), new HashSet<>()));
+        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
 
-        tileOrganisms.PlantOrganisms().add(plantOrganism);
-
-        worldMap.put(tile, tileOrganisms);
-    }
-
-    public void addAnimalOrganism(Point tile, AnimalOrganism animalOrganism) {
-
-        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, k -> new TileOrganisms(new HashSet<>(), new HashSet<>()));
-
-        tileOrganisms.AnimalOrganisms().add(animalOrganism);
+        tileOrganisms.plantOrganisms()
+                .computeIfAbsent(plantSpecies, ignored -> new ArrayList<>())
+                .add(plantOrganism);
 
         worldMap.put(tile, tileOrganisms);
     }
 
-    public void initializePlantOrganismImages(Map<Point, TileOrganisms> worldMap, PlantSpecies plantSpecies) {
+    public void addAnimalOrganism(Point tile, AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
 
-            for (PlantOrganism plantOrganism : tile.getValue().PlantOrganisms()) {
+        tileOrganisms.animalOrganisms()
+                .computeIfAbsent(animalSpecies, ignored -> new ArrayList<>())
+                .add(animalOrganism);
 
-                if (plantSpecies == plantOrganism.getPlantSpecies()) {
-                    plantSpecies.getImageGroup().getChildren().add(plantOrganism.getOrganismIcons().getStackPane());
-                }
-            }
+        worldMap.put(tile, tileOrganisms);
+    }
 
-        }
+    public void addPlantOrganismImage(PlantOrganism plantOrganism, PlantSpecies plantSpecies) {
+        plantSpecies.getImageGroup().getChildren().add(plantOrganism.getOrganismIcons().getStackPane());
+    }
+
+    public void initializePlantOrganismImages(PlantSpecies selectedPlantSpecies) {
+
+        iteratePlantOrganismsPerPlantSpecies(selectedPlantSpecies, (plantOrganism, plantSpecies) ->
+                addPlantOrganismImage((PlantOrganism) plantOrganism, (PlantSpecies) plantSpecies)
+        );
 
     }
 
-    public void initializeAnimalOrganismImages(Map<Point, TileOrganisms> worldMap, AnimalSpecies animalSpecies) {
+    public void initializeAnimalOrganismImages(AnimalSpecies animalSpecies) {
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
 
-            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
+            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = entry.getValue().animalOrganisms();
 
-                if (animalSpecies == animalOrganism.getAnimalSpecies()) {
-                    animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
+            if (!tileSpecies.isEmpty()) {
+
+                ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+
+                if (animalOrganisms != null) {
+                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+                        animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
+                    }
                 }
 
             }
-        }
 
+        }
     }
 
     private void initializePlantOrganisms(PlantSpecies plantSpecies) {
@@ -134,13 +150,13 @@ public class Ecosystem {
 
                 Point tile = Geography.calculateTile(plantPositionAttributes.getLatitude(), plantPositionAttributes.getLongitude());
 
-                addPlantOrganism(tile, plantOrganism);
+                addPlantOrganism(tile, plantSpecies, plantOrganism);
                 plantSpecies.setOrganismCount(plantOrganism.getQuantity());
 
             }
         }
 
-        initializePlantOrganismImages(worldMap, plantSpecies);
+        initializePlantOrganismImages(plantSpecies);
 
     }
 
@@ -186,46 +202,75 @@ public class Ecosystem {
 
     }
 
-    public boolean organismCanBeImpersonated(TaxonomySpecies taxonomySpecies) {
+    public boolean canBeImpersonated(TaxonomySpecies taxonomySpecies) {
         return (taxonomySpecies == SimulationSettings.getImpersonatingTaxonomySpecies());
     }
 
-    public boolean organismCanBeImpersonated(Gender gender, TaxonomySpecies taxonomySpecies) {
+    public boolean canBeImpersonated(Gender gender, TaxonomySpecies taxonomySpecies) {
         return (gender == SimulationSettings.getImpersonatingGender() && taxonomySpecies == SimulationSettings.getImpersonatingTaxonomySpecies());
     }
 
     public void chooseImpersonatingOrganism() {
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
-
-            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
-
-                AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
-
-                if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
-                        organismCanBeImpersonated(animalOrganism.getGender(), animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
-                    animalOrganism.setImpersonatedOrganism(true);
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
-
-                    return;
-                }
-
-            }
+        if (chooseImpersonatingOrganismSelectedGender()) {
+            return;
         }
 
+        chooseImpersonatingOrganismAnyGender();
+
+    }
+
+    private boolean chooseImpersonatingOrganismSelectedGender() {
+
         for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
+            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
 
-                AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
+            for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
 
-                if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
-                        organismCanBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
-                    animalOrganism.setImpersonatedOrganism(true);
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+                if (canBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
 
-                    return;
+                    ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
 
+                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+
+                        if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                                canBeImpersonated(animalOrganism.getGender(), animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
+                            animalOrganism.setImpersonatedOrganism(true);
+                            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+
+                            return true;
+
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void chooseImpersonatingOrganismAnyGender() {
+
+        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+
+            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+
+            for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
+
+                if (canBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
+
+                    ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+
+                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+
+                        if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
+                            animalOrganism.setImpersonatedOrganism(true);
+                            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+
+                            return;
+
+                        }
+                    }
                 }
             }
         }
@@ -308,12 +353,12 @@ public class Ecosystem {
 
             Point tile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
 
-            addAnimalOrganism(tile, animalOrganism);
+            addAnimalOrganism(tile, animalSpecies, animalOrganism);
             animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() + 1);
 
         }
 
-        initializeAnimalOrganismImages(worldMap, animalSpecies);
+        initializeAnimalOrganismImages(animalSpecies);
 
     }
 
@@ -465,21 +510,168 @@ public class Ecosystem {
 
         for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            for (AnimalOrganism animalOrganism : tile.getValue().AnimalOrganisms()) {
+            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
 
-                AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
+            for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
 
                 if (animalSpecies.getSpeciesTaxonomy().taxonomySpecies() == SimulationSettings.getImpersonatingTaxonomySpecies()) {
 
-                    if (animalOrganism.isImpersonatedOrganism()) {
-                        Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + ": " + Log.formatPercentage(animalOrganism.getEnergy()));
-                    }
+                    ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
 
+                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+
+                        if (animalOrganism.isImpersonatedOrganism()) {
+                            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + ": " + Log.formatPercentage(animalOrganism.getEnergy()));
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    // TODO: move to dedicated class
+
+    @SuppressWarnings("unused")
+    private <X extends Organism> void iterateOrganismConsumer(Predicate<X> predicate, Consumer<X> action, ArrayList<X> organisms) {
+        for (X organism : organisms) {
+            if (predicate.test(organism)) {
+                action.accept(organism);
+            }
+        }
+    }
+
+    private <X extends Organism, Y> void iterateOrganismBiConsumer(Predicate<X> predicate, BiConsumer<X, Y> action, ArrayList<X> organisms, Y y) {
+        for (X organism : organisms) {
+            if (predicate.test(organism)) {
+                action.accept(organism, y);
+            }
+        }
+    }
+
+    private <X extends Organism, Y, Z> void iterateOrganismTriConsumer(Predicate<X> predicate, TriConsumer<X, Y, Z> action, ArrayList<X> organisms, Y y, Z z) {
+        for (X organism : organisms) {
+            if (predicate.test(organism)) {
+                action.accept(organism, y, z);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X extends  Organism, Y> void iterateTilePlantSpeciesBiConsumer(BiConsumer<X, Y> action, TileOrganisms tileOrganisms) {
+
+        for (Map.Entry<PlantSpecies, ArrayList<PlantOrganism>> plantEntry : tileOrganisms.plantOrganisms().entrySet()) {
+            PlantSpecies plantSpecies = plantEntry.getKey();
+            ArrayList<PlantOrganism> plantOrganisms = plantEntry.getValue();
+            iterateOrganismBiConsumer((Predicate<X>) plantTruePredicate, action, (ArrayList<X>) plantOrganisms, (Y) plantSpecies);
+        }
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X extends Organism, Y, Z> void iterateTilePlantSpeciesTriConsumer(TriConsumer<X, Y, Z> action, TileOrganisms tileOrganisms, Z z) {
+
+        for (Map.Entry<PlantSpecies, ArrayList<PlantOrganism>> plantEntry : tileOrganisms.plantOrganisms().entrySet()) {
+            PlantSpecies plantSpecies = plantEntry.getKey();
+            ArrayList<PlantOrganism> plantOrganisms = plantEntry.getValue();
+            iterateOrganismTriConsumer((Predicate<X>) plantTruePredicate, action, (ArrayList<X>) plantOrganisms, (Y) plantSpecies, z);
+        }
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X extends Organism, Y> void iterateTileAnimalSpeciesBiConsumer(Predicate<X> predicate, BiConsumer<X, Y> action, TileOrganisms tileOrganisms) {
+
+        for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+            AnimalSpecies animalSpecies = animalEntry.getKey();
+            ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+            iterateOrganismBiConsumer(predicate, action, (ArrayList<X>) animalOrganisms, (Y) animalSpecies);
+        }
+
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X extends Organism, Y, Z> void iterateTileAnimalSpeciesTriConsumer(Predicate<X> predicate, TriConsumer<X, Y, Z> action, TileOrganisms tileOrganisms, Z z) {
+
+        for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+            AnimalSpecies animalSpecies = animalEntry.getKey();
+            ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+            iterateOrganismTriConsumer(predicate, action, (ArrayList<X>) animalOrganisms, (Y) animalSpecies, z);
+        }
+
+    }
+
+    public void iteratePlantOrganisms(BiConsumer<PlantOrganism, PlantSpecies> action) {
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
+            TileOrganisms tileOrganisms = entry.getValue();
+            iterateTilePlantSpeciesBiConsumer(action, tileOrganisms);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X extends Organism, Y> void iteratePlantOrganismsPerPlantSpecies(PlantSpecies plantSpecies, BiConsumer<X, Y> action) {
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
+            TileOrganisms tileOrganisms = entry.getValue();
+            ArrayList<PlantOrganism> plantOrganisms = tileOrganisms.plantOrganisms().get(plantSpecies);
+            iterateOrganismBiConsumer((Predicate<X>) plantTruePredicate, action, (ArrayList<X>) plantOrganisms, (Y) plantSpecies);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public <X extends Organism, Y> void iterateAnimalOrganismsBiConsumer(Predicate<X> predicate, BiConsumer<X, Y> action) {
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
+            TileOrganisms tileOrganisms = entry.getValue();
+            iterateTileAnimalSpeciesBiConsumer(predicate, action, tileOrganisms);
+        }
+    }
+
+    public <X extends Organism, Y, Z> void iterateAnimalOrganismsTriConsumer(Predicate<X> predicate, TriConsumer<X, Y, Z> action, Z z) {
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
+            TileOrganisms tileOrganisms = entry.getValue();
+            iterateTileAnimalSpeciesTriConsumer(predicate, action, tileOrganisms, z);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X extends Organism, Y> void iterateAnimalOrganismsPerEachAnimalOrganism(Predicate<X> predicate, BiConsumer<X, Y> action) {
+
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
+
+            TileOrganisms tileOrganisms = entry.getValue();
+
+            for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+
+                ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+
+                for (AnimalOrganism animalOrganism : animalOrganisms) {
+                    if (predicate.test((X) animalOrganism)) {
+                        iterateOrganismBiConsumer((Predicate<X>) animalTruePredicate, action, (ArrayList<X>) animalOrganisms, (Y) animalOrganism);
+                    }
                 }
 
             }
         }
+    }
 
+    @SuppressWarnings("unchecked")
+    public <X extends Organism, Y, Z> void iteratePlantOrganismsPerEachAnimalOrganism(Predicate<X> predicate, TriConsumer<X, Y, Z> action) {
+
+        for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
+
+            TileOrganisms tileOrganisms = entry.getValue();
+
+            for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+
+                ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+
+                Consumer<X> innerAction = (X animalOrganism) -> iterateTilePlantSpeciesTriConsumer(action, tileOrganisms, (Z) animalOrganism);
+
+                iterateOrganismConsumer(predicate, innerAction, (ArrayList<X>) animalOrganisms);
+
+
+            }
+        }
     }
 
 }
