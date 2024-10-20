@@ -5,7 +5,6 @@ import model.environment.animals.enums.AnimalAttribute;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Diet;
 import model.environment.common.attributes.AttributeValue;
-import model.environment.common.base.Organism;
 import model.environment.common.base.Species;
 import model.environment.common.base.SpeciesTaxonomy;
 import model.environment.common.enums.TaxonomySpecies;

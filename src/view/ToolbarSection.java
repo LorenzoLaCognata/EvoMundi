@@ -12,21 +12,21 @@ import javafx.scene.paint.Color;
 public class ToolbarSection {
 
     private final VBox vBox = new VBox(5);
-    private final Label name = new Label();
     private final Label value = new Label();
-    private final ImageView imageView = new ImageView();
     private final CheckBox checkBox = new CheckBox();
 
     public ToolbarSection(String name, Image image) {
         this.vBox.setAlignment(Pos.CENTER);
         this.vBox.setPadding(new Insets(5));
         this.vBox.setMinWidth(128);
-        this.name.setText(name);
-        this.name.setTextFill(Color.WHITE);
+        Label name1 = new Label();
+        name1.setText(name);
+        name1.setTextFill(Color.WHITE);
         this.value.setTextFill(Color.WHITE);
-        this.imageView.setImage(image);
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
         this.checkBox.setSelected(Boolean.TRUE);
-        this.vBox.getChildren().addAll(this.name, this.value, this.imageView, this.checkBox);
+        this.vBox.getChildren().addAll(name1, this.value, imageView, this.checkBox);
     }
 
     public VBox getvBox() {

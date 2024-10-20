@@ -12,11 +12,9 @@ import model.environment.common.enums.OrganismStatus;
 import model.simulation.base.SimulationSettings;
 import utils.Log;
 import utils.RandomGenerator;
-import utils.TriConsumer;
-import view.Geography;
 
-import java.awt.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class AnimalReproductionSimulation {
@@ -39,14 +37,9 @@ public class AnimalReproductionSimulation {
                             animalOrganism.getGender() == Gender.FEMALE &&
                             animalOrganism.getReproductionStatus() == ReproductionStatus.COOLDOWN;
 
-    private final BiConsumer<AnimalOrganism, AnimalOrganism> findMateConsumer =
-        AnimalReproductionSimulation.this::findMateOrganism;
-
-    private final TriConsumer<AnimalOrganism, AnimalSpecies, Ecosystem> gestationConsumer =
-        this::gestation;
-
-    private final BiConsumer<AnimalOrganism, AnimalSpecies> matingCooldownConsumer =
-        this::matingCooldownOrganism;
+    private final BiConsumer<AnimalOrganism, AnimalOrganism> findMateConsumer = this::findMateOrganism;
+    private final Consumer<AnimalOrganism> gestationConsumer = this::gestation;
+    private final BiConsumer<AnimalOrganism, AnimalSpecies> matingCooldownConsumer = this::matingCooldownOrganism;
 
     public AnimalOrganism birthing(AnimalOrganism male, AnimalOrganism female) {
 
@@ -117,7 +110,9 @@ public class AnimalReproductionSimulation {
 
     }
 
-    public void gestation(AnimalOrganism animalOrganism, AnimalSpecies ignored, Ecosystem ecosystem) {
+    // TODO: check juvenile deaths that appear to never happen anymore
+
+    public void gestation(AnimalOrganism animalOrganism) {
 
         animalOrganism.setGestationWeek(animalOrganism.getGestationWeek() + 1);
 
@@ -216,7 +211,7 @@ public class AnimalReproductionSimulation {
 
     public void animalReproduction(Ecosystem ecosystem) {
         ecosystem.iterateAnimalOrganismsBiConsumer(animalOrganismIsAliveFemaleCooldown, matingCooldownConsumer);
-        ecosystem.iterateAnimalOrganismsTriConsumer(animalOrganismIsAliveFemalePregnant, gestationConsumer, ecosystem);
+        ecosystem.iterateAnimalOrganismsConsumer(animalOrganismIsAliveFemalePregnant, gestationConsumer);
         ecosystem.iterateAnimalOrganismsPerEachAnimalOrganism(animalOrganismIsAliveFemaleMature, findMateConsumer);
     }
 

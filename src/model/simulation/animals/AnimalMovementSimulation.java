@@ -10,8 +10,8 @@ import view.Geography;
 import view.TileOrganisms;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class AnimalMovementSimulation {
 

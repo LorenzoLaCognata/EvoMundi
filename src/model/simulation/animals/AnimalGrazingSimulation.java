@@ -9,11 +9,16 @@ import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
 import utils.Log;
+import utils.LogStatus;
 import utils.TriConsumer;
 
 import java.util.function.Predicate;
 
+// TODO: check starvation that seems too much frequent e.g. for Moose
+
 public class AnimalGrazingSimulation {
+
+    public static final LogStatus logStatus = LogStatus.INACTIVE;
 
     private final Predicate<AnimalOrganism> animalOrganismIsAliveHerbivore =
         animalOrganism ->
@@ -45,8 +50,13 @@ public class AnimalGrazingSimulation {
             Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " graze " + quantityConsumed + " KGs of " + plantOrganism.getPlantSpecies());
         }
 
+        PlantSpecies plantSpecies = plantOrganism.getPlantSpecies();
         plantOrganism.setQuantity(plantOrganism.getQuantity() - quantityConsumed);
-        plantOrganism.getPlantSpecies().setOrganismCount(plantOrganism.getPlantSpecies().getOrganismCount() - quantityConsumed);
+        plantSpecies.setOrganismCount(plantOrganism.getPlantSpecies().getOrganismCount() - quantityConsumed);
+
+        if (logStatus == LogStatus.ACTIVE) {
+            Log.log7(plantSpecies + " " + plantOrganism.getId() + " is consumed by " + Log.formatNumber(quantityConsumed) + " to " + Log.formatNumber(plantOrganism.getQuantity()));
+        }
 
         double gainSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().energyGain();
         double energyGained = Math.min(quantityConsumed * gainSpeciesConstant, 1.0 - animalOrganism.getEnergy());

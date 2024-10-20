@@ -12,8 +12,8 @@ import view.Geography;
 import view.TileOrganisms;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -124,11 +124,11 @@ public class Simulation {
 
         newbornSurvival();
 
-        if (Log.getLogger().getLevel().intValue() >= Level.FINER.intValue()) {
+        if (Log.getLogger().getLevel().intValue() <= Level.FINER.intValue()) {
 
             ecosystem.printImpersonatedOrganism();
 
-            if (Log.getLogger().getLevel().intValue() >= Level.FINEST.intValue()) {
+            if (Log.getLogger().getLevel().intValue() <= Level.FINEST.intValue()) {
                 ecosystem.printSpeciesDistribution();
             }
 

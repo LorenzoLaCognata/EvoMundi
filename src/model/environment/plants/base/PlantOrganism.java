@@ -3,6 +3,7 @@ package model.environment.plants.base;
 import javafx.scene.image.ImageView;
 import model.environment.common.base.Organism;
 import model.environment.plants.attributes.PlantOrganismAttributes;
+import utils.Log;
 
 public class PlantOrganism extends Organism {
 
@@ -32,6 +33,7 @@ public class PlantOrganism extends Organism {
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+        this.setOrganismIconLabel(Log.formatNumber(quantity));
     }
 
 }

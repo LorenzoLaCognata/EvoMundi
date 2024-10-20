@@ -4,9 +4,12 @@ import model.environment.common.base.Ecosystem;
 import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
+import utils.Log;
+import utils.LogStatus;
 
 public class PlantGrowthSimulation {
 
+    public static final LogStatus logStatus = LogStatus.INACTIVE;
     private static void plantRegenerationOrganism(PlantOrganism plantOrganism, PlantSpecies plantSpecies) {
 
         double growthRate = plantSpecies.getAttribute(PlantAttribute.GROWTH_RATE).getValue();
@@ -16,6 +19,10 @@ public class PlantGrowthSimulation {
 
         plantOrganism.setQuantity(currentQuantity + growthQuantity);
         plantSpecies.setOrganismCount(plantSpecies.getOrganismCount() + growthQuantity);
+
+        if (logStatus == LogStatus.ACTIVE) {
+            Log.log7(plantSpecies + " " + plantOrganism.getId() + " grows by " + Log.formatNumber(growthQuantity) + " to " + Log.formatNumber(plantOrganism.getQuantity()));
+        }
 
     }
 

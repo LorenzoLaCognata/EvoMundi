@@ -15,7 +15,7 @@ import utils.TriConsumer;
 import view.Geography;
 import view.TileOrganisms;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
