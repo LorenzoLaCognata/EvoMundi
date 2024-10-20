@@ -3,6 +3,7 @@ package model.simulation.animals;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Ecosystem;
+import model.environment.common.base.IterationManager;
 import model.simulation.base.SimulationSettings;
 import utils.RandomGenerator;
 import utils.TriConsumer;
@@ -17,8 +18,8 @@ public class AnimalMovementSimulation {
 
     public static final int STEPS_PER_DIRECTION = 25;
 
-    private final TriConsumer<AnimalOrganism, AnimalSpecies, Map<Point, ArrayList<AnimalMovementPoint>>> animalMoveOrganismConsumer =
-            (animalOrganism, ignored, movementChanges) -> animalMoveOrganism(animalOrganism, movementChanges);
+    private final TriConsumer<AnimalOrganism, AnimalSpecies, Map<Point, ArrayList<AnimalMovementPoint>>> animalOrganismMoveConsumer =
+            (animalOrganism, ignored, movementChanges) -> animalOrganismMove(animalOrganism, movementChanges);
 
     private void removeAnimalOrganismFromTile(Ecosystem ecosystem, Point point, AnimalOrganism animalOrganism) {
 
@@ -48,56 +49,75 @@ public class AnimalMovementSimulation {
 
     }
 
-    public void animalMoveOrganism(AnimalOrganism animalOrganism, Map<Point, ArrayList<AnimalMovementPoint>> movementChanges) {
+    public void animalOrganismMove(AnimalOrganism animalOrganism, Map<Point, ArrayList<AnimalMovementPoint>> movementChanges) {
+        animalOrganismUpdateSpeed(animalOrganism);
+        animalOrganismCalculateTileMove(animalOrganism, movementChanges);
+        animalOrganismUpdateLayout(animalOrganism);
+        animalOrganismUpdateAnimationStep(animalOrganism);
+    }
 
+    private static void animalOrganismCalculateTileMove(AnimalOrganism animalOrganism, Map<Point, ArrayList<AnimalMovementPoint>> movementChanges) {
+
+        Point currentTile = animalOrganismCurrentTile(animalOrganism);
+        animalOrganismUpdateCoordinates(animalOrganism);
+        Point newTile = animalOrganismCurrentTile(animalOrganism);
+
+        if (currentTile != newTile) {
+            movementChanges.computeIfAbsent(currentTile, ignored ->
+                new ArrayList<>()).add(new AnimalMovementPoint(animalOrganism.getAnimalSpecies(), animalOrganism, newTile));
+        }
+    }
+
+    private static void animalOrganismUpdateCoordinates(AnimalOrganism animalOrganism) {
+        double newLatitude = animalOrganismNewLatitude(animalOrganism);
+        double newLongitude = animalOrganismNewLongitude(animalOrganism);
+        animalOrganism.getOrganismAttributes().animalPositionAttributes().setLatitude(newLatitude);
+        animalOrganism.getOrganismAttributes().animalPositionAttributes().setLongitude(newLongitude);
+    }
+
+    private static Point animalOrganismCurrentTile(AnimalOrganism animalOrganism) {
+        return Geography.calculateTile(
+                animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitude(),
+                animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude()
+        );
+    }
+
+    private static void animalOrganismUpdateAnimationStep(AnimalOrganism animalOrganism) {
+        animalOrganism.getOrganismAttributes().animalPositionAttributes().setAnimationStep(animalOrganism.getOrganismAttributes().animalPositionAttributes().getAnimationStep() + 1);
+    }
+
+    private static void animalOrganismUpdateSpeed(AnimalOrganism animalOrganism) {
         if (animalOrganism.getOrganismAttributes().animalPositionAttributes().getAnimationStep() % STEPS_PER_DIRECTION == 0) {
             double latitudeSpeed = SimulationSettings.MOVEMENT_SPEED_PER_FRAME * RandomGenerator.random.nextDouble(-1.0, 1.0);
             double longitudeSpeed = SimulationSettings.MOVEMENT_SPEED_PER_FRAME * RandomGenerator.random.nextDouble(-1.0, 1.0);
             animalOrganism.getOrganismAttributes().animalPositionAttributes().setLatitudeSpeed(latitudeSpeed);
             animalOrganism.getOrganismAttributes().animalPositionAttributes().setLongitudeSpeed(longitudeSpeed);
         }
+    }
 
-        double baseNewLatitude = animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitude() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitudeSpeed();
-        double newLatitude = Math.clamp(baseNewLatitude, SimulationSettings.MIN_LATITUDE, SimulationSettings.MAX_LATITUDE);
-
-        double baseNewLongitude = animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitudeSpeed();
-        double newLongitude = Math.clamp(baseNewLongitude, SimulationSettings.MIN_LONGITUDE, SimulationSettings.MAX_LONGITUDE);
-
-        Point currentTile = Geography.calculateTile(
-                animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitude(),
-                animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude()
-        );
-
-        animalOrganism.getOrganismAttributes().animalPositionAttributes().setLatitude(newLatitude);
-        animalOrganism.getOrganismAttributes().animalPositionAttributes().setLongitude(newLongitude);
-
-        Point newTile = Geography.calculateTile(
-                animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitude(),
-                animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude()
-        );
-
-        AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
-
-        if (currentTile != newTile) {
-            movementChanges.computeIfAbsent(currentTile, ignored ->
-                new ArrayList<>()).add(new AnimalMovementPoint(animalSpecies, animalOrganism, newTile));
-        }
-
+    private static void animalOrganismUpdateLayout(AnimalOrganism animalOrganism) {
         double screenX = animalOrganism.getOrganismAttributes().animalPositionAttributes().getScreenX();
         double screenY = animalOrganism.getOrganismAttributes().animalPositionAttributes().getScreenY();
 
         animalOrganism.getOrganismIcons().getStackPane().setLayoutX(screenX);
         animalOrganism.getOrganismIcons().getStackPane().setLayoutY(screenY);
-
-        animalOrganism.getOrganismAttributes().animalPositionAttributes().setAnimationStep(animalOrganism.getOrganismAttributes().animalPositionAttributes().getAnimationStep() + 1);
-
     }
 
-    public void animalMove(Ecosystem ecosystem) {
+    private static double animalOrganismNewLongitude(AnimalOrganism animalOrganism) {
+        double baseNewLongitude = animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitudeSpeed();
+        return Math.clamp(baseNewLongitude, SimulationSettings.MIN_LONGITUDE, SimulationSettings.MAX_LONGITUDE);
+    }
+
+    private static double animalOrganismNewLatitude(AnimalOrganism animalOrganism) {
+        double baseNewLatitude = animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitude() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitudeSpeed();
+        return Math.clamp(baseNewLatitude, SimulationSettings.MIN_LATITUDE, SimulationSettings.MAX_LATITUDE);
+    }
+
+    public void ecosystemMove(Ecosystem ecosystem) {
 
         Map<Point, ArrayList<AnimalMovementPoint>> movementChanges = new HashMap<>();
 
-        ecosystem.iterateAnimalOrganismsTriConsumer(Ecosystem.animalTruePredicate, animalMoveOrganismConsumer, movementChanges);
+        ecosystem.getIterationManager().iterateAnimalOrganismsTriConsumer(ecosystem, IterationManager.animalTruePredicate, animalOrganismMoveConsumer, movementChanges);
 
         for (Map.Entry<Point, ArrayList<AnimalMovementPoint>> entry : movementChanges.entrySet()) {
             Point currentTile = entry.getKey();

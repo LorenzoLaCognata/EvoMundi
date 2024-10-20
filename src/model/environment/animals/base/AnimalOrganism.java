@@ -44,6 +44,12 @@ public class AnimalOrganism extends Organism {
         this.animalOrganismAttributes = animalOrganismAttributes;
     }
 
+    public void logEnergy() {
+        if (isImpersonatedOrganism()) {
+            Log.log7(animalSpecies + " " + id + ": " + Log.formatPercentage(energy));
+        }
+    }
+
     public AnimalSpecies getAnimalSpecies() {
         return animalSpecies;
     }
@@ -106,7 +112,7 @@ public class AnimalOrganism extends Organism {
 
     public void setEnergy(double energy) {
         this.energy = energy;
-        this.setOrganismIconLabel(Log.formatPercentage(energy));
+        // TODO: re-enable label to show organism count instead
     }
 
     public void setReproductionStatus(ReproductionStatus reproductionStatus) {

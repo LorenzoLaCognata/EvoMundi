@@ -40,9 +40,6 @@ public class Simulation {
         animalReproductionSimulation = new AnimalReproductionSimulation();
         animalHuntingSimulation = new AnimalHuntingSimulation();
 
-        ecosystem.initializePlantSpecies();
-        ecosystem.initializeAnimalSpecies();
-
     }
 
     public Ecosystem getEcosystem() {
@@ -80,8 +77,6 @@ public class Simulation {
         }
     }
 
-    // TODO: fix negative plants quantity
-
     private void newbornSurvival() {
 
         for (AnimalSpecies animalSpecies : ecosystem.getAnimalSpeciesMap().values()) {
@@ -93,7 +88,7 @@ public class Simulation {
                 AnimalPositionAttributes animalPositionAttributes = animalOrganism.getOrganismAttributes().animalPositionAttributes();
                 Point tile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
 
-                ecosystem.addAnimalOrganism(tile, animalSpecies, animalOrganism);
+                ecosystem.getInitializationManager().addAnimalOrganism(ecosystem.getWorldMap(), tile, animalSpecies, animalOrganism);
 
                 animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() + 1);
                 animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
@@ -109,23 +104,16 @@ public class Simulation {
         SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
         Log.log5("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
-
         plantGrowthSimulation.plantRegeneration(ecosystem);
-
-        animalAgingSimulation.animalAge(ecosystem);
-
-        animalGrazingSimulation.animalGraze(ecosystem);
-
-        animalHuntingSimulation.animalHunt(ecosystem);
-
-        animalReproductionSimulation.animalReproduction(ecosystem);
+        animalAgingSimulation.ecosystemAge(ecosystem);
+        animalGrazingSimulation.ecosystemGraze(ecosystem);
+        animalHuntingSimulation.ecosystemHunt(ecosystem);
+        animalReproductionSimulation.ecosystemReproduction(ecosystem);
 
         buryDead();
-
         newbornSurvival();
 
         if (Log.getLogger().getLevel().intValue() <= Level.FINER.intValue()) {
-
             ecosystem.printImpersonatedOrganism();
 
             if (Log.getLogger().getLevel().intValue() <= Level.FINEST.intValue()) {

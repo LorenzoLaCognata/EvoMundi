@@ -30,7 +30,6 @@ public class SimulationSettings {
     private static final Gender impersonatingGender = Gender.MALE;
 
     private SimulationSettings() {
-
     }
 
     public static int getCurrentWeek() {

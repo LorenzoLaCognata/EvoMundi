@@ -19,8 +19,8 @@ public class AnimalSpecies extends Species {
     private final Diet baseDiet;
 
     private final Map<AnimalAttribute, AttributeValue> attributes = new EnumMap<>(AnimalAttribute.class);
-
     private final Map<TaxonomySpecies, PreyAnimalSpecies> basePreyAnimalSpecies = new EnumMap<>(TaxonomySpecies.class);
+
     private final ArrayList<AnimalOrganism> newbornAnimalOrganisms = new ArrayList<>();
     private final ArrayList<AnimalOrganism> deadAnimalOrganisms = new ArrayList<>();
 

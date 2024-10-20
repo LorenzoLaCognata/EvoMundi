@@ -7,11 +7,13 @@ import model.environment.plants.base.PlantSpecies;
 import model.simulation.base.SimulationSettings;
 import model.simulation.base.SimulationStatus;
 import utils.Log;
+import view.CenterPaneManager;
 
 public class Controller {
 
     private final Model model = new Model();
     private final View view = new View();
+
     private final AnimationTimer timer = new AnimationTimer() {
 
         private long lastUpdateTime = 0;
@@ -34,45 +36,56 @@ public class Controller {
     private void addSpeciesIconsSpecies() {
 
         for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
-            view.addSpeciesIcons(plantSpecies);
+            view.getToolBarManager().addSpeciesIcons(plantSpecies);
         }
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
-            view.addSpeciesIcons(animalSpecies);
+            view.getToolBarManager().addSpeciesIcons(animalSpecies);
         }
 
     }
 
     private void viewSelectedSpeciesImageViews() {
+        viewSelectedPlantSpeciesImageViews();
+        viewSelectedAnimalSpeciesImageViews();
+    }
 
-        for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
+    private void viewSelectedAnimalSpeciesImageViews() {
 
-            if (!plantSpecies.getToolbarSection().getCheckBox().isSelected()) {
-                view.removeCenterRegionGroup(plantSpecies.getImageGroup());
-            }
-            else if (view.groupMissingFromCenterRegion(plantSpecies.getImageGroup())) {
-                view.addCenterRegionGroup(plantSpecies.getImageGroup());
-            }
-
-        }
+        CenterPaneManager centerPaneManager = view.getCenterPaneManager();
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
 
             if (!animalSpecies.getToolbarSection().getCheckBox().isSelected()) {
-                view.removeCenterRegionGroup(animalSpecies.getImageGroup());
+                centerPaneManager.removeCenterPaneGroup(animalSpecies.getImageGroup());
             }
-            else if (view.groupMissingFromCenterRegion(animalSpecies.getImageGroup())) {
-                view.addCenterRegionGroup(animalSpecies.getImageGroup());
+            else if (centerPaneManager.groupMissingFromCenterPane(animalSpecies.getImageGroup())) {
+                centerPaneManager.addCenterPaneGroup(animalSpecies.getImageGroup());
             }
 
         }
+    }
 
+    private void viewSelectedPlantSpeciesImageViews() {
+
+        CenterPaneManager centerPaneManager = view.getCenterPaneManager();
+
+        for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
+
+            if (!plantSpecies.getToolbarSection().getCheckBox().isSelected()) {
+                centerPaneManager.removeCenterPaneGroup(plantSpecies.getImageGroup());
+            }
+            else if (centerPaneManager.groupMissingFromCenterPane(plantSpecies.getImageGroup())) {
+                centerPaneManager.addCenterPaneGroup(plantSpecies.getImageGroup());
+            }
+
+        }
     }
 
     public Controller() {
         Log.initializeLog();
-        view.initializeToolBar();
-        view.setButtonStartStop(this::handleStartStopButton);
+        view.getToolBarManager().initializeToolBar();
+        view.getToolBarManager().setButtonStartStop(this::handleStartStopButton);
         addSpeciesIconsSpecies();
     }
 
@@ -97,26 +110,22 @@ public class Controller {
 
         viewSelectedSpeciesImageViews();
 
-        view.setWeekLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
+        view.getToolBarManager().setLabel("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
 
         for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
-            view.updateToolBarLabels(plantSpecies);
+            view.getToolBarManager().updateToolBarLabels(plantSpecies);
         }
 
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
-            view.updateToolBarLabels(animalSpecies);
+            view.getToolBarManager().updateToolBarLabels(animalSpecies);
         }
 
     }
 
     public void run() {
-
-        model.getSimulation().getAnimalMovementSimulation().animalMove(model.getSimulation().getEcosystem());
+        model.getSimulation().getAnimalMovementSimulation().ecosystemMove(model.getSimulation().getEcosystem());
         model.getSimulation().simulate();
-
         Platform.runLater(this::updateView);
-
-
     }
 
 }

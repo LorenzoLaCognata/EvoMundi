@@ -1,6 +1,7 @@
 package model.simulation.plants;
 
 import model.environment.common.base.Ecosystem;
+import model.environment.common.base.IterationManager;
 import model.environment.plants.base.PlantOrganism;
 import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
@@ -27,7 +28,7 @@ public class PlantGrowthSimulation {
     }
 
     public void plantRegeneration(Ecosystem ecosystem) {
-         ecosystem.iteratePlantOrganisms(PlantGrowthSimulation::plantRegenerationOrganism);
+         ecosystem.getIterationManager().iteratePlantOrganisms(ecosystem, IterationManager.plantTruePredicate, PlantGrowthSimulation::plantRegenerationOrganism);
     }
 
 }

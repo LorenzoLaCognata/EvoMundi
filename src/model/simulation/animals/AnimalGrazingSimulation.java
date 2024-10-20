@@ -25,39 +25,27 @@ public class AnimalGrazingSimulation {
             animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
             animalOrganism.getAnimalSpecies().getBaseDiet() == Diet.HERBIVORE;
 
-    private final TriConsumer<PlantOrganism, PlantSpecies, AnimalOrganism> animalGrazeConsumer =
+    private final TriConsumer<PlantOrganism, PlantSpecies, AnimalOrganism> animalOrganismGrazeConsumer =
         (plantOrganism, ignored, animalOrganism) -> {
             if (animalOrganism.getEnergy() < 1.0 && plantOrganism.getQuantity() > 0.0) {
-                graze(animalOrganism, plantOrganism);
+                animalOrganismGraze(animalOrganism, plantOrganism);
             }
         };
 
     @SuppressWarnings("unchecked")
-    public <X extends Organism, Y, Z> void animalGraze(Ecosystem ecosystem) {
-        ecosystem.iteratePlantOrganismsPerEachAnimalOrganism(
-                (Predicate<X>) animalOrganismIsAliveHerbivore, (TriConsumer<X, Y, Z>) animalGrazeConsumer
-        );
+    public <X extends Organism, Y, Z> void ecosystemGraze(Ecosystem ecosystem) {
+        ecosystem.getIterationManager().iteratePlantOrganismsPerEachAnimalOrganism(
+                (Predicate<X>) animalOrganismIsAliveHerbivore, (TriConsumer<X, Y, Z>) animalOrganismGrazeConsumer,
+                ecosystem);
     }
 
-    public void graze(AnimalOrganism animalOrganism, PlantOrganism plantOrganism) {
+    public void animalOrganismGraze(AnimalOrganism animalOrganism, PlantOrganism plantOrganism) {
+        double quantity = grazeQuantityConsumed(animalOrganism, plantOrganism);
+        plantOrganismGrazeConsumption(plantOrganism, quantity);
+        animalOrganismGrazeEnergyGain(animalOrganism, quantity);
+    }
 
-        double consumptionSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().plantConsumption();
-        double baseConsumptionQuantity = consumptionSpeciesConstant * animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight();
-        double consumptionQuantity = baseConsumptionQuantity * (plantOrganism.getQuantity() / plantOrganism.getPlantSpecies().getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue());
-        double quantityConsumed = Math.min(consumptionQuantity, plantOrganism.getQuantity());
-
-        if (animalOrganism.isImpersonatedOrganism()) {
-            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " graze " + quantityConsumed + " KGs of " + plantOrganism.getPlantSpecies());
-        }
-
-        PlantSpecies plantSpecies = plantOrganism.getPlantSpecies();
-        plantOrganism.setQuantity(plantOrganism.getQuantity() - quantityConsumed);
-        plantSpecies.setOrganismCount(plantOrganism.getPlantSpecies().getOrganismCount() - quantityConsumed);
-
-        if (logStatus == LogStatus.ACTIVE) {
-            Log.log7(plantSpecies + " " + plantOrganism.getId() + " is consumed by " + Log.formatNumber(quantityConsumed) + " to " + Log.formatNumber(plantOrganism.getQuantity()));
-        }
-
+    private static void animalOrganismGrazeEnergyGain(AnimalOrganism animalOrganism, double quantityConsumed) {
         double gainSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().energyGain();
         double energyGained = Math.min(quantityConsumed * gainSpeciesConstant, 1.0 - animalOrganism.getEnergy());
 
@@ -66,7 +54,28 @@ public class AnimalGrazingSimulation {
         }
 
         animalOrganism.setEnergy(animalOrganism.getEnergy() + energyGained);
+    }
 
+    private static double grazeQuantityConsumed(AnimalOrganism animalOrganism, PlantOrganism plantOrganism) {
+        double consumptionSpeciesConstant = animalOrganism.getOrganismAttributes().animalNutritionAttributes().plantConsumption();
+        double baseConsumptionQuantity = consumptionSpeciesConstant * animalOrganism.getOrganismAttributes().animalVitalsAttributes().weight();
+        double consumptionQuantity = baseConsumptionQuantity * (plantOrganism.getQuantity() / plantOrganism.getPlantSpecies().getAttribute(PlantAttribute.CARRYING_CAPACITY).getValue());
+        double quantity = Math.min(consumptionQuantity, plantOrganism.getQuantity());
+
+        if (animalOrganism.isImpersonatedOrganism()) {
+            Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " graze " + quantity + " KGs of " + plantOrganism.getPlantSpecies());
+        }
+        return quantity;
+    }
+
+    private static void plantOrganismGrazeConsumption(PlantOrganism plantOrganism, double quantityConsumed) {
+        PlantSpecies plantSpecies = plantOrganism.getPlantSpecies();
+        plantOrganism.setQuantity(plantOrganism.getQuantity() - quantityConsumed);
+        plantSpecies.setOrganismCount(plantOrganism.getPlantSpecies().getOrganismCount() - quantityConsumed);
+
+        if (logStatus == LogStatus.ACTIVE) {
+            Log.log7(plantSpecies + " " + plantOrganism.getId() + " is consumed by " + Log.formatNumber(quantityConsumed) + " to " + Log.formatNumber(plantOrganism.getQuantity()));
+        }
     }
 
 }
