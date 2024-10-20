@@ -10,9 +10,8 @@ import view.Geography;
 import view.TileOrganisms;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class AnimalMovementSimulation {
 
@@ -26,7 +25,7 @@ public class AnimalMovementSimulation {
         Map<Point, TileOrganisms> worldMap = ecosystem.getWorldMap();
         TileOrganisms tileOrganisms = worldMap.get(point);
         AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
-        ArrayList<AnimalOrganism> animalSpeciesOrganisms = tileOrganisms.animalOrganisms().get(animalSpecies);
+        List<AnimalOrganism> animalSpeciesOrganisms = tileOrganisms.animalOrganisms().get(animalSpecies);
 
         if (animalSpeciesOrganisms != null) {
             animalSpeciesOrganisms.remove(animalOrganism);
@@ -44,7 +43,7 @@ public class AnimalMovementSimulation {
         TileOrganisms tileOrganisms = worldMap.computeIfAbsent(point, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
 
         tileOrganisms.animalOrganisms()
-                .computeIfAbsent(animalSpecies, ignored -> new ArrayList<>())
+                .computeIfAbsent(animalSpecies, ignored -> Collections.synchronizedList(new ArrayList<>()))
                 .add(animalOrganism);
 
     }

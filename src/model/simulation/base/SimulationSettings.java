@@ -6,7 +6,7 @@ import model.environment.common.enums.TaxonomySpecies;
 public class SimulationSettings {
 
     public static final int SIMULATION_SPEED_WEEKS = 1;
-    public static final int SIMULATION_LENGTH_WEEKS = 520;
+    public static final int SIMULATION_LENGTH_WEEKS = 52;
     public static final double DEGREES_PER_TILE = 0.25;
     public static final double PIXELS_PER_TILE = 64;
     public static final double IMAGE_SIZE = 64;

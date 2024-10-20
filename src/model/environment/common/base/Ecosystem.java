@@ -27,10 +27,9 @@ import view.Geography;
 import view.TileOrganisms;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -39,7 +38,7 @@ public class Ecosystem {
 
     private final Map<TaxonomySpecies, PlantSpecies> plantSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
     private final Map<TaxonomySpecies, AnimalSpecies> animalSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
-    private final Map<Point, TileOrganisms> worldMap = new HashMap<>();
+    private final Map<Point, TileOrganisms> worldMap = new ConcurrentHashMap<>();
 
     public static final Predicate<AnimalOrganism> animalTruePredicate =
         ignored -> true;
@@ -64,7 +63,7 @@ public class Ecosystem {
         TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
 
         tileOrganisms.plantOrganisms()
-                .computeIfAbsent(plantSpecies, ignored -> new ArrayList<>())
+                .computeIfAbsent(plantSpecies, ignored -> Collections.synchronizedList(new ArrayList<>()))
                 .add(plantOrganism);
 
         worldMap.put(tile, tileOrganisms);
@@ -75,7 +74,7 @@ public class Ecosystem {
         TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
 
         tileOrganisms.animalOrganisms()
-                .computeIfAbsent(animalSpecies, ignored -> new ArrayList<>())
+                .computeIfAbsent(animalSpecies, ignored -> Collections.synchronizedList(new ArrayList<>()))
                 .add(animalOrganism);
 
         worldMap.put(tile, tileOrganisms);
@@ -97,11 +96,11 @@ public class Ecosystem {
 
         for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = entry.getValue().animalOrganisms();
+            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = entry.getValue().animalOrganisms();
 
             if (!tileSpecies.isEmpty()) {
 
-                ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
 
                 if (animalOrganisms != null) {
                     for (AnimalOrganism animalOrganism : animalOrganisms) {
@@ -195,7 +194,7 @@ public class Ecosystem {
 
         SpeciesTaxonomy salixAlbaTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAGNOLIOPSIDA, TaxonomyOrder.MALPIGHIALES, TaxonomyFamily.SALICACEAE, TaxonomyGenus.SALIX, TaxonomySpecies.SALIX_ALBA);
 
-        PlantSpecies whiteWillow = new PlantSpecies(salixAlbaTaxonomy, "White Willow", new Image("resources/images/whiteWillow.png"));
+        PlantSpecies whiteWillow = new PlantSpecies(salixAlbaTaxonomy, "White Willow", new Image("images/whiteWillow.png"));
         initializePlantSpeciesAttributes(whiteWillow);
         initializePlantOrganisms(whiteWillow);
         plantSpeciesMap.put(TaxonomySpecies.SALIX_ALBA, whiteWillow);
@@ -224,23 +223,25 @@ public class Ecosystem {
 
         for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
 
             for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
 
                 if (canBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
 
-                    ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                    List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
 
-                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+                    synchronized (animalOrganisms) {
+                        for (AnimalOrganism animalOrganism : animalOrganisms) {
 
-                        if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
-                                canBeImpersonated(animalOrganism.getGender(), animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
-                            animalOrganism.setImpersonatedOrganism(true);
-                            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+                            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
+                                    canBeImpersonated(animalOrganism.getGender(), animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
+                                animalOrganism.setImpersonatedOrganism(true);
+                                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
 
-                            return true;
+                                return true;
 
+                            }
                         }
                     }
                 }
@@ -253,22 +254,24 @@ public class Ecosystem {
 
         for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
 
             for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
 
                 if (canBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
 
-                    ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                    List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
 
-                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+                    synchronized (animalOrganisms) {
+                        for (AnimalOrganism animalOrganism : animalOrganisms) {
 
-                        if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
-                            animalOrganism.setImpersonatedOrganism(true);
-                            Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+                            if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
+                                animalOrganism.setImpersonatedOrganism(true);
+                                Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
 
-                            return;
+                                return;
 
+                            }
                         }
                     }
                 }
@@ -345,6 +348,7 @@ public class Ecosystem {
                     animalSpecies,
                     gender,
                     animalSpecies.getBaseDiet(),
+                    OrganismStatus.ALIVE,
                     age,
                     new ImageView(animalSpecies.getImage()),
                     animalOrganismAttributes
@@ -434,38 +438,38 @@ public class Ecosystem {
 
         SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ODOCOILEUS, TaxonomySpecies.ODOCOILEUS_VIRGINIANUS);
 
-        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("resources/images/whiteTailedDeer.png", 64, 64, false, false), Diet.HERBIVORE);
+        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("images/whiteTailedDeer.png", 64, 64, false, false), Diet.HERBIVORE);
         whiteTailedDeerAttributes(whiteTailedDeer);
         initializeAnimalOrganisms(whiteTailedDeer);
 
         animalSpeciesMap.put(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, whiteTailedDeer);
 
         SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ALCES, TaxonomySpecies.ALCES_ALCES);
-        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("resources/images/moose.png", 64, 64, false, false), Diet.HERBIVORE);
+        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("images/moose.png", 64, 64, false, false), Diet.HERBIVORE);
         mooseAttributes(moose);
         initializeAnimalOrganisms(moose);
         animalSpeciesMap.put(TaxonomySpecies.ALCES_ALCES, moose);
 
         SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.CANIDAE, TaxonomyGenus.CANIS, TaxonomySpecies.CANIS_LUPUS);
-        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("resources/images/grayWolf.png", 64, 64, false, false), Diet.CARNIVORE);
+        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("images/grayWolf.png", 64, 64, false, false), Diet.CARNIVORE);
         grayWolfAttributes(grayWolf);
         initializeAnimalOrganisms(grayWolf);
         animalSpeciesMap.put(TaxonomySpecies.CANIS_LUPUS, grayWolf);
 
         SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.LAGOMORPHA, TaxonomyFamily.LEPORIDAE, TaxonomyGenus.LEPUS, TaxonomySpecies.LEPUS_AMERICANUS);
-        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("resources/images/snowshoeHare.png", 64, 64, false, false), Diet.HERBIVORE);
+        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("images/snowshoeHare.png", 64, 64, false, false), Diet.HERBIVORE);
         snowshoeHareAttributes(snowshoeHare);
         initializeAnimalOrganisms(snowshoeHare);
         animalSpeciesMap.put(TaxonomySpecies.LEPUS_AMERICANUS, snowshoeHare);
 
         SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.RODENTIA, TaxonomyFamily.CASTORIDAE, TaxonomyGenus.CASTOR, TaxonomySpecies.CASTOR_FIBER);
-        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("resources/images/europeanBeaver.png", 64, 64, false, false), Diet.HERBIVORE);
+        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("images/europeanBeaver.png", 64, 64, false, false), Diet.HERBIVORE);
         europeanBeaverAttributes(europeanBeaver);
         initializeAnimalOrganisms(europeanBeaver);
         animalSpeciesMap.put(TaxonomySpecies.CASTOR_FIBER, europeanBeaver);
 
         SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.FELIDAE, TaxonomyGenus.LYNX, TaxonomySpecies.LYNX_RUFUS);
-        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("resources/images/bobcat.png", 64, 64, false, false), Diet.CARNIVORE);
+        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("images/bobcat.png", 64, 64, false, false), Diet.CARNIVORE);
         bobcatAttributes(bobcat);
         initializeAnimalOrganisms(bobcat);
         animalSpeciesMap.put(TaxonomySpecies.LYNX_RUFUS, bobcat);
@@ -510,16 +514,15 @@ public class Ecosystem {
 
         for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, ArrayList<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
 
             for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
 
                 if (animalSpecies.getSpeciesTaxonomy().taxonomySpecies() == SimulationSettings.getImpersonatingTaxonomySpecies()) {
 
-                    ArrayList<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                    List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
 
                     for (AnimalOrganism animalOrganism : animalOrganisms) {
-
                         if (animalOrganism.isImpersonatedOrganism()) {
                             Log.log7(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + ": " + Log.formatPercentage(animalOrganism.getEnergy()));
                         }
@@ -531,29 +534,62 @@ public class Ecosystem {
 
     }
 
-    // TODO: move to dedicated class
+    // TODO: move iterate methods to dedicated class
 
     @SuppressWarnings("unused")
-    private <X extends Organism> void iterateOrganismConsumer(Predicate<X> predicate, Consumer<X> action, ArrayList<X> organisms) {
-        for (X organism : organisms) {
-            if (predicate.test(organism)) {
-                action.accept(organism);
+    private <X extends Organism> void iterateOrganismConsumer(Predicate<X> predicate, Consumer<X> action, List<X> organisms) {
+        if (predicate.equals(animalTruePredicate) || predicate.equals(plantTruePredicate) ) {
+            synchronized (organisms) {
+                for (X organism : organisms) {
+                    action.accept(organism);
+                }
+            }
+        }
+        else {
+            synchronized (organisms) {
+                for (X organism : organisms) {
+                    if (predicate.test(organism)) {
+                        action.accept(organism);
+                    }
+                }
             }
         }
     }
 
-    private <X extends Organism, Y> void iterateOrganismBiConsumer(Predicate<X> predicate, BiConsumer<X, Y> action, ArrayList<X> organisms, Y y) {
-        for (X organism : organisms) {
-            if (predicate.test(organism)) {
-                action.accept(organism, y);
+    private <X extends Organism, Y> void iterateOrganismBiConsumer(Predicate<X> predicate, BiConsumer<X, Y> action, List<X> organisms, Y y) {
+        if (predicate.equals(animalTruePredicate) || predicate.equals(plantTruePredicate) ) {
+            synchronized (organisms) {
+                for (X organism : organisms) {
+                    action.accept(organism, y);
+                }
+            }
+        }
+        else {
+            synchronized (organisms) {
+                for (X organism : organisms) {
+                    if (predicate.test(organism)) {
+                        action.accept(organism, y);
+                    }
+                }
             }
         }
     }
 
-    private <X extends Organism, Y, Z> void iterateOrganismTriConsumer(Predicate<X> predicate, TriConsumer<X, Y, Z> action, ArrayList<X> organisms, Y y, Z z) {
-        for (X organism : organisms) {
-            if (predicate.test(organism)) {
-                action.accept(organism, y, z);
+    private <X extends Organism, Y, Z> void iterateOrganismTriConsumer(Predicate<X> predicate, TriConsumer<X, Y, Z> action, List<X> organisms, Y y, Z z) {
+        if (predicate.equals(animalTruePredicate) || predicate.equals(plantTruePredicate) ) {
+            synchronized (organisms) {
+                for (X organism : organisms) {
+                    action.accept(organism, y, z);
+                }
+            }
+        }
+        else {
+            synchronized (organisms) {
+                for (X organism : organisms) {
+                    if (predicate.test(organism)) {
+                        action.accept(organism, y, z);
+                    }
+                }
             }
         }
     }
@@ -561,10 +597,10 @@ public class Ecosystem {
     @SuppressWarnings("unchecked")
     private <X extends  Organism, Y> void iterateTilePlantSpeciesBiConsumer(BiConsumer<X, Y> action, TileOrganisms tileOrganisms) {
 
-        for (Map.Entry<PlantSpecies, ArrayList<PlantOrganism>> plantEntry : tileOrganisms.plantOrganisms().entrySet()) {
+        for (Map.Entry<PlantSpecies, List<PlantOrganism>> plantEntry : tileOrganisms.plantOrganisms().entrySet()) {
             PlantSpecies plantSpecies = plantEntry.getKey();
-            ArrayList<PlantOrganism> plantOrganisms = plantEntry.getValue();
-            iterateOrganismBiConsumer((Predicate<X>) plantTruePredicate, action, (ArrayList<X>) plantOrganisms, (Y) plantSpecies);
+            List<PlantOrganism> plantOrganisms = plantEntry.getValue();
+            iterateOrganismBiConsumer((Predicate<X>) plantTruePredicate, action, (List<X>) plantOrganisms, (Y) plantSpecies);
         }
 
     }
@@ -572,10 +608,10 @@ public class Ecosystem {
     @SuppressWarnings("unchecked")
     private <X extends Organism, Y, Z> void iterateTilePlantSpeciesTriConsumer(TriConsumer<X, Y, Z> action, TileOrganisms tileOrganisms, Z z) {
 
-        for (Map.Entry<PlantSpecies, ArrayList<PlantOrganism>> plantEntry : tileOrganisms.plantOrganisms().entrySet()) {
+        for (Map.Entry<PlantSpecies, List<PlantOrganism>> plantEntry : tileOrganisms.plantOrganisms().entrySet()) {
             PlantSpecies plantSpecies = plantEntry.getKey();
-            ArrayList<PlantOrganism> plantOrganisms = plantEntry.getValue();
-            iterateOrganismTriConsumer((Predicate<X>) plantTruePredicate, action, (ArrayList<X>) plantOrganisms, (Y) plantSpecies, z);
+            List<PlantOrganism> plantOrganisms = plantEntry.getValue();
+            iterateOrganismTriConsumer((Predicate<X>) plantTruePredicate, action, (List<X>) plantOrganisms, (Y) plantSpecies, z);
         }
 
     }
@@ -583,10 +619,10 @@ public class Ecosystem {
     @SuppressWarnings("unchecked")
     private <X extends Organism, Y> void iterateTileAnimalSpeciesBiConsumer(Predicate<X> predicate, BiConsumer<X, Y> action, TileOrganisms tileOrganisms) {
 
-        for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+        for (Map.Entry<AnimalSpecies, List<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
             AnimalSpecies animalSpecies = animalEntry.getKey();
-            ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
-            iterateOrganismBiConsumer(predicate, action, (ArrayList<X>) animalOrganisms, (Y) animalSpecies);
+            List<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+            iterateOrganismBiConsumer(predicate, action, (List<X>) animalOrganisms, (Y) animalSpecies);
         }
 
     }
@@ -594,10 +630,10 @@ public class Ecosystem {
     @SuppressWarnings("unchecked")
     private <X extends Organism, Y, Z> void iterateTileAnimalSpeciesTriConsumer(Predicate<X> predicate, TriConsumer<X, Y, Z> action, TileOrganisms tileOrganisms, Z z) {
 
-        for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+        for (Map.Entry<AnimalSpecies, List<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
             AnimalSpecies animalSpecies = animalEntry.getKey();
-            ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
-            iterateOrganismTriConsumer(predicate, action, (ArrayList<X>) animalOrganisms, (Y) animalSpecies, z);
+            List<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+            iterateOrganismTriConsumer(predicate, action, (List<X>) animalOrganisms, (Y) animalSpecies, z);
         }
 
     }
@@ -613,8 +649,8 @@ public class Ecosystem {
     public <X extends Organism, Y> void iteratePlantOrganismsPerPlantSpecies(PlantSpecies plantSpecies, BiConsumer<X, Y> action) {
         for (Map.Entry<Point, TileOrganisms> entry : worldMap.entrySet()) {
             TileOrganisms tileOrganisms = entry.getValue();
-            ArrayList<PlantOrganism> plantOrganisms = tileOrganisms.plantOrganisms().get(plantSpecies);
-            iterateOrganismBiConsumer((Predicate<X>) plantTruePredicate, action, (ArrayList<X>) plantOrganisms, (Y) plantSpecies);
+            List<PlantOrganism> plantOrganisms = tileOrganisms.plantOrganisms().get(plantSpecies);
+            iterateOrganismBiConsumer((Predicate<X>) plantTruePredicate, action, (List<X>) plantOrganisms, (Y) plantSpecies);
         }
     }
 
@@ -640,16 +676,17 @@ public class Ecosystem {
 
             TileOrganisms tileOrganisms = entry.getValue();
 
-            for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+            for (Map.Entry<AnimalSpecies, List<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
 
-                ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+                List<AnimalOrganism> animalOrganisms = animalEntry.getValue();
 
-                for (AnimalOrganism animalOrganism : animalOrganisms) {
-                    if (predicate.test((X) animalOrganism)) {
-                        iterateOrganismBiConsumer((Predicate<X>) animalTruePredicate, action, (ArrayList<X>) animalOrganisms, (Y) animalOrganism);
+                synchronized (animalOrganisms) {
+                    for (AnimalOrganism animalOrganism : animalOrganisms) {
+                        if (predicate.test((X) animalOrganism)) {
+                            iterateOrganismBiConsumer((Predicate<X>) animalTruePredicate, action, (List<X>) animalOrganisms, (Y) animalOrganism);
+                        }
                     }
                 }
-
             }
         }
     }
@@ -661,13 +698,13 @@ public class Ecosystem {
 
             TileOrganisms tileOrganisms = entry.getValue();
 
-            for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+            for (Map.Entry<AnimalSpecies, List<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
 
-                ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+                List<AnimalOrganism> animalOrganisms = animalEntry.getValue();
 
                 Consumer<X> innerAction = (X animalOrganism) -> iterateTilePlantSpeciesTriConsumer(action, tileOrganisms, (Z) animalOrganism);
 
-                iterateOrganismConsumer(predicate, innerAction, (ArrayList<X>) animalOrganisms);
+                iterateOrganismConsumer(predicate, innerAction, (List<X>) animalOrganisms);
 
 
             }

@@ -105,14 +105,13 @@ public class AnimalReproductionSimulation {
             female.getAnimalSpecies(),
             gender,
             female.getDiet(),
+            OrganismStatus.NEWBORN,
             0.0,
             new ImageView(female.getOrganismIcons().getSpeciesIcon().getImage()),
             offspringAnimalOrganismAttributes
         );
 
         offspring.getPreyAnimalSpecies().putAll(female.getPreyAnimalSpecies());
-
-        offspring.getAnimalSpecies().getImageGroup().getChildren().add(offspring.getOrganismIcons().getStackPane());
 
         return offspring;
 
@@ -147,12 +146,7 @@ public class AnimalReproductionSimulation {
                     }
                 }
 
-                AnimalPositionAttributes offspringPositionAttributes = offspring.getOrganismAttributes().animalPositionAttributes();
-
-                Point currentTile = Geography.calculateTile(offspringPositionAttributes.getLatitude(), offspringPositionAttributes.getLongitude());
-
-                ecosystem.addAnimalOrganism(currentTile, offspring.getAnimalSpecies(), offspring);
-                offspring.getAnimalSpecies().setOrganismCount(offspring.getAnimalSpecies().getOrganismCount() + 1);
+                offspring.getAnimalSpecies().addNewbornOrganism(offspring);
 
             }
 

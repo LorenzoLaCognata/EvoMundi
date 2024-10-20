@@ -1,5 +1,6 @@
 package model.simulation.base;
 
+import model.environment.animals.attributes.AnimalPositionAttributes;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Ecosystem;
@@ -7,10 +8,11 @@ import model.environment.common.enums.OrganismStatus;
 import model.simulation.animals.*;
 import model.simulation.plants.PlantGrowthSimulation;
 import utils.Log;
+import view.Geography;
 import view.TileOrganisms;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -57,9 +59,9 @@ public class Simulation {
 
             TileOrganisms tileOrganisms = entry.getValue();
 
-            for (Map.Entry<AnimalSpecies, ArrayList<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+            for (Map.Entry<AnimalSpecies, List<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
 
-                ArrayList<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+                List<AnimalOrganism> animalOrganisms = animalEntry.getValue();
 
                 Iterator<AnimalOrganism> iterator = animalOrganisms.iterator();
 
@@ -78,10 +80,35 @@ public class Simulation {
         }
     }
 
+    // TODO: fix negative plants quantity
+
+    private void newbornSurvival() {
+
+        for (AnimalSpecies animalSpecies : ecosystem.getAnimalSpeciesMap().values()) {
+
+            for (AnimalOrganism animalOrganism : animalSpecies.getNewbornOrganisms()) {
+
+                animalOrganism.setOrganismStatus(OrganismStatus.ALIVE);
+
+                AnimalPositionAttributes animalPositionAttributes = animalOrganism.getOrganismAttributes().animalPositionAttributes();
+                Point tile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
+
+                ecosystem.addAnimalOrganism(tile, animalSpecies, animalOrganism);
+
+                animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() + 1);
+                animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
+            }
+
+            animalSpecies.getNewbornOrganisms().clear();
+        }
+
+    }
+
     public void simulate() {
 
         SimulationSettings.setCurrentWeek(SimulationSettings.getCurrentWeek() + SimulationSettings.SIMULATION_SPEED_WEEKS);
         Log.log5("YEAR #" + SimulationSettings.getYear() + " - WEEK #" + SimulationSettings.getWeek());
+
 
         plantGrowthSimulation.plantRegeneration(ecosystem);
 
@@ -94,6 +121,8 @@ public class Simulation {
         animalReproductionSimulation.animalReproduction(ecosystem);
 
         buryDead();
+
+        newbornSurvival();
 
         if (Log.getLogger().getLevel().intValue() >= Level.FINER.intValue()) {
 

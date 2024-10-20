@@ -56,18 +56,4 @@ public class Species {
         return commonName;
     }
 
-    // TODO: delete and keep the version present in Ecosystem only
-    public static double classDoubleConstant(String className, String constantName) {
-
-        Class<?> speciesClass;
-        try {
-            speciesClass = Class.forName(className);
-            return speciesClass.getField(constantName).getDouble(null);
-
-        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
 }

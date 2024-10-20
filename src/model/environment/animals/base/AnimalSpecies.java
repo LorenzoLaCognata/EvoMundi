@@ -5,6 +5,7 @@ import model.environment.animals.enums.AnimalAttribute;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Diet;
 import model.environment.common.attributes.AttributeValue;
+import model.environment.common.base.Organism;
 import model.environment.common.base.Species;
 import model.environment.common.base.SpeciesTaxonomy;
 import model.environment.common.enums.TaxonomySpecies;
@@ -21,6 +22,7 @@ public class AnimalSpecies extends Species {
     private final Map<AnimalAttribute, AttributeValue> attributes = new EnumMap<>(AnimalAttribute.class);
 
     private final Map<TaxonomySpecies, PreyAnimalSpecies> basePreyAnimalSpecies = new EnumMap<>(TaxonomySpecies.class);
+    private final ArrayList<AnimalOrganism> newbornAnimalOrganisms = new ArrayList<>();
     private final ArrayList<AnimalOrganism> deadAnimalOrganisms = new ArrayList<>();
 
     public AnimalSpecies(SpeciesTaxonomy speciesTaxonomy, String commonName, Image image, Diet baseDiet) {
@@ -40,8 +42,16 @@ public class AnimalSpecies extends Species {
         return basePreyAnimalSpecies;
     }
 
+    public List<AnimalOrganism> getNewbornOrganisms() {
+        return newbornAnimalOrganisms;
+    }
+
     public List<AnimalOrganism> getDeadOrganisms() {
         return deadAnimalOrganisms;
+    }
+
+    public void addNewbornOrganism(AnimalOrganism organism) {
+        newbornAnimalOrganisms.add(organism);
     }
 
     public int getDeadPopulation() {

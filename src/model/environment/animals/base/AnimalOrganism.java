@@ -27,18 +27,19 @@ public class AnimalOrganism extends Organism {
     private double cooldownWeek = 0.0;
     private AnimalOrganism mate;
 
-    private OrganismStatus organismStatus = OrganismStatus.ALIVE;
+    private OrganismStatus organismStatus;
     private AnimalOrganismDeathReason organismDeathReason = AnimalOrganismDeathReason.NA;
 
     private boolean impersonatedOrganism = false;
 
     private final Map<TaxonomySpecies, PreyAnimalSpecies> preyAnimalSpecies = new EnumMap<>(TaxonomySpecies.class);
 
-    public AnimalOrganism(AnimalSpecies animalSpecies, Gender gender, Diet diet, double age, ImageView imageView, AnimalOrganismAttributes animalOrganismAttributes) {
+    public AnimalOrganism(AnimalSpecies animalSpecies, Gender gender, Diet diet, OrganismStatus organismStatus, double age, ImageView imageView, AnimalOrganismAttributes animalOrganismAttributes) {
         super(imageView);
         this.animalSpecies = animalSpecies;
         this.gender = gender;
         this.diet = diet;
+        this.organismStatus = organismStatus;
         this.age = age;
         this.animalOrganismAttributes = animalOrganismAttributes;
     }
@@ -137,7 +138,7 @@ public class AnimalOrganism extends Organism {
         this.impersonatedOrganism = impersonatedOrganism;
 
         if (impersonatedOrganism) {
-            ImageView imageView = new ImageView(new Image("resources/images/impersonated.png", 64, 64, false, false));
+            ImageView imageView = new ImageView(new Image("images/impersonated.png", 64, 64, false, false));
             this.getOrganismIcons().setImpersonatedIcon(imageView);
         }
 

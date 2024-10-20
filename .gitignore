@@ -3,7 +3,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 /.idea/
-/resources/
 EvoMundi.iml
 
 ### Eclipse ###

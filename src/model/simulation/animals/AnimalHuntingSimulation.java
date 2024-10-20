@@ -15,8 +15,8 @@ import utils.TriConsumer;
 import view.Geography;
 import view.TileOrganisms;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Point;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -41,27 +41,7 @@ public class AnimalHuntingSimulation {
 
             };
 
-    // TODO: try refactoring loops using variables below
-    /*
-    private final TriConsumer<AnimalOrganism, AnimalSpecies, AnimalOrganism> huntingAttemptConsumer =
-
-        (preyAnimalOrganism, preyAnimalSpecies, predatorAnimalOrganism) -> {
-
-            int preySpeciesPopulation = (int) preyAnimalSpecies.getOrganismCount();
-
-            if (preySpeciesPopulation > 0) {
-
-                double baseSuccessRate = predatorAnimalOrganism.calculateHuntSuccessRate(preyAnimalSpecies, preyAnimalOrganism);
-                double huntSuccessRate = RandomGenerator.generateGaussian(baseSuccessRate, RandomGenerator.GAUSSIAN_VARIANCE);
-
-                if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
-                    huntingSuccess(predatorAnimalOrganism, preyAnimalOrganism);
-                }
-
-            }
-
-        };
-     */
+    // TODO: refactor every loop using dedicated methods using the Consumer approach
 
     public AnimalSpecies choosePreySpecies(Ecosystem ecosystem, AnimalOrganism predatorAnimalOrganism) {
 
@@ -108,22 +88,26 @@ public class AnimalHuntingSimulation {
 
             if (tileOrganisms != null) {
 
-                ArrayList<AnimalOrganism> preyAnimalOrganisms = tileOrganisms.animalOrganisms().get(preyAnimalSpecies);
+                List<AnimalOrganism> preyAnimalOrganisms = tileOrganisms.animalOrganisms().get(preyAnimalSpecies);
 
-                for (AnimalOrganism preyAnimalOrganism : preyAnimalOrganisms) {
+                if (preyAnimalOrganisms != null) {
 
-                    int preySpeciesPopulation = (int) preyAnimalSpecies.getOrganismCount();
+                    synchronized (preyAnimalOrganisms) {
+                        for (AnimalOrganism preyAnimalOrganism : preyAnimalOrganisms) {
 
-                    if (preySpeciesPopulation > 0) {
+                            int preySpeciesPopulation = (int) preyAnimalSpecies.getOrganismCount();
 
-                        double baseSuccessRate = predatorAnimalOrganism.calculateHuntSuccessRate(preyAnimalSpecies, preyAnimalOrganism);
-                        double huntSuccessRate = RandomGenerator.generateGaussian(baseSuccessRate, RandomGenerator.GAUSSIAN_VARIANCE);
+                            if (preySpeciesPopulation > 0) {
 
-                        if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
-                            huntingSuccess(predatorAnimalOrganism, preyAnimalOrganism);
-                            return;
-                        }
+                                double baseSuccessRate = predatorAnimalOrganism.calculateHuntSuccessRate(preyAnimalSpecies, preyAnimalOrganism);
+                                double huntSuccessRate = RandomGenerator.generateGaussian(baseSuccessRate, RandomGenerator.GAUSSIAN_VARIANCE);
 
+                                if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
+                                    huntingSuccess(predatorAnimalOrganism, preyAnimalOrganism);
+                                    return;
+                                }
+                            }
+}
                     }
                 }
             }
