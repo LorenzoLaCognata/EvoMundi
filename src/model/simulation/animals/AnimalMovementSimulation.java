@@ -52,7 +52,7 @@ public class AnimalMovementSimulation {
     public void animalOrganismMove(AnimalOrganism animalOrganism, Map<Point, ArrayList<AnimalMovementPoint>> movementChanges) {
         animalOrganismUpdateSpeed(animalOrganism);
         animalOrganismCalculateTileMove(animalOrganism, movementChanges);
-        animalOrganismUpdateLayout(animalOrganism);
+        animalOrganism.updateLayout();
         animalOrganismUpdateAnimationStep(animalOrganism);
     }
 
@@ -95,14 +95,6 @@ public class AnimalMovementSimulation {
         }
     }
 
-    private static void animalOrganismUpdateLayout(AnimalOrganism animalOrganism) {
-        double screenX = animalOrganism.getOrganismAttributes().animalPositionAttributes().getScreenX();
-        double screenY = animalOrganism.getOrganismAttributes().animalPositionAttributes().getScreenY();
-
-        animalOrganism.getOrganismIcons().getStackPane().setLayoutX(screenX);
-        animalOrganism.getOrganismIcons().getStackPane().setLayoutY(screenY);
-    }
-
     private static double animalOrganismNewLongitude(AnimalOrganism animalOrganism) {
         double baseNewLongitude = animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude() + animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitudeSpeed();
         return Math.clamp(baseNewLongitude, SimulationSettings.MIN_LONGITUDE, SimulationSettings.MAX_LONGITUDE);
@@ -126,7 +118,6 @@ public class AnimalMovementSimulation {
                 Point newTile = move.point();
                 removeAnimalOrganismFromTile(ecosystem, currentTile, move.animalOrganism());
                 addAnimalOrganismToTile(ecosystem, newTile, move.animalOrganism().getAnimalSpecies(), move.animalOrganism());
-
             }
         }
 

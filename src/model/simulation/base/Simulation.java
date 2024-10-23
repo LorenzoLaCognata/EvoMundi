@@ -11,10 +11,12 @@ import utils.Log;
 import view.Geography;
 import view.TileOrganisms;
 
+import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class Simulation {
@@ -67,11 +69,12 @@ public class Simulation {
                     AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
 
                     if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
-                        animalSpecies.getDeadOrganisms().add(animalOrganism);
+                        animalSpecies.addDeadOrganism(animalOrganism);
                         animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
-                        iterator.remove();
                         animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() - 1);
+                        iterator.remove();
                     }
+
                 }
             }
         }
@@ -89,9 +92,8 @@ public class Simulation {
                 Point tile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
 
                 ecosystem.getInitializationManager().addAnimalOrganism(ecosystem.getWorldMap(), tile, animalSpecies, animalOrganism);
-
-                animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() + 1);
                 animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
+
             }
 
             animalSpecies.getNewbornOrganisms().clear();

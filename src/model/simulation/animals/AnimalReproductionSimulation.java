@@ -105,7 +105,7 @@ public class AnimalReproductionSimulation {
         );
     }
 
-    public AnimalOrganism animalOrganismBirthing(AnimalOrganism male, AnimalOrganism female) {
+    public AnimalOrganism animalOffspringGeneration(AnimalOrganism male, AnimalOrganism female) {
 
         Gender gender = (RandomGenerator.random.nextDouble() < 0.50) ? Gender.FEMALE : Gender.MALE;
 
@@ -165,19 +165,21 @@ public class AnimalReproductionSimulation {
 
     private void animalOrganismOffspringBirth(AnimalOrganism animalOrganism) {
 
-        AnimalOrganism offspring = animalOrganismBirthing(animalOrganism, animalOrganism.getMate());
+        AnimalOrganism offspring = animalOffspringGeneration(animalOrganism, animalOrganism.getMate());
 
         if (RandomGenerator.random.nextDouble() >= animalOrganism.getOrganismAttributes().animalReproductionAttributes().juvenileSurvivalRate()) {
             animalOrganismJuvenileDeath(animalOrganism, offspring);
         }
 
         else {
+
             if (animalOrganism.isImpersonatedOrganism()) {
                 Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " gives birth to a " + offspring.getGender() + " " + offspring.getAnimalSpecies() + " " + offspring.getId());
             }
+
+            offspring.getAnimalSpecies().addNewbornOrganism(offspring);
         }
 
-        offspring.getAnimalSpecies().addNewbornOrganism(offspring);
     }
 
     public void animalOrganismJuvenileDeath(AnimalOrganism animalOrganism, AnimalOrganism offspring) {

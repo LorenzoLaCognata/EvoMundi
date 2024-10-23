@@ -49,6 +49,10 @@ public class AnimalSpecies extends Species {
         return deadAnimalOrganisms;
     }
 
+    public void addDeadOrganism(AnimalOrganism organism) {
+        deadAnimalOrganisms.add(organism);
+    }
+
     public void addNewbornOrganism(AnimalOrganism organism) {
         newbornAnimalOrganisms.add(organism);
     }

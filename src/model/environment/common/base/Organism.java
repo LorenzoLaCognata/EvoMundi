@@ -2,6 +2,7 @@ package model.environment.common.base;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import model.environment.animals.base.AnimalOrganism;
 import view.OrganismIcons;
 
 import java.util.UUID;

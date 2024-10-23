@@ -19,9 +19,10 @@ public class SimulationSettings {
     private static SimulationStatus simulationStatus = SimulationStatus.PAUSED;
 
     public static final double SCENE_WIDTH = 1536;
-    public static final double SCENE_HEIGHT = 1024;
+    // TODO: review as it should be 1024 px
+    public static final double SCENE_HEIGHT = 640;
     public static final double MIN_LATITUDE = 50.0;
-    public static final double MAX_LATITUDE = 54.0;
+    public static final double MAX_LATITUDE = 52.5;
     public static final double MIN_LONGITUDE = -104.0;
     public static final double MAX_LONGITUDE = -98.0;
 

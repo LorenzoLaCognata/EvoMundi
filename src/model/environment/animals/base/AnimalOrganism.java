@@ -150,6 +150,14 @@ public class AnimalOrganism extends Organism {
 
     }
 
+    public void updateLayout() {
+        double screenX = animalOrganismAttributes.animalPositionAttributes().getScreenX();
+        double screenY = animalOrganismAttributes.animalPositionAttributes().getScreenY();
+
+        organismIcons.getStackPane().setLayoutX(screenX);
+        organismIcons.getStackPane().setLayoutY(screenY);
+    }
+
     public double calculateHuntSuccessRate(AnimalSpecies preyAnimalSpecies, AnimalOrganism preyOrganism) {
 
         double baseSuccessRate;
