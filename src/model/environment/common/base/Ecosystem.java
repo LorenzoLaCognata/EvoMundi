@@ -11,7 +11,8 @@ import model.environment.plants.base.PlantSpecies;
 import model.environment.plants.enums.PlantAttribute;
 import model.simulation.base.SimulationSettings;
 import utils.Log;
-import view.TileOrganisms;
+import view.Tile;
+import view.TileSpecies;
 
 import java.awt.*;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Ecosystem {
 
     private final Map<TaxonomySpecies, PlantSpecies> plantSpeciesMap;
     private final Map<TaxonomySpecies, AnimalSpecies> animalSpeciesMap;
-    private final Map<Point, TileOrganisms> worldMap = new ConcurrentHashMap<>();
+    private final Map<Point, Tile> worldMap = new ConcurrentHashMap<>();
 
     private final InitializationManager initializationManager = new InitializationManager();
     private final IterationManager iterationManager = new IterationManager();
@@ -51,7 +52,7 @@ public class Ecosystem {
         return initializationManager;
     }
 
-    public Map<Point, TileOrganisms> getWorldMap() {
+    public Map<Point, Tile> getWorldMap() {
         return worldMap;
     }
 
@@ -75,15 +76,15 @@ public class Ecosystem {
 
     private boolean chooseImpersonatingOrganismSelectedGender() {
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+        for (Map.Entry<Point, Tile> entry : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+            Map<AnimalSpecies, TileSpecies> tileSpecies = entry.getValue().animalTileSpecies();
 
-            for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
+            for (AnimalSpecies animalSpecies : entry.getValue().animalTileSpecies().keySet()) {
 
                 if (canBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
 
-                    List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                    List<Organism> animalOrganisms = tileSpecies.get(animalSpecies).organisms();
 
                     if (chooseOrganismToImpersonateSelectedGender(animalSpecies, animalOrganisms)) return true;
                 }
@@ -92,9 +93,13 @@ public class Ecosystem {
         return false;
     }
 
-    private boolean chooseOrganismToImpersonateSelectedGender(AnimalSpecies animalSpecies, List<AnimalOrganism> animalOrganisms) {
+    private boolean chooseOrganismToImpersonateSelectedGender(AnimalSpecies animalSpecies, List<Organism> animalOrganisms) {
+
         synchronized (animalOrganisms) {
-            for (AnimalOrganism animalOrganism : animalOrganisms) {
+
+            for (Organism organism : animalOrganisms) {
+
+                AnimalOrganism animalOrganism = (AnimalOrganism) organism;
 
                 if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE &&
                         canBeImpersonated(animalOrganism.getGender(), animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
@@ -107,19 +112,20 @@ public class Ecosystem {
             }
         }
         return false;
+
     }
 
     private void chooseImpersonatingOrganismAnyGender() {
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+        for (Map.Entry<Point, Tile> entry : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+            Map<AnimalSpecies, TileSpecies> tileSpecies = entry.getValue().animalTileSpecies();
 
-            for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
+            for (AnimalSpecies animalSpecies : entry.getValue().animalTileSpecies().keySet()) {
 
                 if (canBeImpersonated(animalSpecies.getSpeciesTaxonomy().taxonomySpecies())) {
 
-                    List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                    List<Organism> animalOrganisms = tileSpecies.get(animalSpecies).organisms();
 
                     if (chooseOrganismToImpersonateAnyGender(animalOrganisms)) return;
                 }
@@ -128,16 +134,19 @@ public class Ecosystem {
 
     }
 
-    private boolean chooseOrganismToImpersonateAnyGender(List<AnimalOrganism> animalOrganisms) {
+    private boolean chooseOrganismToImpersonateAnyGender(List<Organism> animalOrganisms) {
         synchronized (animalOrganisms) {
-            for (AnimalOrganism animalOrganism : animalOrganisms) {
+            for (Organism organism : animalOrganisms) {
 
-                if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
-                    animalOrganism.setImpersonatedOrganism(true);
-                    Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
+                if (organism instanceof AnimalOrganism animalOrganism) {
 
-                    return true;
+                    if (animalOrganism.getOrganismStatus() == OrganismStatus.ALIVE) {
+                        animalOrganism.setImpersonatedOrganism(true);
+                        Log.log6(animalOrganism.getAnimalSpecies() + " " + animalOrganism.getId() + " is impersonated now");
 
+                        return true;
+
+                    }
                 }
             }
         }
@@ -169,19 +178,20 @@ public class Ecosystem {
 
     public void printImpersonatedOrganism() {
 
-        for (Map.Entry<Point, TileOrganisms> tile : worldMap.entrySet()) {
+        for (Map.Entry<Point, Tile> entry : worldMap.entrySet()) {
 
-            Map<AnimalSpecies, List<AnimalOrganism>> tileSpecies = tile.getValue().animalOrganisms();
+            Map<AnimalSpecies, TileSpecies> tileSpecies = entry.getValue().animalTileSpecies();
 
-            for (AnimalSpecies animalSpecies : tile.getValue().animalOrganisms().keySet()) {
+            for (AnimalSpecies animalSpecies : entry.getValue().animalTileSpecies().keySet()) {
 
                 if (animalSpecies.getSpeciesTaxonomy().taxonomySpecies() == SimulationSettings.getImpersonatingTaxonomySpecies()) {
 
-                    List<AnimalOrganism> animalOrganisms = tileSpecies.get(animalSpecies);
+                    List<Organism> animalOrganisms = tileSpecies.get(animalSpecies).organisms();
 
-                    for (AnimalOrganism animalOrganism : animalOrganisms) {
-                        animalOrganism.logEnergy();
-
+                    for (Organism organism : animalOrganisms) {
+                        if (organism instanceof AnimalOrganism) {
+                            ((AnimalOrganism) organism).logEnergy();
+                        }
                     }
                 }
             }
@@ -202,15 +212,31 @@ public class Ecosystem {
 
 
     public void initializePlantOrganismImages() {
-        iterationManager.iteratePlantOrganisms(this, IterationManager.plantTruePredicate, (plantOrganism, plantSpecies) ->
-                initializationManager.addPlantOrganismImage(plantOrganism, (PlantSpecies) plantSpecies)
-        );
+
+        for (Map.Entry<Point, Tile> entry : worldMap.entrySet()) {
+            Tile tile = entry.getValue();
+
+            for (Map.Entry<PlantSpecies, TileSpecies> tileSpeciesEntry : tile.plantTileSpecies().entrySet()) {
+                Organism plantOrganism = tileSpeciesEntry.getValue().organisms().getFirst();
+                tileSpeciesEntry.getValue().addOrganismImage(plantOrganism.getOrganismIcons().getStackPane());
+            }
+
+        }
+
     }
 
     public void initializeAnimalOrganismImages() {
-        iterationManager.iterateAnimalOrganismsBiConsumer(this, IterationManager.animalTruePredicate, (animalOrganism, animalSpecies) ->
-                initializationManager.addAnimalOrganismImage(animalOrganism, (AnimalSpecies) animalSpecies)
-        );
+
+        for (Map.Entry<Point, Tile> entry : worldMap.entrySet()) {
+            Tile tile = entry.getValue();
+
+            for (Map.Entry<AnimalSpecies, TileSpecies> tileSpeciesEntry : tile.animalTileSpecies().entrySet()) {
+                Organism animalOrganism = tileSpeciesEntry.getValue().organisms().getFirst();
+                tileSpeciesEntry.getValue().addOrganismImage(animalOrganism.getOrganismIcons().getStackPane());
+            }
+
+        }
+
     }
 
 

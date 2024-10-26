@@ -4,19 +4,19 @@ import model.environment.animals.attributes.AnimalPositionAttributes;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Ecosystem;
+import model.environment.common.base.Organism;
 import model.environment.common.enums.OrganismStatus;
 import model.simulation.animals.*;
 import model.simulation.plants.PlantGrowthSimulation;
 import utils.Log;
 import view.Geography;
-import view.TileOrganisms;
+import view.Tile;
+import view.TileSpecies;
 
-import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class Simulation {
@@ -54,28 +54,42 @@ public class Simulation {
 
     private void buryDead() {
 
-        for (Map.Entry<Point, TileOrganisms> entry : ecosystem.getWorldMap().entrySet()) {
+        for (Map.Entry<Point, Tile> entry : ecosystem.getWorldMap().entrySet()) {
 
-            TileOrganisms tileOrganisms = entry.getValue();
+            Tile tile = entry.getValue();
 
-            for (Map.Entry<AnimalSpecies, List<AnimalOrganism>> animalEntry : tileOrganisms.animalOrganisms().entrySet()) {
+            for (Map.Entry<AnimalSpecies, TileSpecies> animalEntry : tile.animalTileSpecies().entrySet()) {
 
-                List<AnimalOrganism> animalOrganisms = animalEntry.getValue();
+                AnimalSpecies animalSpecies = animalEntry.getKey();
+                List<Organism> animalOrganisms = animalEntry.getValue().organisms();
 
-                Iterator<AnimalOrganism> iterator = animalOrganisms.iterator();
+                Iterator<Organism> iterator = animalOrganisms.iterator();
 
                 while (iterator.hasNext()) {
-                    AnimalOrganism animalOrganism = iterator.next();
-                    AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
+                    AnimalOrganism animalOrganism = (AnimalOrganism) iterator.next();
 
                     if (animalOrganism.getOrganismStatus() == OrganismStatus.DEAD) {
                         animalSpecies.addDeadOrganism(animalOrganism);
-                        animalSpecies.getImageGroup().getChildren().remove(animalOrganism.getOrganismIcons().getStackPane());
                         animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() - 1);
                         iterator.remove();
+
+                        if (!animalEntry.getValue().organismImages().getChildren().isEmpty()) {
+                            if (animalEntry.getValue().containsOrganismImage(animalOrganism.getOrganismIcons().getStackPane())) {
+                                animalEntry.getValue().removeOrganismImage(animalOrganism.getOrganismIcons().getStackPane());
+                            }
+                        }
+
                     }
 
                 }
+
+                for (Organism animalOrganism : animalOrganisms) {
+                    if (animalEntry.getValue().organismImages().getChildren().isEmpty()) {
+                        animalEntry.getValue().addOrganismImage(animalOrganism.getOrganismIcons().getStackPane());
+                    }
+
+                }
+
             }
         }
     }
@@ -92,7 +106,6 @@ public class Simulation {
                 Point tile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
 
                 ecosystem.getInitializationManager().addAnimalOrganism(ecosystem.getWorldMap(), tile, animalSpecies, animalOrganism);
-                animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
 
             }
 

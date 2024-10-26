@@ -3,6 +3,8 @@ package model.environment.animals.constants;
 @SuppressWarnings("unused")
 public class OdocoileusVirginianus {
 
+    public static final boolean ACTIVE = true;
+
     public static final double MALE_CARRYING_CAPACITY = 5000;
     public static final double FEMALE_CARRYING_CAPACITY = 5000;
     public static final double MALE_LIFESPAN = 4.0;

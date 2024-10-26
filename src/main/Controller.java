@@ -8,6 +8,11 @@ import model.simulation.base.SimulationSettings;
 import model.simulation.base.SimulationStatus;
 import utils.Log;
 import view.CenterPaneManager;
+import view.Tile;
+import view.TileSpecies;
+
+import java.awt.*;
+import java.util.Map;
 
 public class Controller {
 
@@ -57,10 +62,30 @@ public class Controller {
         for (AnimalSpecies animalSpecies : model.getSimulation().getEcosystem().getAnimalSpeciesMap().values()) {
 
             if (!animalSpecies.getToolbarSection().getCheckBox().isSelected()) {
-                centerPaneManager.removeCenterPaneGroup(animalSpecies.getImageGroup());
+                for (Map.Entry<Point, Tile> entry : model.getSimulation().getEcosystem().getWorldMap().entrySet()) {
+                    Tile tile = entry.getValue();
+
+                    for (Map.Entry<AnimalSpecies, TileSpecies> tileSpeciesEntry : tile.animalTileSpecies().entrySet()) {
+                        centerPaneManager.removeCenterPaneGroup(tileSpeciesEntry.getValue().organismImages());
+                    }
+
+                }
             }
-            else if (centerPaneManager.groupMissingFromCenterPane(animalSpecies.getImageGroup())) {
-                centerPaneManager.addCenterPaneGroup(animalSpecies.getImageGroup());
+
+            else {
+
+                for (Map.Entry<Point, Tile> entry : model.getSimulation().getEcosystem().getWorldMap().entrySet()) {
+                    Tile tile = entry.getValue();
+
+                    for (Map.Entry<AnimalSpecies, TileSpecies> tileSpeciesEntry : tile.animalTileSpecies().entrySet()) {
+
+                        if (centerPaneManager.groupMissingFromCenterPane(tileSpeciesEntry.getValue().organismImages())) {
+                            centerPaneManager.addCenterPaneGroup(tileSpeciesEntry.getValue().organismImages());
+                        }
+                    }
+
+                }
+
             }
 
         }
@@ -73,10 +98,26 @@ public class Controller {
         for (PlantSpecies plantSpecies : model.getSimulation().getEcosystem().getPlantSpeciesMap().values()) {
 
             if (!plantSpecies.getToolbarSection().getCheckBox().isSelected()) {
-                centerPaneManager.removeCenterPaneGroup(plantSpecies.getImageGroup());
+                for (Map.Entry<Point, Tile> entry : model.getSimulation().getEcosystem().getWorldMap().entrySet()) {
+                    Tile tile = entry.getValue();
+
+                    for (Map.Entry<PlantSpecies, TileSpecies> tileSpeciesEntry : tile.plantTileSpecies().entrySet()) {
+                        centerPaneManager.removeCenterPaneGroup(tileSpeciesEntry.getValue().organismImages());
+                    }
+
+                }
             }
-            else if (centerPaneManager.groupMissingFromCenterPane(plantSpecies.getImageGroup())) {
-                centerPaneManager.addCenterPaneGroup(plantSpecies.getImageGroup());
+            else {
+                for (Map.Entry<Point, Tile> entry : model.getSimulation().getEcosystem().getWorldMap().entrySet()) {
+                    Tile tile = entry.getValue();
+
+                    for (Map.Entry<PlantSpecies, TileSpecies> tileSpeciesEntry : tile.plantTileSpecies().entrySet()) {
+                        if (centerPaneManager.groupMissingFromCenterPane(tileSpeciesEntry.getValue().organismImages())) {
+                            centerPaneManager.removeCenterPaneGroup(tileSpeciesEntry.getValue().organismImages());
+                        }
+                    }
+
+                }
             }
 
         }

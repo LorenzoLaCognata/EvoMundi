@@ -7,13 +7,15 @@ import model.environment.animals.base.PreyAnimalSpecies;
 import model.environment.animals.enums.AnimalOrganismDeathReason;
 import model.environment.animals.enums.Diet;
 import model.environment.common.base.Ecosystem;
+import model.environment.common.base.Organism;
 import model.environment.common.enums.OrganismStatus;
 import model.environment.common.enums.TaxonomySpecies;
 import utils.Log;
 import utils.RandomGenerator;
 import utils.TriConsumer;
 import view.Geography;
-import view.TileOrganisms;
+import view.Tile;
+import view.TileSpecies;
 
 import java.awt.*;
 import java.util.List;
@@ -77,39 +79,41 @@ public class AnimalHuntingSimulation {
 
     public void animalOrganismHuntingAttempt(AnimalOrganism predatorAnimalOrganism, Ecosystem ecosystem) {
 
-        Map<Point, TileOrganisms> worldMap = ecosystem.getWorldMap();
+        Map<Point, Tile> worldMap = ecosystem.getWorldMap();
         AnimalSpecies preyAnimalSpecies = choosePreySpecies(predatorAnimalOrganism, ecosystem);
 
         if (preyAnimalSpecies != null) {
 
             AnimalPositionAttributes animalPositionAttributes = predatorAnimalOrganism.getOrganismAttributes().animalPositionAttributes();
             Point currentTile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
-            TileOrganisms tileOrganisms = worldMap.get(currentTile);
+            Tile tile = worldMap.get(currentTile);
 
-            if (tileOrganisms != null) {
-                animalOrganismHuntPreySpeciesInTile(predatorAnimalOrganism, tileOrganisms, preyAnimalSpecies);
+            if (tile != null) {
+                animalOrganismHuntPreySpeciesInTile(predatorAnimalOrganism, tile, preyAnimalSpecies);
             }
         }
     }
 
-    private void animalOrganismHuntPreySpeciesInTile(AnimalOrganism predatorAnimalOrganism, TileOrganisms tileOrganisms, AnimalSpecies preyAnimalSpecies) {
+    private void animalOrganismHuntPreySpeciesInTile(AnimalOrganism predatorAnimalOrganism, Tile tile, AnimalSpecies preyAnimalSpecies) {
 
-        List<AnimalOrganism> preyAnimalOrganisms = tileOrganisms.animalOrganisms().get(preyAnimalSpecies);
+        TileSpecies tileSpecies = tile.animalTileSpecies().get(preyAnimalSpecies);
 
-        if (preyAnimalOrganisms != null) {
+        if (tileSpecies != null) {
+
+            List<Organism> preyAnimalOrganisms = tileSpecies.organisms();
 
             synchronized (preyAnimalOrganisms) {
-                for (AnimalOrganism preyAnimalOrganism : preyAnimalOrganisms) {
+                for (Organism preyAnimalOrganism : preyAnimalOrganisms) {
 
                     int preySpeciesPopulation = (int) preyAnimalSpecies.getOrganismCount();
 
                     if (preySpeciesPopulation > 0) {
 
-                        double baseSuccessRate = predatorAnimalOrganism.calculateHuntSuccessRate(preyAnimalSpecies, preyAnimalOrganism);
+                        double baseSuccessRate = predatorAnimalOrganism.calculateHuntSuccessRate(preyAnimalSpecies, (AnimalOrganism) preyAnimalOrganism);
                         double huntSuccessRate = RandomGenerator.generateGaussian(baseSuccessRate, RandomGenerator.GAUSSIAN_VARIANCE);
 
                         if (RandomGenerator.random.nextDouble() <= huntSuccessRate) {
-                            huntingSuccess(predatorAnimalOrganism, preyAnimalOrganism);
+                            huntingSuccess(predatorAnimalOrganism, (AnimalOrganism)preyAnimalOrganism);
                             return;
                         }
                     }

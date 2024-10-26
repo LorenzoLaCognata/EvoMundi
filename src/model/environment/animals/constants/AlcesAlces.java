@@ -3,6 +3,8 @@ package model.environment.animals.constants;
 @SuppressWarnings("unused")
 public class AlcesAlces {
 
+    public static final boolean ACTIVE = true;
+
     public static final double MALE_CARRYING_CAPACITY = 100;
     public static final double FEMALE_CARRYING_CAPACITY = 100;
     public static final double MALE_LIFESPAN = 13.0;

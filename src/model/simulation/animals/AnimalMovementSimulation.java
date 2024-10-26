@@ -1,14 +1,17 @@
 package model.simulation.animals;
 
+import javafx.scene.Group;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
 import model.environment.common.base.Ecosystem;
 import model.environment.common.base.IterationManager;
+import model.environment.common.base.Organism;
 import model.simulation.base.SimulationSettings;
 import utils.RandomGenerator;
 import utils.TriConsumer;
 import view.Geography;
-import view.TileOrganisms;
+import view.Tile;
+import view.TileSpecies;
 
 import java.awt.*;
 import java.util.List;
@@ -21,31 +24,44 @@ public class AnimalMovementSimulation {
     private final TriConsumer<AnimalOrganism, AnimalSpecies, Map<Point, ArrayList<AnimalMovementPoint>>> animalOrganismMoveConsumer =
             (animalOrganism, ignored, movementChanges) -> animalOrganismMove(animalOrganism, movementChanges);
 
-    private void removeAnimalOrganismFromTile(Ecosystem ecosystem, Point point, AnimalOrganism animalOrganism) {
+    private void removeMovingAnimalOrganismFromTile(Ecosystem ecosystem, Point point, AnimalOrganism animalOrganism) {
 
-        Map<Point, TileOrganisms> worldMap = ecosystem.getWorldMap();
-        TileOrganisms tileOrganisms = worldMap.get(point);
+        Map<Point, Tile> worldMap = ecosystem.getWorldMap();
+        Tile tile = worldMap.get(point);
         AnimalSpecies animalSpecies = animalOrganism.getAnimalSpecies();
-        List<AnimalOrganism> animalSpeciesOrganisms = tileOrganisms.animalOrganisms().get(animalSpecies);
+        TileSpecies tileSpecies = tile.animalTileSpecies().get(animalSpecies);
+        List<Organism> animalSpeciesOrganisms = tileSpecies.organisms();
 
         if (animalSpeciesOrganisms != null) {
             animalSpeciesOrganisms.remove(animalOrganism);
 
+            if (!tileSpecies.getOrganismsImages().getChildren().isEmpty()) {
+                if (tileSpecies.containsOrganismImage(animalOrganism.getOrganismIcons().getStackPane())) {
+                    tileSpecies.removeOrganismImage(animalOrganism.getOrganismIcons().getStackPane());
+                }
+            }
+
             if (animalSpeciesOrganisms.isEmpty()) {
-                tileOrganisms.animalOrganisms().remove(animalSpecies);
+                tile.animalTileSpecies().remove(animalSpecies);
             }
         }
 
     }
 
-    private void addAnimalOrganismToTile(Ecosystem ecosystem, Point point, AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
+    private void addMovingAnimalOrganismToTile(Ecosystem ecosystem, Point point, AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
 
-        Map<Point, TileOrganisms> worldMap = ecosystem.getWorldMap();
-        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(point, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
+        Map<Point, Tile> worldMap = ecosystem.getWorldMap();
+        Tile tile = worldMap.computeIfAbsent(point, ignored -> new Tile(new HashMap<>(), new HashMap<>()));
 
-        tileOrganisms.animalOrganisms()
-                .computeIfAbsent(animalSpecies, ignored -> Collections.synchronizedList(new ArrayList<>()))
-                .add(animalOrganism);
+        tile.animalTileSpecies()
+                .computeIfAbsent(animalSpecies, ignored -> new TileSpecies(Collections.synchronizedList(new ArrayList<>()), new Group()))
+                .addOrganism(animalOrganism);
+
+        TileSpecies tileSpecies = tile.animalTileSpecies().get(animalSpecies);
+
+        if (tileSpecies.organismImages().getChildren().isEmpty()) {
+            tileSpecies.addOrganismImage(animalOrganism.getOrganismIcons().getStackPane());
+        }
 
     }
 
@@ -58,11 +74,11 @@ public class AnimalMovementSimulation {
 
     private static void animalOrganismCalculateTileMove(AnimalOrganism animalOrganism, Map<Point, ArrayList<AnimalMovementPoint>> movementChanges) {
 
-        Point currentTile = animalOrganismCurrentTile(animalOrganism);
+        Point currentTile = animalOrganismTile(animalOrganism);
         animalOrganismUpdateCoordinates(animalOrganism);
-        Point newTile = animalOrganismCurrentTile(animalOrganism);
+        Point newTile = animalOrganismTile(animalOrganism);
 
-        if (currentTile != newTile) {
+        if (currentTile.getX() != newTile.getX() || currentTile.getY() != newTile.getY()) {
             movementChanges.computeIfAbsent(currentTile, ignored ->
                 new ArrayList<>()).add(new AnimalMovementPoint(animalOrganism.getAnimalSpecies(), animalOrganism, newTile));
         }
@@ -75,7 +91,7 @@ public class AnimalMovementSimulation {
         animalOrganism.getOrganismAttributes().animalPositionAttributes().setLongitude(newLongitude);
     }
 
-    private static Point animalOrganismCurrentTile(AnimalOrganism animalOrganism) {
+    private static Point animalOrganismTile(AnimalOrganism animalOrganism) {
         return Geography.calculateTile(
                 animalOrganism.getOrganismAttributes().animalPositionAttributes().getLatitude(),
                 animalOrganism.getOrganismAttributes().animalPositionAttributes().getLongitude()
@@ -116,8 +132,8 @@ public class AnimalMovementSimulation {
 
             for (AnimalMovementPoint move : entry.getValue()) {
                 Point newTile = move.point();
-                removeAnimalOrganismFromTile(ecosystem, currentTile, move.animalOrganism());
-                addAnimalOrganismToTile(ecosystem, newTile, move.animalOrganism().getAnimalSpecies(), move.animalOrganism());
+                removeMovingAnimalOrganismFromTile(ecosystem, currentTile, move.animalOrganism());
+                addMovingAnimalOrganismToTile(ecosystem, newTile, move.animalOrganism().getAnimalSpecies(), move.animalOrganism());
             }
         }
 

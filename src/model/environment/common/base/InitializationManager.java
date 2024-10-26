@@ -1,10 +1,12 @@
 package model.environment.common.base;
 
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.environment.animals.attributes.*;
 import model.environment.animals.base.AnimalOrganism;
 import model.environment.animals.base.AnimalSpecies;
+import model.environment.animals.constants.*;
 import model.environment.animals.enums.AnimalAttribute;
 import model.environment.animals.enums.Diet;
 import model.environment.animals.enums.Gender;
@@ -18,7 +20,8 @@ import model.simulation.base.SimulationSettings;
 import utils.Constants;
 import utils.RandomGenerator;
 import view.Geography;
-import view.TileOrganisms;
+import view.Tile;
+import view.TileSpecies;
 
 import java.awt.*;
 import java.util.List;
@@ -157,33 +160,33 @@ public class InitializationManager {
 
     }
 
-    public void addPlantOrganism(Map<Point, TileOrganisms> worldMap, Point tile, PlantSpecies plantSpecies, PlantOrganism plantOrganism) {
+    public void addPlantOrganism(Map<Point, Tile> worldMap, Point point, PlantSpecies plantSpecies, PlantOrganism plantOrganism) {
 
-        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
+        Tile tile = worldMap.computeIfAbsent(point, ignored -> new Tile(new HashMap<>(), new HashMap<>()));
 
-        tileOrganisms.plantOrganisms()
-                .computeIfAbsent(plantSpecies, ignored -> Collections.synchronizedList(new ArrayList<>()))
-                .add(plantOrganism);
+        tile.plantTileSpecies()
+                .computeIfAbsent(plantSpecies, ignored -> new TileSpecies(Collections.synchronizedList(new ArrayList<>()), new Group()))
+                .addOrganism(plantOrganism);
 
-        worldMap.put(tile, tileOrganisms);
+        worldMap.put(point, tile);
         plantSpecies.setOrganismCount(plantSpecies.getOrganismCount() + plantOrganism.getQuantity());
 
     }
 
-    public void addAnimalOrganism(Map<Point, TileOrganisms> worldMap, Point tile, AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
+    public void addAnimalOrganism(Map<Point, Tile> worldMap, Point point, AnimalSpecies animalSpecies, AnimalOrganism animalOrganism) {
 
-        TileOrganisms tileOrganisms = worldMap.computeIfAbsent(tile, ignored -> new TileOrganisms(new HashMap<>(), new HashMap<>()));
+        Tile tile = worldMap.computeIfAbsent(point, ignored -> new Tile(new HashMap<>(), new HashMap<>()));
 
-        tileOrganisms.animalOrganisms()
-                .computeIfAbsent(animalSpecies, ignored -> Collections.synchronizedList(new ArrayList<>()))
-                .add(animalOrganism);
+        tile.animalTileSpecies()
+                .computeIfAbsent(animalSpecies, ignored -> new TileSpecies(Collections.synchronizedList(new ArrayList<>()), new Group()))
+                .addOrganism(animalOrganism);
 
-        worldMap.put(tile, tileOrganisms);
+        worldMap.put(point, tile);
         animalSpecies.setOrganismCount(animalSpecies.getOrganismCount() + 1);
 
     }
 
-    private void addPlantSpeciesOrganisms(Map<Point, TileOrganisms> worldMap, List<PlantOrganism> plantOrganisms, PlantSpecies plantSpecies) {
+    private void addPlantSpeciesOrganisms(Map<Point, Tile> worldMap, List<PlantOrganism> plantOrganisms, PlantSpecies plantSpecies) {
         for (PlantOrganism plantOrganism : plantOrganisms) {
             PlantPositionAttributes plantPositionAttributes = plantOrganism.getPlantOrganismAttributes().plantPositionAttributes();
             Point tile = Geography.calculateTile(plantPositionAttributes.getLatitude(), plantPositionAttributes.getLongitude());
@@ -191,7 +194,7 @@ public class InitializationManager {
         }
     }
 
-    private void addAnimalSpeciesOrganisms(Map<Point, TileOrganisms> worldMap, List<AnimalOrganism> animalOrganisms, AnimalSpecies animalSpecies) {
+    private void addAnimalSpeciesOrganisms(Map<Point, Tile> worldMap, List<AnimalOrganism> animalOrganisms, AnimalSpecies animalSpecies) {
         for (AnimalOrganism animalOrganism : animalOrganisms) {
             AnimalPositionAttributes animalPositionAttributes = animalOrganism.getOrganismAttributes().animalPositionAttributes();
             Point tile = Geography.calculateTile(animalPositionAttributes.getLatitude(), animalPositionAttributes.getLongitude());
@@ -199,7 +202,7 @@ public class InitializationManager {
         }
     }
 
-    public Map<TaxonomySpecies, PlantSpecies>  initializePlantSpecies(Map<Point, TileOrganisms> worldMap) {
+    public Map<TaxonomySpecies, PlantSpecies>  initializePlantSpecies(Map<Point, Tile> worldMap) {
 
         EnumMap<TaxonomySpecies, PlantSpecies> plantSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
 
@@ -216,69 +219,73 @@ public class InitializationManager {
 
     }
 
-    public Map<TaxonomySpecies, AnimalSpecies> initializeAnimalSpecies(Map<Point, TileOrganisms> worldMap) {
+    public Map<TaxonomySpecies, AnimalSpecies> initializeAnimalSpecies(Map<Point, Tile> worldMap) {
 
         EnumMap<TaxonomySpecies, AnimalSpecies> animalSpeciesMap = new EnumMap<>(TaxonomySpecies.class);
 
-        SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ODOCOILEUS, TaxonomySpecies.ODOCOILEUS_VIRGINIANUS);
+        if (OdocoileusVirginianus.ACTIVE) {
+            SpeciesTaxonomy odocoileusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ODOCOILEUS, TaxonomySpecies.ODOCOILEUS_VIRGINIANUS);
 
-        AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("images/whiteTailedDeer.png", 64, 64, false, false), Diet.HERBIVORE);
-        Constants.whiteTailedDeerAttributes(whiteTailedDeer);
-        animalSpeciesMap.put(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, whiteTailedDeer);
+            AnimalSpecies whiteTailedDeer = new AnimalSpecies(odocoileusTaxonomy, "White-Tailed Deer", new Image("images/whiteTailedDeer.png", 64, 64, false, false), Diet.HERBIVORE);
+            Constants.whiteTailedDeerAttributes(whiteTailedDeer);
+            animalSpeciesMap.put(TaxonomySpecies.ODOCOILEUS_VIRGINIANUS, whiteTailedDeer);
 
-        List<AnimalOrganism> whiteTailedDeerOrganisms = initializeAnimalOrganisms(whiteTailedDeer);
-        addAnimalSpeciesOrganisms(worldMap, whiteTailedDeerOrganisms, whiteTailedDeer);
+            List<AnimalOrganism> whiteTailedDeerOrganisms = initializeAnimalOrganisms(whiteTailedDeer);
+            addAnimalSpeciesOrganisms(worldMap, whiteTailedDeerOrganisms, whiteTailedDeer);
+        }
 
-        SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ALCES, TaxonomySpecies.ALCES_ALCES);
-        AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("images/moose.png", 64, 64, false, false), Diet.HERBIVORE);
-        Constants.mooseAttributes(moose);
-        animalSpeciesMap.put(TaxonomySpecies.ALCES_ALCES, moose);
+        if (AlcesAlces.ACTIVE) {
+            SpeciesTaxonomy alcesTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.ARTIODACTYLA, TaxonomyFamily.CERVIDAE, TaxonomyGenus.ALCES, TaxonomySpecies.ALCES_ALCES);
+            AnimalSpecies moose = new AnimalSpecies(alcesTaxonomy, "Moose", new Image("images/moose.png", 64, 64, false, false), Diet.HERBIVORE);
+            Constants.mooseAttributes(moose);
+            animalSpeciesMap.put(TaxonomySpecies.ALCES_ALCES, moose);
 
-        List<AnimalOrganism> mooseOrganisms = initializeAnimalOrganisms(moose);
-        addAnimalSpeciesOrganisms(worldMap, mooseOrganisms, moose);
+            List<AnimalOrganism> mooseOrganisms = initializeAnimalOrganisms(moose);
+            addAnimalSpeciesOrganisms(worldMap, mooseOrganisms, moose);
+        }
 
-        SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.CANIDAE, TaxonomyGenus.CANIS, TaxonomySpecies.CANIS_LUPUS);
-        AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("images/grayWolf.png", 64, 64, false, false), Diet.CARNIVORE);
-        Constants.grayWolfAttributes(grayWolf);
-        animalSpeciesMap.put(TaxonomySpecies.CANIS_LUPUS, grayWolf);
+        if (CanisLupus.ACTIVE) {
+            SpeciesTaxonomy canisTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.CANIDAE, TaxonomyGenus.CANIS, TaxonomySpecies.CANIS_LUPUS);
+            AnimalSpecies grayWolf = new AnimalSpecies(canisTaxonomy, "Gray Wolf", new Image("images/grayWolf.png", 64, 64, false, false), Diet.CARNIVORE);
+            Constants.grayWolfAttributes(grayWolf);
+            animalSpeciesMap.put(TaxonomySpecies.CANIS_LUPUS, grayWolf);
 
-        List<AnimalOrganism> grayWolfOrganisms = initializeAnimalOrganisms(grayWolf);
-        addAnimalSpeciesOrganisms(worldMap, grayWolfOrganisms, grayWolf);
+            List<AnimalOrganism> grayWolfOrganisms = initializeAnimalOrganisms(grayWolf);
+            addAnimalSpeciesOrganisms(worldMap, grayWolfOrganisms, grayWolf);
+        }
 
-        SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.LAGOMORPHA, TaxonomyFamily.LEPORIDAE, TaxonomyGenus.LEPUS, TaxonomySpecies.LEPUS_AMERICANUS);
-        AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("images/snowshoeHare.png", 64, 64, false, false), Diet.HERBIVORE);
-        Constants.snowshoeHareAttributes(snowshoeHare);
-        animalSpeciesMap.put(TaxonomySpecies.LEPUS_AMERICANUS, snowshoeHare);
+        if (LepusAmericanus.ACTIVE) {
+            SpeciesTaxonomy lepusTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.LAGOMORPHA, TaxonomyFamily.LEPORIDAE, TaxonomyGenus.LEPUS, TaxonomySpecies.LEPUS_AMERICANUS);
+            AnimalSpecies snowshoeHare = new AnimalSpecies(lepusTaxonomy, "Snowshoe Hare", new Image("images/snowshoeHare.png", 64, 64, false, false), Diet.HERBIVORE);
+            Constants.snowshoeHareAttributes(snowshoeHare);
+            animalSpeciesMap.put(TaxonomySpecies.LEPUS_AMERICANUS, snowshoeHare);
 
-        List<AnimalOrganism> snowshoeHareOrganisms = initializeAnimalOrganisms(snowshoeHare);
-        addAnimalSpeciesOrganisms(worldMap, snowshoeHareOrganisms, snowshoeHare);
+            List<AnimalOrganism> snowshoeHareOrganisms = initializeAnimalOrganisms(snowshoeHare);
+            addAnimalSpeciesOrganisms(worldMap, snowshoeHareOrganisms, snowshoeHare);
+        }
 
-        SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.RODENTIA, TaxonomyFamily.CASTORIDAE, TaxonomyGenus.CASTOR, TaxonomySpecies.CASTOR_FIBER);
-        AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("images/europeanBeaver.png", 64, 64, false, false), Diet.HERBIVORE);
-        Constants.europeanBeaverAttributes(europeanBeaver);
-        animalSpeciesMap.put(TaxonomySpecies.CASTOR_FIBER, europeanBeaver);
+        if (CastorFiber.ACTIVE) {
+            SpeciesTaxonomy castorTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.RODENTIA, TaxonomyFamily.CASTORIDAE, TaxonomyGenus.CASTOR, TaxonomySpecies.CASTOR_FIBER);
+            AnimalSpecies europeanBeaver = new AnimalSpecies(castorTaxonomy, "European Beaver", new Image("images/europeanBeaver.png", 64, 64, false, false), Diet.HERBIVORE);
+            Constants.europeanBeaverAttributes(europeanBeaver);
+            animalSpeciesMap.put(TaxonomySpecies.CASTOR_FIBER, europeanBeaver);
 
-        List<AnimalOrganism> europeanBeaverOrganisms = initializeAnimalOrganisms(europeanBeaver);
-        addAnimalSpeciesOrganisms(worldMap, europeanBeaverOrganisms, europeanBeaver);
+            List<AnimalOrganism> europeanBeaverOrganisms = initializeAnimalOrganisms(europeanBeaver);
+            addAnimalSpeciesOrganisms(worldMap, europeanBeaverOrganisms, europeanBeaver);
+        }
 
-        SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.FELIDAE, TaxonomyGenus.LYNX, TaxonomySpecies.LYNX_RUFUS);
-        AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("images/bobcat.png", 64, 64, false, false), Diet.CARNIVORE);
-        Constants.bobcatAttributes(bobcat);
-        animalSpeciesMap.put(TaxonomySpecies.LYNX_RUFUS, bobcat);
+        if (LynxRufus.ACTIVE) {
+            SpeciesTaxonomy lynxTaxonomy = new SpeciesTaxonomy(TaxonomyClass.MAMMALIA, TaxonomyOrder.CARNIVORA, TaxonomyFamily.FELIDAE, TaxonomyGenus.LYNX, TaxonomySpecies.LYNX_RUFUS);
+            AnimalSpecies bobcat = new AnimalSpecies(lynxTaxonomy, "Bobcat", new Image("images/bobcat.png", 64, 64, false, false), Diet.CARNIVORE);
+            Constants.bobcatAttributes(bobcat);
+            animalSpeciesMap.put(TaxonomySpecies.LYNX_RUFUS, bobcat);
 
-        List<AnimalOrganism> bobcatOrganisms = initializeAnimalOrganisms(bobcat);
-        addAnimalSpeciesOrganisms(worldMap, bobcatOrganisms, bobcat);
+            List<AnimalOrganism> bobcatOrganisms = initializeAnimalOrganisms(bobcat);
+            addAnimalSpeciesOrganisms(worldMap, bobcatOrganisms, bobcat);
+        }
 
         return animalSpeciesMap;
 
-    }
-
-    public void addPlantOrganismImage(PlantOrganism plantOrganism, PlantSpecies plantSpecies) {
-        plantSpecies.getImageGroup().getChildren().add(plantOrganism.getOrganismIcons().getStackPane());
-    }
-
-    public void addAnimalOrganismImage(AnimalOrganism animalOrganism, AnimalSpecies animalSpecies) {
-        animalSpecies.getImageGroup().getChildren().add(animalOrganism.getOrganismIcons().getStackPane());
     }
 
 }
